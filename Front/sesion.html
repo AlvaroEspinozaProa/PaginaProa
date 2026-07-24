@@ -3,10 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="PRoA.css">
     <title>Iniciar Sesión</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            background:#f5f5f5;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            height:100vh;
+        }
+
+        .login{
+            background:white;
+            padding:35px;
+            width:350px;
+            border-radius:10px;
+            box-shadow:0 5px 20px rgba(0,0,0,.2);
+        }
+
+        h2{
+            text-align:center;
+            margin-bottom:25px;
+        }
+
+        input{
+            width:100%;
+            padding:12px;
+            margin-bottom:15px;
+            border:1px solid #ccc;
+            border-radius:6px;
+        }
+
+        button{
+            width:100%;
+            padding:12px;
+            background:#1d4ed8;
+            color:white;
+            border:none;
+            border-radius:6px;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#1e40af;
+        }
+
+        #mensaje{
+            margin-top:15px;
+            text-align:center;
+            font-size:14px;
+        }
+    </style>
 </head>
 <body>
-    
+
+<div class="login">
+
+    <h2>Administrador</h2>
+
+    <input
+        type="email"
+        id="email"
+        placeholder="Correo">
+
+    <input
+        type="password"
+        id="password"
+        placeholder="Contraseña">
+
+    <button onclick="login()">
+        Iniciar sesión
+    </button>
+
+    <p id="mensaje"></p>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script src="login.js"></script>
 </body>
 </html>
