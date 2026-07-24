@@ -1,38 +1,40 @@
-console.log("JS cargado");
+console.log("JS cargado correctamente");
+
 const supabaseUrl = "https://agzlhfrlonbetudirnib.supabase.co";
-const supabaseKey = "sb_publishable_8FopUJH1v3v5_8xjoROl4Q_jyCCavnw";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFnemxoZnJsb25iZXR1ZGlybmliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ4NzE3MjcsImV4cCI6MjEwMDQ0NzcyN30.MAWSGG2GV-bgMPNvTp9jEsAWvfsjXbEYwidramCQ6w4";
 
-const supabase = window.supabase.createClient(
-    supabaseUrl,
-    supabaseKey
-);
+// Cambiamos 'supabase' por 'supabaseClient' para evitar el SyntaxError
+const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-async function login(){
+async function login() {
+    console.log("Iniciando proceso de autenticación...");
 
-    console.log("Entró al login");
-
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-
-    const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-    });
-
+    const emailInput = document.getElementById("email").value.trim();
+    const passwordInput = document.getElementById("password").value;
     const mensaje = document.getElementById("mensaje");
 
-    if(error){
+    if (!emailInput || !passwordInput) {
+        mensaje.style.color = "red";
+        mensaje.textContent = "Por favor completa todos los campos.";
+        return;
+    }
+
+    // Usamos la nueva variable supabaseClient
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email: emailInput,
+        password: passwordInput,
+    });
+
+    if (error) {
+        console.error("Error de Supabase:", error);
         mensaje.style.color = "red";
         mensaje.textContent = error.message;
         return;
     }
 
+    console.log("Usuario autenticado:", data.user);
     mensaje.style.color = "green";
-    mensaje.textContent = "Inicio de sesión correcto";
-
-    // Después pueden redirigir al tablón
-    // window.location.href = "tablon.html";
-
+    mensaje.textContent = "¡Inicio de sesión correcto!";
 }
 
 window.login = login;
