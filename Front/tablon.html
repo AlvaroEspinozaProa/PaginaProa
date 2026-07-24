@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="PRoA.css">
+    <title>Tablón de Anuncios</title>
+</head>
+<body>
+    <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tablón de Novedades Oficial</title>
+    
+    <!-- ==================== HOJA DE ESTILOS CSS PURO (INDESTRUCTIBLE) ==================== -->
+    <style>
+        body {
+            background-color: #f1f5f9;
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            color: #334155;
+        }
+        .max-w-6xl { max-width: 1150px; margin: 0 auto; }
+        .text-center { text-align: center; margin-bottom: 40px; }
+        h1 { color: #1e3a8a; margin: 0 0 10px 0; font-size: 2rem; font-weight: 800; }
+        .text-muted { color: #64748b; margin: 0; font-size: 0.9rem; }
+        
+        .btn-toggle {
+            background-color: #1d4ed8; color: white; border: none; padding: 10px 20px;
+            font-size: 0.75rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em;
+            border-radius: 8px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(29, 78, 216, 0.2);
+            transition: all 0.2s; margin-top: 15px;
+        }
+        .btn-toggle:hover { background-color: #1e40af; }
+
+        .form-section {
+            background-color: white; padding: 24px; border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;
+            max-width: 500px; margin: 0 auto 40px auto;
+        }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; color: #94a3b8; margin-bottom: 6px; }
+        .form-group input, .form-group textarea {
+            width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; box-sizing: border-box;
+        }
+        .form-group input[type="file"] { padding: 5px; }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #1d4ed8; }
+        .btn-submit {
+            width: 100%; background-color: #10b981; color: white; border: none; padding: 12px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: background 0.2s;
+        }
+        .btn-submit:hover { background-color: #059669; }
+
+        .grid-noticias {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 50px 30px; padding-top: 20px; justify-items: center;
+        }
+
+        /* DISEÑO DE TU TARJETA ORIGINAL DE UIVERSE */
+        .tarjeta-uiverse {
+            position: relative; display: flex; width: 320px; flex-direction: column;
+            border-radius: 12px; background-color: white; color: #374151;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); box-sizing: border-box;
+        }
+        .tarjeta-cabecera {
+            position: relative; margin-left: 16px; margin-right: 16px; margin-top: -24px;
+            height: 160px; overflow: hidden; border-radius: 12px;
+            background-image: linear-gradient(to right, #3b82f6, #2563eb);
+            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4);
+        }
+        .tarjeta-cabecera img { width: 100%; height: 100%; object-fit: cover; }
+        .tarjeta-cuerpo { padding: 24px; flex-grow: 1; }
+        .tarjeta-cuerpo h5 { margin: 0 0 8px 0; font-size: 1.25rem; font-weight: 600; color: #111827; }
+        .tarjeta-cuerpo p { margin: 0; font-size: 1rem; font-weight: 300; line-height: 1.5; color: #6b7280; }
+        
+        /* Botón de Adjunto Interno */
+        .doc-badge {
+            display: inline-flex; align-items: center; background-color: #eff6ff; color: #1d4ed8;
+            padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 600;
+            margin-top: 12px; text-decoration: none; border: 1px solid #bfdbfe;
+        }
+        .doc-badge:hover { background-color: #dbeafe; }
+
+        .tarjeta-acciones { padding: 24px; padding-top: 0; display: flex; justify-content: space-between; align-items: center; }
+        
+        .btn-read-more {
+            background-color: #3b82f6; color: white; border: none; padding: 12px 24px;
+            text-align: center; font-size: 0.75rem; font-weight: bold; text-transform: uppercase;
+            border-radius: 8px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2); transition: all 0.2s;
+        }
+        .btn-read-more:hover { box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4); background-color: #2563eb; }
+        .btn-delete { background: none; border: none; color: #ef4444; font-weight: bold; font-size: 0.75rem; cursor: pointer; padding: 8px; }
+        .btn-delete:hover { color: #dc2626; }
+
+        /* Estilos Ventana Emergente (Modal) */
+        .modal-mask {
+            display: none; position: fixed; inset: 0; background-color: rgba(15, 23, 42, 0.6);
+            align-items: center; justify-content: center; padding: 16px; z-index: 100; backdrop-filter: blur(4px);
+        }
+        .modal-box {
+            position: relative; display: flex; width: 100%; max-width: 500px; flex-direction: column;
+            border-radius: 12px; background-color: white; border: 1px solid #e2e8f0; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); margin-top: 24px;
+        }
+        .modal-cuerpo { padding: 24px; }
+        .modal-cuerpo h5 { margin: 0 0 16px 0; font-size: 1.5rem; font-weight: 700; color: #1e3a8a; }
+        .modal-texto { max-height: 240px; overflow-y: auto; color: #475569; font-size: 0.95rem; line-height: 1.6; }
+        .modal-acciones { padding: 16px 24px; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
+        .btn-close { background-color: #f1f5f9; color: #475569; border: none; padding: 10px 20px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; border-radius: 8px; cursor: pointer; }
+        .btn-close:hover { background-color: #e2e8f0; }
+        
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <div class="max-w-6xl">
+        <!-- ==================== CABECERA PRINCIPAL ==================== -->
+        <header class="text-center">
+            <h1>📢 TABLÓN DE NOVEDADES</h1>
+            <p class="text-muted">Sección interna para publicar, gestionar y revisar las últimas actualizaciones oficiales con archivos locales.</p>
+            <button id="btn-toggle-form" class="btn-toggle">+ Publicar Nueva Noticia</button>
+        </header>
+
+        <!-- ==================== FORMULARIO DE CARGA DE ARCHIVOS DEL DISPOSITIVO ==================== -->
+        <section id="seccion-formulario" class="form-section hidden">
+            <form id="formulario-noticia">
+                <div class="form-group">
+                    <label>Título de la Noticia</label>
+                    <input type="text" id="form-titulo" required placeholder="Ej: Reporte Mensual de Operaciones">
+                </div>
+                <div class="form-group">
+                    <label>Resumen Corto (Se ve en la tarjeta)</label>
+                    <input type="text" id="form-resumen" required placeholder="Ej: Archivo adjunto con el balance del mes...">
+                </div>
+                <div class="form-group">
+                    <label>Subir Foto o Documento desde tu Dispositivo (Opcional)</label>
+                    <!-- Acepta imágenes y cualquier tipo de documento de la PC -->
+                    <input type="file" id="form-archivo" accept="image/*, .pdf, .doc, .docx, .xls, .xlsx, .txt">
+                    <p style="text-align: left;" class="text-muted">Si subes una foto, se verá arriba. Si subes un documento, se creará un botón de descarga.</p>
+                </div>
+                <div class="form-group">
+                    <label>Contenido Detallado</label>
+                    <textarea id="form-contenido" required rows="4" placeholder="Escribe aquí la información completa..."></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Publicar en el Tablón</button>
+            </form>
+        </section>
+
+        <!-- ==================== CONTENEDOR DE TARJETAS ==================== -->
+        <main id="contenedor-noticias" class="grid-noticias">
+            <!-- Las tarjetas se generan automáticas aquí -->
+        </main>
+    </div>
+
+    <!-- ==================== VENTANA EMERGENTE (MODAL) ==================== -->
+    <div id="modal-unico" class="modal-mask hidden">
+      <div class="modal-box">
+        <div id="modal-cabecera" class="tarjeta-cabecera">
+            <img id="modal-imagen" src="" alt="" class="hidden">
+        </div>
+        <div class="modal-cuerpo">
+          <h5 id="modal-titulo"></h5>
+          <div id="modal-texto-largo" class="modal-texto"></div>
+        </div>
+        <div class="modal-acciones">
+          <!-- Botón de descarga dinámico dentro del modal -->
+          <div id="modal-contenedor-descarga"></div>
+          <button id="cerrar-modal" type="button" class="btn-close">Cerrar Novedad</button>
+        </div>
+      </div>
+    </div>
+    <!-- ==================== SCRIPT DE LOGICA (CONVERTIDOR LOCAL) ==================== -->
+   <script src="noticias.js"></script>
+
+</body>
+</html>
+</body>
+</html>
