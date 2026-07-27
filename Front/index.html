@@ -3,93 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PROA Despeñaderos</title>
+    <title>Escuela PRoA Despeñaderos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="PRoA.css">
+    <!-- Iconos Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
 
-<label class="event-wrapper">
-  <input type="checkbox" checked="" class="event-wrapper-inp" />
-  <div class="bar">
-    <span class="top bar-list"></span>
-    <span class="middle bar-list"></span>
-    <span class="bottom bar-list"></span>
-  </div>
-  <section class="menu-container">
-    <div class="menu-list"> <a href="proyectos.html">Proyectos</a></div>
-    <div class="menu-list">Repost</div>
-    <div class="menu-list">Delete</div>
-  </section>
-</label>
+    <!-- Encabezado unificado (Maneja la navegación para PC y Móvil automáticamente) -->
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="Logo PRoA Despeñaderos">
+            <h2>PRoA <span>Despeñaderos</span></h2>
+        </div>
+        
+        <nav>
+            <a href="#"><i data-lucide="home"></i> Inicio</a>
+            <a href="proyectos.html"><i data-lucide="folder-code"></i> Proyectos</a>
+            <a href="deporte.html"><i data-lucide="trophy"></i> Deportes</a>
+            <a href="cde.html"><i data-lucide="users"></i> CDE</a>
+            <a href="pasantias.html"><i data-lucide="briefcase"></i> Pasantías</a>
+            <a href="tablon.html"><i data-lucide="layout-dashboard"></i> Tablón</a>
+        </nav>
+    </header>
 
-<nav>
-    <a href="#">Inicio</a>
-    <a href="proyectos.html">Proyectos</a>
-    <a href="deporte.html">Deportes</a>
-    <a href="cde.html">Centro de Estudiantes</a>
-    <a href="pasantias.html">Pasantías</a>
-    <a href="tablon.html">Tablón</a>
-</nav>
-<header class="hero">
+    <!-- Sección Hero principal -->
+    <section class="hero">
+        <div class="hero-texto">
+            <span class="hero-badge">Educación Pública & Digital</span>
+            <h1>Escuela Experimental PRoA Despeñaderos</h1>
+            <p>Formación orientada al Desarrollo de Software y capacitación integral para el futuro tecnológico.</p>
+            
+            <div class="botones">
+                <a href="proyectos.html" class="btn btn-principal">Ver Proyectos</a>
+                <a href="#quienes-somos" class="btn btn-secundario">Conocenos</a>
+            </div>
+        </div>
+    </section>
 
-    <img src="logo.png" alt="Logo PROA" class="logo">
+    <!-- Sección ¿Quiénes somos? -->
+    <section id="quienes-somos" class="seccion-comun">
+        <div class="seccion-header">
+            <span class="seccion-etiqueta">Nuestra Institución</span>
+            <h2>¿Quiénes somos?</h2>
+            <p>
+                La Escuela Experimental PROA Despeñaderos es una institución pública orientada al Desarrollo de Software, que forma estudiantes con pensamiento crítico, habilidades tecnológicas y una preparación integral. Su propuesta combina materias de formación general con programación, inglés aplicado y proyectos tecnológicos.
+            </p>
+        </div>
+    </section>
 
-    <h1>Escuela Experimental PRoA Despeñaderos</h1>
-
-    <p>
-        Formación orientada al Desarrollo de Software
-    </p>
-
-</header>
-
-
-<section class="presentacion">
-
-    <h2>¿Quiénes somos?</h2>
-    <p>
-        La Escuela Experimental PROA Despeñaderos es una institución pública orientada al Desarrollo de Software, que forma estudiantes con pensamiento crítico, habilidades tecnológicas y una preparación integral para los desafíos del mundo actual. Su propuesta educativa combina materias de formación general con programación, inglés aplicado y proyectos tecnológicos.
-    </p>
-
-</section>
-
-<section class="clubes">
-
-    <h2>Clubes y Actividades</h2>
-
-    <div class="cards">
-
-        <div class="card">
-            <h3>Club de Arte</h3>
-            <p>Espacio de creatividad y expresión artística.</p>
+    <!-- Sección Clubes y Actividades -->
+    <section class="seccion-comun seccion-fondo">
+        <div class="seccion-header">
+            <span class="seccion-etiqueta">Comunidad Estudiantil</span>
+            <h2>Clubes y Actividades</h2>
+            <p>Espacios donde potenciamos la creatividad, el trabajo en equipo y el desarrollo personal.</p>
         </div>
 
-        <div class="card">
-            <h3>Club de Deportes</h3>
-            <p>Actividades físicas y participación en competencias.</p>
+        <div class="cards">
+            <div class="card">
+                <i data-lucide="palette"></i>
+                <h3>Club de Arte</h3>
+                <p>Espacio de creatividad y expresión artística.</p>
+            </div>
+
+            <div class="card">
+                <i data-lucide="activity"></i>
+                <h3>Club de Deportes</h3>
+                <p>Actividades físicas y participación en competencias.</p>
+            </div>
+
+            <div class="card">
+                <i data-lucide="flask-conical"></i>
+                <h3>Club de Ciencias</h3>
+                <p>Investigación, experimentación y proyectos innovadores.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Banner Historia -->
+    <section class="banner-destacado">
+        <h2>Nuestra Historia</h2>
+        <p>
+            La escuela forma parte del Programa PROA, creado en 2014 por la Provincia de Córdoba para impulsar una educación secundaria innovadora con orientación tecnológica. Comenzó sus actividades en 2019 en un edificio provisorio y, el 27 de junio de 2022, inauguró su sede actual en Despeñaderos.
+        </p>
+    </section>
+
+    <!-- Pie de página -->
+    <footer>
+        <div class="contacto-info">
+            <div class="contacto-item">
+                <i data-lucide="map-pin"></i>
+                <div>
+                    <strong>Ubicación</strong>
+                    <p>Argentina 734 - Despeñaderos</p>
+                </div>
+            </div>
+
+            <div class="contacto-item">
+                <i data-lucide="mail"></i>
+                <div>
+                    <strong>Contacto</strong>
+                    <a href="mailto:despenaderos.ds@escuelasproa.edu.ar">despenaderos.ds@escuelasproa.edu.ar</a>
+                </div>
+            </div>
         </div>
 
-        <div class="card">
-            <h3>Club de Ciencias</h3>
-            <p>Investigación, experimentación y proyectos innovadores.</p>
+        <div class="footer-creditos">
+            <p>Escuela Experimental PROA Despeñaderos &copy; 2026</p>
         </div>
+    </footer>
 
-    </div>
-
-</section>
-
-<section class="comienzo">
-<p>
-La escuela forma parte del Programa PROA, creado en 2014 por la Provincia de Córdoba para impulsar una educación secundaria innovadora con orientación tecnológica. Comenzó sus actividades en 2019 en un edificio provisorio y, el 27 de junio de 2022, inauguró su sede actual en Despeñaderos. Desde entonces, continúa promoviendo una formación basada en la innovación, el aprendizaje por proyectos y el desarrollo de habilidades para el futuro.
-</p>
-</section>
-
-<footer>
-
-    <p>Escuela Experimental PROA Despeñaderos</p>
-    <p>Argentina 734 - Despeñaderos</p>
-    <p>despenaderos.ds@escuelasproa.edu.ar</p>
-
-</footer>
+    <!-- Inicialización de los iconos de Lucide -->
+    <script>
+        lucide.createIcons();
+    </script>
 
 </body>
 </html>
