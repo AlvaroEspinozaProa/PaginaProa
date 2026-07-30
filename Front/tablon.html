@@ -1,20 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="PRoA.css">
-    <title>Tablón de Anuncios</title>
-</head>
-<body>
-    <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tablón de Novedades Oficial</title>
+    <link rel="stylesheet" href="PRoA.css">
     
-    <!-- ==================== HOJA DE ESTILOS CSS PURO (INDESTRUCTIBLE) ==================== -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <style>
         body {
             background-color: #f1f5f9;
@@ -58,7 +51,6 @@
             gap: 50px 30px; padding-top: 20px; justify-items: center;
         }
 
-        /* DISEÑO DE TU TARJETA ORIGINAL DE UIVERSE */
         .tarjeta-uiverse {
             position: relative; display: flex; width: 320px; flex-direction: column;
             border-radius: 12px; background-color: white; color: #374151;
@@ -75,7 +67,6 @@
         .tarjeta-cuerpo h5 { margin: 0 0 8px 0; font-size: 1.25rem; font-weight: 600; color: #111827; }
         .tarjeta-cuerpo p { margin: 0; font-size: 1rem; font-weight: 300; line-height: 1.5; color: #6b7280; }
         
-        /* Botón de Adjunto Interno */
         .doc-badge {
             display: inline-flex; align-items: center; background-color: #eff6ff; color: #1d4ed8;
             padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 600;
@@ -94,7 +85,6 @@
         .btn-delete { background: none; border: none; color: #ef4444; font-weight: bold; font-size: 0.75rem; cursor: pointer; padding: 8px; }
         .btn-delete:hover { color: #dc2626; }
 
-        /* Estilos Ventana Emergente (Modal) */
         .modal-mask {
             display: none; position: fixed; inset: 0; background-color: rgba(15, 23, 42, 0.6);
             align-items: center; justify-content: center; padding: 16px; z-index: 100; backdrop-filter: blur(4px);
@@ -116,14 +106,12 @@
 <body>
 
     <div class="max-w-6xl">
-        <!-- ==================== CABECERA PRINCIPAL ==================== -->
         <header class="text-center">
             <h1>📢 TABLÓN DE NOVEDADES</h1>
-            <p class="text-muted">Sección interna para publicar, gestionar y revisar las últimas actualizaciones oficiales con archivos locales.</p>
+            <p class="text-muted">Sección interna para publicar, gestionar y revisar las últimas actualizaciones oficiales.</p>
             <button id="btn-toggle-form" class="btn-toggle">+ Publicar Nueva Noticia</button>
         </header>
 
-        <!-- ==================== FORMULARIO DE CARGA DE ARCHIVOS DEL DISPOSITIVO ==================== -->
         <section id="seccion-formulario" class="form-section hidden">
             <form id="formulario-noticia">
                 <div class="form-group">
@@ -135,10 +123,9 @@
                     <input type="text" id="form-resumen" required placeholder="Ej: Archivo adjunto con el balance del mes...">
                 </div>
                 <div class="form-group">
-                    <label>Subir Foto o Documento desde tu Dispositivo (Opcional)</label>
-                    <!-- Acepta imágenes y cualquier tipo de documento de la PC -->
+                    <label>Subir Foto o Documento (Opcional)</label>
                     <input type="file" id="form-archivo" accept="image/*, .pdf, .doc, .docx, .xls, .xlsx, .txt">
-                    <p style="text-align: left;" class="text-muted">Si subes una foto, se verá arriba. Si subes un documento, se creará un botón de descarga.</p>
+                    <p style="text-align: left;" class="text-muted">Si subes una foto se verá en la cabecera; si es un documento, se creará un botón de descarga.</p>
                 </div>
                 <div class="form-group">
                     <label>Contenido Detallado</label>
@@ -148,13 +135,10 @@
             </form>
         </section>
 
-        <!-- ==================== CONTENEDOR DE TARJETAS ==================== -->
         <main id="contenedor-noticias" class="grid-noticias">
-            <!-- Las tarjetas se generan automáticas aquí -->
-        </main>
+            </main>
     </div>
 
-    <!-- ==================== VENTANA EMERGENTE (MODAL) ==================== -->
     <div id="modal-unico" class="modal-mask hidden">
       <div class="modal-box">
         <div id="modal-cabecera" class="tarjeta-cabecera">
@@ -165,16 +149,13 @@
           <div id="modal-texto-largo" class="modal-texto"></div>
         </div>
         <div class="modal-acciones">
-          <!-- Botón de descarga dinámico dentro del modal -->
           <div id="modal-contenedor-descarga"></div>
           <button id="cerrar-modal" type="button" class="btn-close">Cerrar Novedad</button>
         </div>
       </div>
     </div>
-    <!-- ==================== SCRIPT DE LOGICA (CONVERTIDOR LOCAL) ==================== -->
-   <script src="noticias.js"></script>
 
-</body>
-</html>
+    <script type="module" src="./JS/noticias.js"></script>
+
 </body>
 </html>

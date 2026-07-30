@@ -3,122 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Escuela PRoA Despeñaderos</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="PRoA.css">
-    <!-- Iconos Lucide -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Inicio - Escuela PRoA</title>
 </head>
 <body>
 
-    <!-- Encabezado unificado (Maneja la navegación para PC y Móvil automáticamente) -->
+    <!-- =========================================
+         HEADER & NAVEGACIÓN
+         ========================================= -->
     <header>
         <div class="logo">
-            <img src="logo.png" alt="Logo PRoA Despeñaderos">
-            <h2>PRoA <span>Despeñaderos</span></h2>
+            <img src="https://via.placeholder.com/70" alt="Logo PRoA">
+            <div>
+                <h2>Escuela PRoA</h2>
+                <span style="font-size: 0.85rem; color: #666;">Innovación en Educación</span>
+            </div>
         </div>
-        
         <nav>
-            <a href="#"><i data-lucide="home"></i> Inicio</a>
-            <a href="proyectos.html"><i data-lucide="folder-code"></i> Proyectos</a>
-            <a href="deporte.html"><i data-lucide="trophy"></i> Deportes</a>
-            <a href="cde.html"><i data-lucide="users"></i> CDE</a>
-            <a href="pasantias.html"><i data-lucide="briefcase"></i> Pasantías</a>
-            <a href="tablon.html"><i data-lucide="layout-dashboard"></i> Tablón</a>
+            <a href="index.html"><i class="fa-solid fa-house"></i> Inicio</a>
+            <a href="tablon.html"><i class="fa-solid fa-bullhorn"></i> Novedades</a>
+            <a href="proyectos.html"><i class="fa-solid fa-code-branch"></i> Proyectos</a>
+            <a href="pasantias.html"><i class="fa-solid fa-briefcase"></i> Pasantías</a>
+            <a href="cde.html"><i class="fa-solid fa-users-rectangle"></i> CDE</a>
+            <a href="#contacto"><i class="fa-solid fa-envelope"></i> Contacto</a>
         </nav>
     </header>
 
-    <!-- Sección Hero principal -->
+    <!-- =========================================
+         HERO SECTION (Quiénes Somos)
+         ========================================= -->
     <section class="hero">
         <div class="hero-texto">
-            <span class="hero-badge">Educación Pública & Digital</span>
-            <h1>Escuela Experimental PRoA Despeñaderos</h1>
-            <p>Formación orientada al Desarrollo de Software y capacitación integral para el futuro tecnológico.</p>
-            
+            <span class="etiqueta">¿Quiénes somos?</span>
+            <h1>Formación secundaria orientada al desarrollo tecnológico</h1>
+            <p>Somos una institución comprometida con la formación en desarrollo de software. Creemos firmemente que el respeto, la solidaridad y la innovación son fundamentales tanto en el crecimiento colectivo como en el personal.</p>
             <div class="botones">
-                <a href="proyectos.html" class="btn btn-principal">Ver Proyectos</a>
-                <a href="#quienes-somos" class="btn btn-secundario">Conocenos</a>
+                <a href="#secciones-clave" class="btn btn-principal">Explorar Secciones</a>
             </div>
+        </div>
+        <div class="hero-imagen">
+            <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Alumnos programando">
         </div>
     </section>
 
-    <!-- Sección ¿Quiénes somos? -->
-    <section id="quienes-somos" class="seccion-comun">
+    <!-- =========================================
+         ACCESOS DIRECTOS A LAS PÁGINAS DEL SITIO
+         ========================================= -->
+    <section id="secciones-clave" class="seccion-comun seccion-fondo">
         <div class="seccion-header">
-            <span class="seccion-etiqueta">Nuestra Institución</span>
-            <h2>¿Quiénes somos?</h2>
-            <p>
-                La Escuela Experimental PROA Despeñaderos es una institución pública orientada al Desarrollo de Software, que forma estudiantes con pensamiento crítico, habilidades tecnológicas y una preparación integral. Su propuesta combina materias de formación general con programación, inglés aplicado y proyectos tecnológicos.
-            </p>
+            <h2>Explorá Nuestro Sitio</h2>
+            <p>Accedé rápidamente a todas las secciones y novedades de la comunidad educativa.</p>
+        </div>
+        
+        <div class="grid-cards">
+            <!-- Tablón / Noticias -->
+            <a href="tablon.html" class="card" style="text-decoration: none; color: inherit; display: block;">
+                <i class="fa-solid fa-bullhorn icono-card"></i>
+                <h3>Tablón de Noticias</h3>
+                <p>Enterate de los avisos importantes, cronogramas, circulares y últimas novedades publicadas.</p>
+                <span class="doc-badge" style="margin-top: 15px; display: inline-block;">Ir al Tablón ➔</span>
+            </a>
+            
+            <!-- Proyectos -->
+            <a href="proyectos.html" class="card" style="text-decoration: none; color: inherit; display: block;">
+                <i class="fa-solid fa-code-branch icono-card"></i>
+                <h3>Proyectos</h3>
+                <p>Conocé los desarrollos de software, prototipos de hardware y trabajos tecnológicos creados por los alumnos.</p>
+                <span class="doc-badge" style="margin-top: 15px; display: inline-block;">Ver Proyectos ➔</span>
+            </a>
+
+            <!-- Pasantías -->
+            <a href="pasantias.html" class="card" style="text-decoration: none; color: inherit; display: block;">
+                <i class="fa-solid fa-briefcase icono-card"></i>
+                <h3>Pasantías</h3>
+                <p>Información sobre experiencias profesionales, prácticas profesionalizantes y vinculación laboral.</p>
+                <span class="doc-badge" style="margin-top: 15px; display: inline-block;">Ver Pasantías ➔</span>
+            </a>
+
+            <!-- Centro de Estudiantes (CDE) -->
+            <a href="cde.html" class="card" style="text-decoration: none; color: inherit; display: block;">
+                <i class="fa-solid fa-users-rectangle icono-card"></i>
+                <h3>Centro de Estudiantes</h3>
+                <p>Espacio de representación estudiantil, actividades, propuestas y comunicación del CDE.</p>
+                <span class="doc-badge" style="margin-top: 15px; display: inline-block;">Visitar CDE ➔</span>
+            </a>
         </div>
     </section>
 
-    <!-- Sección Clubes y Actividades -->
-    <section class="seccion-comun seccion-fondo">
+    <!-- =========================================
+         INFORMACIÓN DEL COLEGIO (Formación PRoA y Compromiso)
+         ========================================= -->
+    <section id="formacion" class="seccion-comun">
         <div class="seccion-header">
-            <span class="seccion-etiqueta">Comunidad Estudiantil</span>
-            <h2>Clubes y Actividades</h2>
-            <p>Espacios donde potenciamos la creatividad, el trabajo en equipo y el desarrollo personal.</p>
+            <h2>Formación PRoA</h2>
+            <p>Brindamos una propuesta educativa innovadora que se adapta a los desafíos del mundo profesional moderno.</p>
         </div>
-
-        <div class="cards">
+        
+        <div class="grid-cards">
+            <!-- Tarjeta 1: Especialidad Técnica -->
             <div class="card">
-                <i data-lucide="palette"></i>
-                <h3>Club de Arte</h3>
-                <p>Espacio de creatividad y expresión artística.</p>
+                <i class="fa-solid fa-laptop-code icono-card"></i>
+                <h3>Tecnología y Desarrollo</h3>
+                <p>Promovemos el pensamiento lógico y la resolución de problemas en Programación, Desarrollo y Taller de Inglés Aplicado (TIA), llevando las ideas a la práctica con proyectos reales de automatización y robótica.</p>
             </div>
-
+            
+            <!-- Tarjeta 2: Clubes y Crecimiento -->
             <div class="card">
-                <i data-lucide="activity"></i>
-                <h3>Club de Deportes</h3>
-                <p>Actividades físicas y participación en competencias.</p>
+                <i class="fa-solid fa-palette icono-card"></i>
+                <h3>Espacios de Interés</h3>
+                <p>Hacemos un fuerte enfoque en el crecimiento personal de los estudiantes, incorporando espacios donde pueden desarrollar sus pasiones, como el Club de Ciencias, el Club de Arte y el Club de Deporte.</p>
             </div>
-
+            
+            <!-- Tarjeta 3: Compromiso Educativo -->
             <div class="card">
-                <i data-lucide="flask-conical"></i>
-                <h3>Club de Ciencias</h3>
-                <p>Investigación, experimentación y proyectos innovadores.</p>
+                <i class="fa-solid fa-handshake-angle icono-card"></i>
+                <h3>Compromiso Educativo</h3>
+                <p>El equilibrio entre la tecnología, el conocimiento y la ciudadanía es nuestro eje central. Asumimos la responsabilidad de formar estudiantes autónomos, con pensamiento crítico y responsabilidad social.</p>
             </div>
         </div>
     </section>
 
-    <!-- Banner Historia -->
-    <section class="banner-destacado">
-        <h2>Nuestra Historia</h2>
-        <p>
-            La escuela forma parte del Programa PROA, creado en 2014 por la Provincia de Córdoba para impulsar una educación secundaria innovadora con orientación tecnológica. Comenzó sus actividades en 2019 en un edificio provisorio y, el 27 de junio de 2022, inauguró su sede actual en Despeñaderos.
-        </p>
+    <!-- =========================================
+         DESTACADO (Historia - Cómo comenzó)
+         ========================================= -->
+    <section id="historia" class="destacado">
+        <div>
+            <h2>¿Cómo comenzó?</h2>
+            <p>El programa PRoA fue lanzado en 2014 por la provincia de Córdoba como una iniciativa innovadora orientada a las tecnologías de información y comunicación (TICs), con especialidades en Desarrollo de Software o Biotecnología.</p>
+            <p>Nuestras clases comenzaron en 2019 utilizando instalaciones provisionales. Tras mucho esfuerzo y crecimiento, en mayo de 2021 comenzó la construcción de nuestro edificio propio, inaugurándose finalmente con mucho orgullo en junio de 2022.</p>
+        </div>
+        <div>
+            <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Edificio de la escuela" style="width:100%; border-radius:16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+        </div>
     </section>
 
-    <!-- Pie de página -->
-    <footer>
-        <div class="contacto-info">
+    <!-- =========================================
+         BANNER DE NÚMEROS (Estadísticas)
+         ========================================= -->
+    <section class="numeros">
+        <h2>Nuestra Comunidad en Números</h2>
+        <p>Acompañamos el crecimiento constante de nuestros estudiantes desde 2019.</p>
+        <div class="numeros-grid">
+            <div>
+                <h3 style="font-size: 2.5rem; margin-bottom: 5px;">2022</h3>
+                <p>Inauguración Edificio</p>
+            </div>
+            <div>
+                <h3 style="font-size: 2.5rem; margin-bottom: 5px;">+150</h3>
+                <p>Estudiantes</p>
+            </div>
+            <div>
+                <h3 style="font-size: 2.5rem; margin-bottom: 5px;">3</h3>
+                <p>Clubes Estudiantiles</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================================
+         FOOTER Y CONTACTO
+         ========================================= -->
+    <footer id="contacto">
+        <div class="footer-contacto">
             <div class="contacto-item">
-                <i data-lucide="map-pin"></i>
+                <i class="fa-solid fa-envelope"></i>
+                <div>
+                    <strong>Email Oficial</strong>
+                    <a href="mailto:info@escuelaproa.edu.ar">info@escuelaproa.edu.ar</a>
+                </div>
+            </div>
+            <div class="contacto-item">
+                <i class="fa-solid fa-location-dot"></i>
                 <div>
                     <strong>Ubicación</strong>
-                    <p>Argentina 734 - Despeñaderos</p>
-                </div>
-            </div>
-
-            <div class="contacto-item">
-                <i data-lucide="mail"></i>
-                <div>
-                    <strong>Contacto</strong>
-                    <a href="mailto:despenaderos.ds@escuelasproa.edu.ar">despenaderos.ds@escuelasproa.edu.ar</a>
+                    <p>Despeñaderos, Córdoba</p>
                 </div>
             </div>
         </div>
-
         <div class="footer-creditos">
-            <p>Escuela Experimental PROA Despeñaderos &copy; 2026</p>
+            <p>&copy; 2026 Escuela PRoA - Desarrollado por los alumnos.</p>
         </div>
     </footer>
-
-    <!-- Inicialización de los iconos de Lucide -->
-    <script>
-        lucide.createIcons();
-    </script>
 
 </body>
 </html>
