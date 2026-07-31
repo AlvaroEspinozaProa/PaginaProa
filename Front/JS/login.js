@@ -40,12 +40,17 @@ async function login() {
     mensaje.style.color = "green";
     mensaje.textContent = "¡Inicio de sesión correcto!";
 
-    // Redireccionar al tablón
     setTimeout(() => {
-
-        window.location.href = "tablon.html";
-
+        const urlAnterior = document.referrer;
+        
+        // Verificamos si la página anterior existe y pertenece a tu mismo sitio web
+        if (urlAnterior && urlAnterior.includes(window.location.origin)) {
+            window.location.href = urlAnterior;
+        } else {
+            window.location.href = "tablon.html"; // Plan B por si entra directo al login
+        }
     }, 800);
+
 
 }
 document
