@@ -119,3 +119,49 @@ export async function eliminarNoticia(id) {
     return true;
 
 }
+
+//======================================
+// ACTUALIZAR / EDITAR NOTICIA
+//======================================
+
+export async function actualizarNoticia(id, {
+
+    titulo,
+    resumen,
+    contenido,
+    archivo
+
+}) {
+
+    const datosActualizar = {
+
+        titulo,
+        resumen,
+        contenido
+
+    };
+
+    if (archivo) {
+
+        const archivo_url = await subirArchivo(archivo);
+        if (archivo_url) {
+            datosActualizar.archivo_url = archivo_url;
+        }
+
+    }
+
+    const { error } = await supabase
+        .from(TABLA)
+        .update(datosActualizar)
+        .eq("id", id);
+
+    if (error) {
+
+        console.error(error);
+        return false;
+
+    }
+
+    return true;
+
+}

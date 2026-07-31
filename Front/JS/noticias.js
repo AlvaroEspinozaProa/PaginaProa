@@ -1,16 +1,90 @@
-import { obtenerNoticias, publicarNoticia, eliminarNoticia } from "./tablon.js";
+import { obtenerNoticias, publicarNoticia, eliminarNoticia, actualizarNoticia } from "./tablon.js";
+import { obtenerUsuarioActual, esAdmin, cerrarSesion } from "./auth.js";
 
 const contenedor = document.getElementById('contenedor-noticias');
 const formulario = document.getElementById('formulario-noticia');
 const seccionFormulario = document.getElementById('seccion-formulario');
 const btnToggleForm = document.getElementById('btn-toggle-form');
+const formTituloModo = document.getElementById('form-titulo-modo');
+const formIdNoticia = document.getElementById('form-id-noticia');
+const btnSubmitForm = document.getElementById('btn-submit-form');
+const btnCancelarEdicion = document.getElementById('btn-cancelar-edicion');
+const txtUsuarioEstado = document.getElementById('txt-usuario-estado');
+const btnLoginLink = document.getElementById('btn-login-link');
+const btnLogout = document.getElementById('btn-logout');
 
 let misNoticias = [];
+let usuarioActual = null;
+let esUsuarioAdmin = false;
+
+// ====================================================
+// INICIALIZAR SESIÓN Y ROL
+// ====================================================
+async function inicializarSesion() {
+    try {
+        usuarioActual = await obtenerUsuarioActual();
+        esUsuarioAdmin = await esAdmin();
+
+        if (usuarioActual) {
+            const email = usuarioActual.email || "";
+            const etiquetaRol = esUsuarioAdmin ? " (Admin)" : "";
+            txtUsuarioEstado.textContent = `Sesión activa: ${email}${etiquetaRol}`;
+            
+            btnLoginLink.classList.add('hidden');
+            btnLogout.classList.remove('hidden');
+
+            if (esUsuarioAdmin && btnToggleForm) {
+                btnToggleForm.classList.remove('hidden');
+            }
+        } else {
+            txtUsuarioEstado.textContent = "Modo de solo lectura";
+            btnLoginLink.classList.remove('hidden');
+            btnLogout.classList.add('hidden');
+            if (btnToggleForm) {
+                btnToggleForm.classList.add('hidden');
+            }
+        }
+    } catch (err) {
+        console.error("Error comprobando sesión:", err);
+        txtUsuarioEstado.textContent = "Error de conexión con usuario";
+    }
+}
+
+// Evento Cerrar Sesión
+if (btnLogout) {
+    btnLogout.addEventListener('click', async () => {
+        await cerrarSesion();
+        window.location.reload();
+    });
+}
 
 // Mostrar / Ocultar formulario
-btnToggleForm.addEventListener('click', () => {
-    seccionFormulario.classList.toggle('hidden');
-});
+if (btnToggleForm) {
+    btnToggleForm.addEventListener('click', () => {
+        if (seccionFormulario.classList.contains('hidden')) {
+            limpiarFormularioModo();
+            seccionFormulario.classList.remove('hidden');
+        } else {
+            seccionFormulario.classList.add('hidden');
+        }
+    });
+}
+
+// Cancelar edición
+if (btnCancelarEdicion) {
+    btnCancelarEdicion.addEventListener('click', () => {
+        limpiarFormularioModo();
+        seccionFormulario.classList.add('hidden');
+    });
+}
+
+function limpiarFormularioModo() {
+    formulario.reset();
+    formIdNoticia.value = "";
+    if (formTituloModo) formTituloModo.textContent = "Publicar Nueva Noticia";
+    if (btnSubmitForm) btnSubmitForm.textContent = "Publicar en el Tablón";
+    if (btnCancelarEdicion) btnCancelarEdicion.classList.add('hidden');
+}
 
 // Función auxiliar: Detecta si la URL guardada en Supabase pertenece a una imagen
 function esImagenURL(url) {
@@ -24,7 +98,6 @@ function esImagenURL(url) {
 function obtenerNombreArchivo(url) {
     if (!url) return "Archivo adjunto";
     const parteFinal = url.split('/').pop();
-    // Remueve el prefijo de fecha (Date.now() + "_") si existe
     return parteFinal.includes('_') ? parteFinal.split('_').slice(1).join('_') : parteFinal;
 }
 
@@ -66,6 +139,17 @@ function dibujarTarjetas() {
             adjuntoHTML = `<a href="${noticia.archivo_url}" target="_blank" download="${nombreArchivo}" class="doc-badge">📁 Descargar: ${nombreArchivo}</a>`;
         }
 
+        // Botones de administración (Solo visibles para Admin)
+        let botonesAdminHTML = "";
+        if (esUsuarioAdmin) {
+            botonesAdminHTML = `
+                <div style="display: flex; gap: 4px;">
+                    <button onclick="editarNoticia('${noticia.id}')" type="button" class="btn-edit"><i class="fa-solid fa-pen"></i> Editar</button>
+                    <button onclick="borrarNoticia('${noticia.id}')" type="button" class="btn-delete"><i class="fa-solid fa-trash"></i> Eliminar</button>
+                </div>
+            `;
+        }
+
         const tarjetaHTML = `
             <div class="tarjeta-uiverse">
               ${cabeceraTarjetaHTML}
@@ -76,7 +160,7 @@ function dibujarTarjetas() {
               </div>
               <div class="tarjeta-acciones">
                 <button onclick="abrirNoticiaCompleta('${noticia.id}')" type="button" class="btn-read-more">Leer Más</button>
-                <button onclick="borrarNoticia('${noticia.id}')" type="button" class="btn-delete">Eliminar</button>
+                ${botonesAdminHTML}
               </div>
             </div>
         `;
@@ -84,49 +168,94 @@ function dibujarTarjetas() {
     });
 }
 
+
 // ====================================================
-// FORMULARIO: PUBLICAR NOTICIA A SUPABASE
+// FORMULARIO: PUBLICAR O EDITAR NOTICIA EN SUPABASE
 // ====================================================
 formulario.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const btnSubmit = formulario.querySelector('.btn-submit');
+    if (!esUsuarioAdmin) {
+        alert("Atención: Solo los administradores pueden realizar publicaciones o modificaciones.");
+        return;
+    }
+
+    const btnSubmit = btnSubmitForm || formulario.querySelector('.btn-submit');
     const textoOriginal = btnSubmit.textContent;
     btnSubmit.disabled = true;
-    btnSubmit.textContent = "Publicando...";
+    btnSubmit.textContent = "Procesando...";
 
+    const idEditar = formIdNoticia.value;
     const fileInput = document.getElementById('form-archivo');
     const file = fileInput.files[0] || null;
 
-    const exito = await publicarNoticia({
-        titulo: document.getElementById('form-titulo').value.trim(),
-        resumen: document.getElementById('form-resumen').value.trim(),
-        contenido: document.getElementById('form-contenido').value.trim(),
-        archivo: file
-    });
+    let exito = false;
+
+    if (idEditar) {
+        // MODO EDICIÓN
+        exito = await actualizarNoticia(idEditar, {
+            titulo: document.getElementById('form-titulo').value.trim(),
+            resumen: document.getElementById('form-resumen').value.trim(),
+            contenido: document.getElementById('form-contenido').value.trim(),
+            archivo: file
+        });
+    } else {
+        // MODO CREACIÓN
+        exito = await publicarNoticia({
+            titulo: document.getElementById('form-titulo').value.trim(),
+            resumen: document.getElementById('form-resumen').value.trim(),
+            contenido: document.getElementById('form-contenido').value.trim(),
+            archivo: file
+        });
+    }
 
     btnSubmit.disabled = false;
     btnSubmit.textContent = textoOriginal;
 
     if (exito) {
-        formulario.reset();
+        limpiarFormularioModo();
         seccionFormulario.classList.add('hidden');
-        await cargarYDibujarNoticias(); // Recarga las noticias de Supabase
+        await cargarYDibujarNoticias(); // Recarga noticias de Supabase
     } else {
-        alert("Ocurrió un error al publicar la noticia en Supabase.");
+        alert("Ocurrió un error al guardar la noticia en Supabase.");
     }
 });
+
+// ====================================================
+// CARGAR DATOS EN FORMULARIO PARA EDICIÓN
+// ====================================================
+window.editarNoticia = function(idNoticia) {
+    const noticia = misNoticias.find(n => n.id == idNoticia);
+    if (!noticia) return;
+
+    formIdNoticia.value = noticia.id;
+    document.getElementById('form-titulo').value = noticia.titulo;
+    document.getElementById('form-resumen').value = noticia.resumen;
+    document.getElementById('form-contenido').value = noticia.contenido;
+
+    if (formTituloModo) formTituloModo.textContent = "Editar Noticia Existente";
+    if (btnSubmitForm) btnSubmitForm.textContent = "Guardar Cambios";
+    if (btnCancelarEdicion) btnCancelarEdicion.classList.remove('hidden');
+
+    seccionFormulario.classList.remove('hidden');
+    seccionFormulario.scrollIntoView({ behavior: 'smooth' });
+}
 
 // ====================================================
 // ELIMINAR NOTICIA
 // ====================================================
 window.borrarNoticia = async function(idNoticia) {
+    if (!esUsuarioAdmin) {
+        alert("Atención: Solo los administradores pueden eliminar publicaciones.");
+        return;
+    }
+
     if (confirm("¿Seguro que deseas eliminar esta publicación del sistema?")) {
         const exito = await eliminarNoticia(idNoticia);
         if (exito) {
             await cargarYDibujarNoticias();
         } else {
-            alert("No se pudo eliminar la noticia.");
+            alert("No se pudo eliminar la noticia de Supabase.");
         }
     }
 }
@@ -168,14 +297,24 @@ window.abrirNoticiaCompleta = function(idNoticia) {
 }
 
 // Eventos de cierre de modal
-document.getElementById('cerrar-modal').addEventListener('click', () => {
-    document.getElementById('modal-unico').style.display = "none";
-});
+function cerrarModalUnico() {
+    const modal = document.getElementById('modal-unico');
+    if (modal) {
+        modal.classList.add('hidden');
+        modal.style.display = "none";
+    }
+}
+
+document.getElementById('cerrar-modal').addEventListener('click', cerrarModalUnico);
 document.getElementById('modal-unico').addEventListener('click', (e) => {
     if (e.target === document.getElementById('modal-unico')) {
-        document.getElementById('modal-unico').style.display = "none";
+        cerrarModalUnico();
     }
 });
 
-// Cargar noticias al iniciar la página
-document.addEventListener("DOMContentLoaded", cargarYDibujarNoticias);
+
+// Cargar estado de sesión y noticias al iniciar la página
+document.addEventListener("DOMContentLoaded", async () => {
+    await inicializarSesion();
+    await cargarYDibujarNoticias();
+});

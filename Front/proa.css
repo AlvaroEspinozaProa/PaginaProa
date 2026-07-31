@@ -469,3 +469,735 @@ footer svg:hover {
         padding: 60px 5%;
     }
 }
+
+/* =========================================
+   SECCIÓN TABLÓN DE NOVEDADES
+   ========================================= */
+.tablon-body {
+    background-color: #f8fafc;
+    color: #1e293b;
+}
+
+/* --- Barra de Sesión de Usuario --- */
+.tablon-bar-sesion {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #e2e8f0;
+    padding: 12px 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    font-size: 0.88rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+}
+
+.tablon-sesion-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #475569;
+    font-weight: 500;
+}
+
+.tablon-badge-estado, .badge-estado {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.tablon-sesion-acciones {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.tablon-btn-action-main, .btn-action-main {
+    background: linear-gradient(135deg, #0077cc, #0057B8);
+    color: #ffffff;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 10px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 14px rgba(0, 119, 204, 0.25);
+    transition: all 0.25s ease;
+}
+
+.tablon-btn-action-main:hover, .btn-action-main:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 119, 204, 0.35);
+    background: linear-gradient(135deg, #0088e6, #0066d6);
+}
+
+.tablon-btn-action-secondary, .btn-action-secondary {
+    background: #e2e8f0;
+    color: #334155;
+    border: none;
+    padding: 9px 18px;
+    border-radius: 10px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.tablon-btn-action-secondary:hover, .btn-action-secondary:hover {
+    background: #cbd5e1;
+    color: #0f172a;
+}
+
+/* --- Hero Compacto del Tablón --- */
+.tablon-hero {
+    background: linear-gradient(135deg, #0057B8 0%, #0077cc 50%, #00AEEF 100%);
+    color: #ffffff;
+    text-align: center;
+    padding: 45px 20px 50px;
+    position: relative;
+}
+
+.tablon-hero h1 {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: -0.02em;
+}
+
+.tablon-hero p {
+    font-size: 1rem;
+    opacity: 0.92;
+    max-width: 650px;
+    margin: 0 auto;
+    font-weight: 300;
+    line-height: 1.6;
+}
+
+/* --- Formulario de Publicación (Animado) --- */
+.tablon-form-section-animated, .form-section-animated {
+    display: block;
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-15px);
+    overflow: hidden;
+    transition: max-height 0.4s ease, opacity 0.3s ease, transform 0.3s ease, margin 0.3s ease;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 650px;
+}
+
+.tablon-form-section-animated:not(.hidden), .form-section-animated:not(.hidden) {
+    max-height: 1200px;
+    opacity: 1;
+    transform: translateY(0);
+    margin: 35px auto 40px auto;
+}
+
+.tablon-form-card, .form-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 32px;
+    box-shadow: 0 10px 30px rgba(0, 87, 184, 0.08);
+    border: 1px solid #e2e8f0;
+    position: relative;
+}
+
+.tablon-form-card::before, .form-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(to right, #0057B8, #00AEEF);
+    border-radius: 18px 18px 0 0;
+}
+
+.tablon-form-card h3, .form-card h3 {
+    color: #0057B8;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tablon-form-group, .form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.tablon-form-group label, .form-group label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    margin-bottom: 8px;
+}
+
+.tablon-form-group input[type="text"],
+.tablon-form-group textarea,
+.tablon-form-group input[type="file"],
+.form-group input[type="text"],
+.form-group textarea,
+.form-group input[type="file"] {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    color: #1e293b;
+    background: #f8fafc;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+}
+
+.tablon-form-group input[type="file"], .form-group input[type="file"] {
+    padding: 8px 12px;
+    background: #ffffff;
+    cursor: pointer;
+}
+
+.tablon-form-group input:focus,
+.tablon-form-group textarea:focus,
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #0077cc;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(0, 119, 204, 0.15);
+}
+
+.tablon-form-actions, .form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.tablon-btn-submit, .btn-submit {
+    width: 100%;
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    border: none;
+    padding: 14px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
+    transition: all 0.2s ease;
+}
+
+.tablon-btn-submit:hover, .btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+    background: linear-gradient(135deg, #059669, #047857);
+}
+
+.tablon-btn-cancel, .btn-cancel {
+    width: 100%;
+    background: #f1f5f9;
+    color: #64748b;
+    border: none;
+    padding: 12px;
+    font-weight: 600;
+    font-size: 0.88rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tablon-btn-cancel:hover, .btn-cancel:hover {
+    background: #e2e8f0;
+    color: #334155;
+}
+
+/* --- Grilla de Tarjetas --- */
+.seccion-tablon-contenido {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+}
+
+.tablon-grid-noticias, .grid-noticias {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 35px 25px;
+    padding-top: 10px;
+    align-items: stretch;
+}
+
+/* --- Tarjeta Individual de Noticia --- */
+.tablon-tarjeta-uiverse, .tarjeta-uiverse {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: 16px;
+    background-color: #ffffff;
+    color: #334155;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tablon-tarjeta-uiverse:hover, .tarjeta-uiverse:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0, 87, 184, 0.12);
+    border-color: #bfdbfe;
+}
+
+.tablon-tarjeta-cabecera, .tarjeta-cabecera {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #0057B8, #0077cc);
+}
+
+.tablon-tarjeta-cabecera img, .tarjeta-cabecera img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.tablon-tarjeta-uiverse:hover .tablon-tarjeta-cabecera img,
+.tarjeta-uiverse:hover .tarjeta-cabecera img {
+    transform: scale(1.05);
+}
+
+.tablon-tarjeta-cuerpo, .tarjeta-cuerpo {
+    padding: 24px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.tablon-tarjeta-cuerpo h5, .tarjeta-cuerpo h5 {
+    margin: 0 0 10px 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.35;
+}
+
+.tablon-tarjeta-cuerpo p, .tarjeta-cuerpo p {
+    margin: 0;
+    font-size: 0.92rem;
+    font-weight: 300;
+    line-height: 1.6;
+    color: #64748b;
+    flex-grow: 1;
+}
+
+.tablon-doc-badge, .doc-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #eff6ff;
+    color: #0077cc;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-top: 16px;
+    text-decoration: none;
+    border: 1px solid #bfdbfe;
+    transition: background 0.2s ease;
+    width: fit-content;
+}
+
+.tablon-doc-badge:hover, .doc-badge:hover {
+    background-color: #dbeafe;
+}
+
+.tablon-tarjeta-acciones, .tarjeta-acciones {
+    padding: 16px 24px;
+    background-color: #f8fafc;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.tablon-btn-read-more, .btn-read-more {
+    background: linear-gradient(135deg, #0077cc, #0057B8);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(0, 119, 204, 0.2);
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.tablon-btn-read-more:hover, .btn-read-more:hover {
+    box-shadow: 0 6px 16px rgba(0, 119, 204, 0.35);
+    transform: translateY(-1px);
+}
+
+.tablon-btn-edit, .btn-edit {
+    background-color: #e0f2fe;
+    color: #0369a1;
+    border: none;
+    padding: 8px 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-right: 4px;
+}
+
+.tablon-btn-edit:hover, .btn-edit:hover {
+    background-color: #bae6fd;
+    color: #0284c7;
+}
+
+.tablon-btn-delete, .btn-delete {
+    background-color: #fef2f2;
+    color: #dc2626;
+    border: none;
+    padding: 8px 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tablon-btn-delete:hover, .btn-delete:hover {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+/* --- Ventana Modal Depurada --- */
+.tablon-modal-mask, .modal-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.tablon-modal-mask.hidden, .modal-mask.hidden {
+    display: none !important;
+}
+
+.tablon-modal-box, .modal-box {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 620px;
+    max-height: 88vh;
+    border-radius: 20px;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    animation: modalIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalIn {
+    from { opacity: 0; transform: scale(0.95) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.tablon-modal-cabecera-box, .modal-cabecera-box {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #0057B8, #0077cc);
+    flex-shrink: 0;
+}
+
+.tablon-modal-cabecera-box img, .modal-cabecera-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.tablon-modal-cuerpo, .modal-cuerpo {
+    padding: 28px;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.tablon-modal-cuerpo h5, .modal-cuerpo h5 {
+    margin: 0 0 16px 0;
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.3;
+}
+
+.tablon-modal-texto, .modal-texto {
+    color: #475569;
+    font-size: 0.96rem;
+    line-height: 1.7;
+    white-space: pre-wrap;
+}
+
+.tablon-modal-acciones, .modal-acciones {
+    padding: 18px 28px;
+    background-color: #f8fafc;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.tablon-btn-close, .btn-close {
+    background-color: #e2e8f0;
+    color: #334155;
+    border: none;
+    padding: 10px 22px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.tablon-btn-close:hover, .btn-close:hover {
+    background-color: #cbd5e1;
+    color: #0f172a;
+}
+
+/* =========================================
+   SECCIÓN PASANTÍAS Y POSTULACIÓN DE EMPRESAS
+   ========================================= */
+
+.pasantias-hero {
+    background: linear-gradient(135deg, #0057B8 0%, #0077cc 50%, #00AEEF 100%);
+    color: #ffffff;
+    text-align: center;
+    padding: 60px 20px 70px;
+    position: relative;
+}
+
+.pasantias-hero h1 {
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    font-weight: 800;
+    margin-bottom: 15px;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+
+.pasantias-hero p {
+    font-size: 1.05rem;
+    opacity: 0.94;
+    max-width: 720px;
+    margin: 0 auto 30px auto;
+    font-weight: 300;
+    line-height: 1.7;
+}
+
+.pasantias-hero-cta {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.pasantias-grid-beneficios {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.pasantias-card-beneficio {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 35px 25px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pasantias-card-beneficio:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 87, 184, 0.12);
+    border-color: #bfdbfe;
+}
+
+.pasantias-icono-card {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    color: #0077cc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin: 0 auto 20px auto;
+}
+
+.pasantias-card-beneficio h3 {
+    font-size: 1.2rem;
+    color: #0f172a;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.pasantias-card-beneficio p {
+    color: #64748b;
+    font-size: 0.92rem;
+    line-height: 1.6;
+}
+
+/* --- Panel de Administración de Postulaciones --- */
+.pasantias-admin-section {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 87, 184, 0.08);
+    border: 1px solid #e2e8f0;
+    margin: 40px 0;
+}
+
+.pasantias-admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f1f5f9;
+}
+
+.pasantias-admin-header h2 {
+    font-size: 1.4rem;
+    color: #0057B8;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+}
+
+.pasantias-filtros {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn-filtro {
+    background: #f1f5f9;
+    color: #475569;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-filtro.activo, .btn-filtro:hover {
+    background: #0077cc;
+    color: #ffffff;
+}
+
+.pasantias-tabla-container {
+    overflow-x: auto;
+}
+
+.pasantias-tabla {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.88rem;
+}
+
+.pasantias-tabla th {
+    background-color: #f8fafc;
+    color: #475569;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    padding: 14px 16px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.pasantias-tabla td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    color: #334155;
+}
+
+.pasantias-tabla tr:hover {
+    background-color: #f8fafc;
+}
+
+/* Badges de Estado */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.status-pendiente { background: #fff7ed; color: #c2410c; border: 1px solid #ffedd5; }
+.status-contactado { background: #eff6ff; color: #1d4ed8; border: 1px solid #dbeafe; }
+.status-aprobado { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
+.status-rechazado { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+
+.select-estado {
+    padding: 5px 10px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    font-size: 0.8rem;
+    background: #ffffff;
+    color: #1e293b;
+    cursor: pointer;
+}
+

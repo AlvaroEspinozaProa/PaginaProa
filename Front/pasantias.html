@@ -1,208 +1,274 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pasantías & Prácticas Profesionalizantes - Escuela PRoA</title>
+    
+    <!-- Hojas de estilo y fuentes -->
     <link rel="stylesheet" href="PRoA.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <title>Pasantías</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<script src="https://unpkg.com/lucide@latest"></script>
+<body class="tablon-body">
 
-<body>
+    <!-- =========================================
+         HEADER & NAVEGACIÓN PRINCIPAL
+         ========================================= -->
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="Logo PRoA">
+            <div>
+                <h2>Escuela PRoA</h2>
+                <span>Innovación en Educación</span>
+            </div>
+        </div>
+        <nav>
+            <a href="index.html"><i class="fa-solid fa-house"></i> Inicio</a>
+            <a href="tablon.html"><i class="fa-solid fa-bullhorn"></i> Novedades</a>
+            <a href="proyectos.html"><i class="fa-solid fa-code-branch"></i> Proyectos</a>
+            <a href="pasantias.html" style="background: var(--primary-hover); color: var(--white);"><i class="fa-solid fa-briefcase"></i> Pasantías</a>
+            <a href="cde.html"><i class="fa-solid fa-users-rectangle"></i> CDE</a>
+            <a href="deporte.html"><i class="fa-solid fa-trophy"></i> Deportes</a>
+        </nav>
+    </header>
 
-<header>
+    <!-- =========================================
+         BARRA SUPERIOR COMPACTA DE SESIÓN
+         ========================================= -->
+    <div id="bar-sesion" class="tablon-bar-sesion">
+        <div class="tablon-sesion-info">
+            <span class="tablon-badge-estado">
+                <i class="fa-solid fa-circle-user"></i>
+                <span id="txt-usuario-estado">Cargando estado de usuario...</span>
+            </span>
+        </div>
 
-    <div class="logo">
-        <img src="LOGO PROITA.jpg" alt="Logo ProA">
-
-        <div>
-            <h2>Colegio Experimental PROA</h2>
-            <span>Despeñaderos</span>
+        <div class="tablon-sesion-acciones">
+            <a id="btn-login-link" href="sesion.html" class="tablon-btn-action-secondary">
+                <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión (Admin)
+            </a>
+            <button id="btn-logout" class="tablon-btn-action-secondary hidden">
+                <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
+            </button>
         </div>
     </div>
 
-    <nav>
+    <!-- =========================================
+         HERO PRINCIPAL DE PASANTÍAS
+         ========================================= -->
+    <section class="pasantias-hero">
+        <span class="etiqueta">Prácticas Profesionalizantes</span>
+        <h1>Vinculando Estudiantes con el Sector Productivo</h1>
+        <p>Impulsamos el talento técnico de las Escuelas PRoA conectando a nuestros estudiantes de desarrollo de software con empresas e instituciones comprometidas con la formación profesional.</p>
+        
+        <div class="pasantias-hero-cta">
+            <button id="btn-abrir-postulacion" class="tablon-btn-action-main" style="padding: 14px 28px; font-size: 0.95rem;">
+                <i class="fa-solid fa-building-circle-check"></i> Postular Empresa / Solicitar Pasantes
+            </button>
+            <a href="#proceso" class="tablon-btn-action-secondary" style="padding: 14px 24px; font-size: 0.95rem;">
+                <i class="fa-solid fa-circle-info"></i> Conocer el Proceso
+            </a>
+        </div>
+    </section>
 
-        <a href="index.html">
-            <i data-lucide="house"></i>
-            Inicio
-        </a>
+    <!-- =========================================
+         PANEL DE ADMINISTRACIÓN (SOLO ADMINS)
+         ========================================= -->
+    <div class="seccion-comun" style="padding-top: 20px; padding-bottom: 0;">
+        <div class="max-w-6xl" style="max-width: 1200px; margin: 0 auto;">
+            <section id="seccion-admin-pasantias" class="pasantias-admin-section hidden">
+                <div class="pasantias-admin-header">
+                    <h2><i class="fa-solid fa-user-shield"></i> Panel de Administrador: Postulaciones de Empresas</h2>
+                    
+                    <div class="pasantias-filtros">
+                        <button id="filtro-todos" class="btn-filtro activo">Todas</button>
+                        <button id="filtro-pendiente" class="btn-filtro">Pendientes</button>
+                        <button id="filtro-contactado" class="btn-filtro">Contactados</button>
+                        <button id="filtro-aprobado" class="btn-filtro">Aprobados</button>
+                        <button id="filtro-rechazado" class="btn-filtro">Rechazados</button>
+                    </div>
+                </div>
 
-        <a href="quienes-somos.html">
-            <i data-lucide="school"></i>
-            Escuela
-        </a>
-
-        <a href="proyectos.html">
-            <i data-lucide="folder-code"></i>
-            Proyectos
-        </a>
-
-        <a href="pasantias.html">
-            <i data-lucide="briefcase-business"></i>
-            Pasantías
-        </a>
-
-        <a href="tablon.html">
-            <i data-lucide="mail"></i>
-            Vacantes Laborales
-        </a>
-
-    </nav>
-
-</header>
-
-<section class="hero" id="inicio">
-    <div class="hero-contenido"> <br><br>
-        <span class="hero-badge">Escuelas ProA · Formación Profesional</span>
-        <h1>Vinculando estudiantes con experiencias reales</h1>
-
-        <p>
-            Una plataforma diseñada para conectar estudiantes de las Escuelas ProA
-            con empresas e instituciones interesadas en brindar oportunidades de
-            formación profesional.
-        </p>
-
-        <div class="botones">
-            <a href="#empresas" class="btn btn-principal">Registrar Empresa</a>
-            <a href="#estudiantes" class="btn btn-secundario">Soy Estudiante</a>
+                <div id="contenedor-tabla-postulaciones" class="pasantias-tabla-container">
+                    <p style="text-align: center; color: #64748b; padding: 20px;">Cargando postulaciones de empresas desde Supabase...</p>
+                </div>
+            </section>
         </div>
     </div>
-</section>
 
-<section class="para-quien" id="estudiantes">
-    <div class="seccion-header">
-        <span class="seccion-etiqueta">Plataforma</span>
-        <h2>¿Para quién es?</h2>
-        <p>Conecta Pasantías está pensada para todos los actores del proceso de formación profesional.</p>
-    </div>
-
-    <div class="audiencia-grid">
-<div class="audiencia-card">
-    <div class="audiencia-icono">
-        <i data-lucide="graduation-cap"></i>
-    </div>
-    <h3>Estudiantes</h3>
-    <p>Conocé oportunidades de pasantías y prácticas en empresas e instituciones de la región.</p>
-    <a href="#como-funciona" class="audiencia-link">Ver cómo funciona →</a>
-</div>
-        <div class="audiencia-card">
-    <div class="audiencia-icono">
-        <i data-lucide="building-2"></i>
-    </div>
-    <h3>Empresas</h3>
-    <p>Registrate y publicá propuestas para recibir estudiantes interesados en aprender en tu organización.</p>
-    <a href="#empresas" class="audiencia-link">Más información →</a>
-</div>
-        <div class="audiencia-card">
-    <div class="audiencia-icono">
-        <i data-lucide="school"></i>
-    </div>
-    <h3>Institución</h3>
-    <p>La escuela coordina, acompaña y supervisa el proceso para garantizar una experiencia formativa de calidad.</p>
-    <a href="#contacto" class="audiencia-link">Contactanos →</a>
-</div>
-    </div>
-</section>
-
-<section class="alianzas" id="empresas">
-    <div class="seccion-header">
-        <span class="seccion-etiqueta">Alianzas</span>
-        <h2>Red de Empresas Participantes</h2>
-        <p>
-            Conectamos las Escuelas ProA con el sector productivo para que los estudiantes
-            accedan a experiencias reales en entornos laborales.
-        </p>
-    </div>
-</section>
-
-<section class="info" id="como-funciona">
-    <div class="seccion-header">
-        <span class="seccion-etiqueta">Proceso</span>
-        <h2>¿Cómo funciona?</h2>
-        <p>Simple, organizado y pensado para estudiantes, empresas y la institución educativa.</p>
-    </div>
-
-    <div class="pasos">
-        <div class="paso">
-            <div class="paso-numero">1</div>
-            <h3>Registro</h3>
-            <p>Las empresas interesadas se registran en la plataforma.</p>
+    <!-- =========================================
+         AUDIENCIA Y BENEFICIOS
+         ========================================= -->
+    <section class="seccion-comun seccion-fondo">
+        <div class="seccion-header">
+            <span class="seccion-etiqueta">Beneficios</span>
+            <h2>¿Para quién es Conecta Pasantías?</h2>
+            <p>Un ecosistema colaborativo donde estudiantes, empresas y la institución educativa crecen juntos.</p>
         </div>
-        <div class="paso">
-            <div class="paso-numero">2</div>
-            <h3>Publicación</h3>
-            <p>Publican oportunidades de pasantías y prácticas profesionalizantes.</p>
+
+        <div class="pasantias-grid-beneficios">
+            <div class="pasantias-card-beneficio">
+                <div class="pasantias-icono-card">
+                    <i class="fa-solid fa-user-graduate"></i>
+                </div>
+                <h3>Estudiantes</h3>
+                <p>Acceso a prácticas reales en desarrollo de software, robótica y tecnología, adquiriendo experiencia profesional antes de graduarse.</p>
+            </div>
+
+            <div class="pasantias-card-beneficio">
+                <div class="pasantias-icono-card">
+                    <i class="fa-solid fa-building"></i>
+                </div>
+                <h3>Empresas</h3>
+                <p>Incorporación de talento joven capacitado en tecnologías modernas, apoyando la formación técnica y dinamizando sus proyectos.</p>
+            </div>
+
+            <div class="pasantias-card-beneficio">
+                <div class="pasantias-icono-card">
+                    <i class="fa-solid fa-school-flag"></i>
+                </div>
+                <h3>Institución</h3>
+                <p>Supervisión pedagógica y coordinación continua para asegurar el cumplimiento de los objetivos formativos y convenios marco.</p>
+            </div>
         </div>
-        <div class="paso">
-            <div class="paso-numero">3</div>
-            <h3>Exploración</h3>
-            <p>Los estudiantes pueden conocer las propuestas disponibles.</p>
+    </section>
+
+    <!-- =========================================
+         PROCESO PASO A PASO
+         ========================================= -->
+    <section id="proceso" class="seccion-comun">
+        <div class="seccion-header">
+            <span class="seccion-etiqueta">Paso a Paso</span>
+            <h2>¿Cómo Funciona el Proceso?</h2>
+            <p>Transparente, ágil y respaldado por las Escuelas PRoA.</p>
         </div>
-        <div class="paso">
-            <div class="paso-numero">4</div>
-            <h3>Coordinación</h3>
-            <p>La institución educativa coordina y supervisa el proceso.</p>
+
+        <div class="pasos">
+            <div class="paso">
+                <div class="paso-numero">1</div>
+                <h3>Postulación de Empresa</h3>
+                <p>La empresa completa el formulario de solicitud indicando el perfil deseado y la cantidad de vacantes.</p>
+            </div>
+            <div class="paso">
+                <div class="paso-numero">2</div>
+                <h3>Revisión Institucional</h3>
+                <p>El equipo docente audita la solicitud y contacta a la empresa a través del correo oficial.</p>
+            </div>
+            <div class="paso">
+                <div class="paso-numero">3</div>
+                <h3>Selección & Convenio</h3>
+                <p>Se firman los acuerdos institucionales y se asignan los estudiantes postulantes.</p>
+            </div>
+            <div class="paso">
+                <div class="paso-numero">4</div>
+                <h3>Práctica & Seguimiento</h3>
+                <p>Los pasantes desarrollan sus horas de práctica supervisadas periódicamente por la escuela.</p>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<section class="propuesta">
-    <div class="seccion-header">
-        <span class="seccion-etiqueta">Nuestra visión</span>
-        <h2>Nuestra Propuesta</h2>
-    </div>
+    <!-- =========================================
+         PIE DE PÁGINA / FOOTER
+         ========================================= -->
+    <footer id="contacto">
+        <div class="footer-contacto">
+            <div class="contacto-item">
+                <i class="fa-solid fa-envelope" style="font-size: 1.5rem; color: #00AEEF;"></i>
+                <div>
+                    <strong>Email Oficial de Pasantías</strong>
+                    <p>despenaderos.ds@escuelasproa.edu.ar</p>
+                </div>
+            </div>
 
-    <div class="propuesta-contenido">
-        <p>
-            Conecta Pasantías simplifica el vínculo entre la escuela y las organizaciones
-            interesadas en colaborar con la formación de futuros profesionales, mediante
-            una herramienta digital accesible y organizada.
-        </p>
-    </div>
-</section>
+            <div class="contacto-item">
+                <i class="fa-solid fa-location-dot" style="font-size: 1.5rem; color: #00AEEF;"></i>
+                <div>
+                    <strong>Ubicación Institucional</strong>
+                    <p>Escuelas PRoA — Despeñaderos / Córdoba</p>
+                </div>
+            </div>
 
-<footer id="contacto">
-    <div class="footer-contacto">
-        <h2>¿Tenés consultas?</h2>
-        <p>Escribinos o acercate a la institución para más información sobre las pasantías.</p>
+            <div class="contacto-item">
+                <i class="fa-solid fa-clock" style="font-size: 1.5rem; color: #00AEEF;"></i>
+                <div>
+                    <strong>Atención a Empresas</strong>
+                    <p>Lunes a Viernes · Horario Escolar</p>
+                </div>
+            </div>
+        </div>
 
-        <div class="contacto-item">
-    <i data-lucide="mail" class="contacto-icono"></i>
-    <div>
-        <strong>Email</strong>
-        <p>despenaderos.ds@escuelasproa.edu.ar</p>
-    </div>
-</div>
-       <div class="contacto-item">
-    <i data-lucide="map-pin" class="contacto-icono"></i>
-    <div>
-        <strong>Institución</strong>
-        <p>Escuelas ProA</p>
-    </div>
-</div>
-        <div class="contacto-item">
-    <i data-lucide="clock-3" class="contacto-icono"></i>
-    <div>
-        <strong>Horario de consultas</strong>
-        <p>Lunes a viernes · Horario escolar</p>
-    </div>
-</div>
+        <div class="footer-creditos">
+            <p>Proyecto de Pasantías & Tesina — Escuela PRoA</p>
+            <p>Conecta Pasantías © 2026</p>
+        </div>
+    </footer>
+
+    <!-- =========================================
+         MODAL DE POSTULACIÓN DE EMPRESAS
+         ========================================= -->
+    <div id="modal-empresa" class="tablon-modal-mask hidden">
+        <div class="tablon-modal-box" style="max-width: 650px;">
+            <div class="tablon-modal-cabecera-box" style="height: 120px; display: flex; align-items: center; justify-content: center; color: white;">
+                <h3 style="margin: 0; font-size: 1.35rem;"><i class="fa-solid fa-building-circle-check"></i> Registro de Empresa para Pasantías</h3>
+            </div>
+            
+            <div class="tablon-modal-cuerpo" style="padding: 24px;">
+                <form id="formulario-postulacion-empresa">
+                    <div class="tablon-form-group">
+                        <label>Nombre de la Empresa / Organización *</label>
+                        <input type="text" id="empresa-nombre" required placeholder="Ej: Tech Solution S.A.">
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="tablon-form-group">
+                            <label>Rubro o Sector</label>
+                            <input type="text" id="empresa-rubro" placeholder="Ej: Software, Hardware, Industria">
+                        </div>
+                        <div class="tablon-form-group">
+                            <label>Persona de Contacto *</label>
+                            <input type="text" id="empresa-contacto" required placeholder="Ej: Ing. María Pérez">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="tablon-form-group">
+                            <label>Correo Electrónico *</label>
+                            <input type="email" id="empresa-email" required placeholder="contacto@empresa.com">
+                        </div>
+                        <div class="tablon-form-group">
+                            <label>Teléfono de Contacto</label>
+                            <input type="text" id="empresa-telefono" placeholder="Ej: 3564 123456">
+                        </div>
+                    </div>
+
+                    <div class="tablon-form-group">
+                        <label>Cantidad de Pasantes Solicitados</label>
+                        <input type="number" id="empresa-vacantes" min="1" value="1">
+                    </div>
+
+                    <div class="tablon-form-group">
+                        <label>Perfil Deseado / Comentarios</label>
+                        <textarea id="empresa-mensaje" rows="4" placeholder="Describe brevemente las tareas o perfil técnico que necesitas..."></textarea>
+                    </div>
+
+                    <div class="tablon-form-actions">
+                        <button type="submit" id="btn-submit-empresa" class="tablon-btn-submit">
+                            Enviar Postulación de Empresa
+                        </button>
+                        <button type="button" id="btn-cerrar-modal-empresa" class="tablon-btn-cancel">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
-    <div class="footer-creditos">
-        <p>Proyecto de Tesina — Escuelas ProA</p>
-        <p>Conecta Pasantías © 2026</p>
-    </div>
-</footer>
-
-<script>
-    lucide.createIcons();
-</script>
+    <!-- Script Controlador de Pasantías -->
+    <script type="module" src="./JS/pasantias_controller.js"></script>
 
 </body>
 </html>

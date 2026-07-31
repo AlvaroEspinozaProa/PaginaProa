@@ -1,4 +1,4 @@
-import { iniciarSesion } from "./auth.js";
+import { iniciarSesion, esCorreoInstitucional } from "./auth.js";
 
 console.log("Login cargado correctamente");
 
@@ -18,16 +18,14 @@ async function login() {
 
     }
 
-    // (Opcional) Solo permitir correos institucionales
-    /*
-    if (!email.endsWith("@escuelasproa.edu.ar")) {
+    if (!esCorreoInstitucional(email)) {
 
         mensaje.style.color = "red";
-        mensaje.textContent = "Solo se permiten cuentas institucionales.";
+        mensaje.textContent = "Acceso denegado: solo se permiten correos institucionales @escuelasproa.edu.ar";
         return;
 
     }
-    */
+
 
     const { error } = await iniciarSesion(email, password);
 

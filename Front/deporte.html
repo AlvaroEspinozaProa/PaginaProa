@@ -1,30 +1,113 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="PRoA.css">
-    <title>Deporte</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Deportes - Escuela PRoA</title>
 </head>
-<body>
-    
+<body class="tablon-body">
 
 
+    <!-- =========================================
+         HEADER & NAVEGACIÓN
+         ========================================= -->
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="Logo PRoA">
+            <div>
+                <h2>Escuela PRoA</h2>
+                <span style="font-size: 0.85rem; color: #666;">Innovación en Educación</span>
+            </div>
+        </div>
+        <nav>
+            <a href="index.html"><i class="fa-solid fa-house"></i> Inicio</a>
+            <a href="tablon.html"><i class="fa-solid fa-bullhorn"></i> Novedades</a>
+            <a href="proyectos.html"><i class="fa-solid fa-code-branch"></i> Proyectos</a>
+            <a href="pasantias.html"><i class="fa-solid fa-briefcase"></i> Pasantías</a>
+            <a href="cde.html"><i class="fa-solid fa-users-rectangle"></i> CDE</a>
+            <a href="deporte.html" style="background: var(--primary-hover); color: var(--white);"><i class="fa-solid fa-trophy"></i> Deportes</a>
+        </nav>
+    </header>
 
+        <!-- =========================================
+         BARRA SUPERIOR DE SESIÓN
+         ========================================= -->
+    <div id="bar-sesion" class="tablon-bar-sesion">
+        <div class="tablon-sesion-info">
+            <span class="badge-estado">
+                <i class="fa-solid fa-circle-user"></i>
+                <span id="txt-usuario-estado">Verificando sesión...</span>
+            </span>
+        </div>
+        <div class="tablon-sesion-acciones">
+            <a id="btn-login-link" href="sesion.html" class="btn-action-secondary">
+                <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión (Admin)
+            </a>
+            <button id="btn-logout" class="btn-action-secondary hidden">
+                <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
+            </button>
+        </div>
+    </div>
 
+    <!-- =========================================
+         HERO SECTION (Cabecera de la Sección)
+         ========================================= -->
+    <section class="tablon-hero">
+        <div class="hero-texto">
+            <span class="etiqueta">Deportes</span>
+            <h1>Programas Deportivos</h1>
+            <p>Descubre los programas deportivos disponibles para los estudiantes de la Escuela PRoA.</p>
+        </div>
+        <div class="hero-imagen">
+            <img src="https://static.vecteezy.com/system/resources/thumbnails/045/740/243/small/a-variety-of-sports-equipment-including-an-american-football-a-soccer-ball-a-tennis-racket-a-tennis-ball-and-a-basketball-photo.jpg" alt="Equipamiento deportivo">
+        </div>
+    </section>
 
+    <!-- =========================================
+         CONTENIDO PRINCIPAL
+         ========================================= -->
+    <main class="seccion-comun seccion-fondo">
+        <div class="seccion-header">
+            <h2>Subtítulo de la Sección</h2>
+            <p>Texto orientativo para guiar al usuario a través del contenido desplegado.</p>
+        </div>
+        
+        <div class="grid-cards">
+            <!-- Plantilla de Tarjeta Genérica -->
+            <div class="card">
+                <i class="fa-solid fa-circle-info icono-card"></i>
+                <h3>Elemento o Artículo</h3>
+                <p>Aquí puedes redactar el contenido principal, descripciones, o integrar dinámicamente los elementos mediante JavaScript.</p>
+            </div>
+        </div>
+    </main>
 
-
-
-
-
-
-
-
-
-
-
-
+    <!-- =========================================
+         FOOTER Y CONTACTO
+         ========================================= -->
+    <footer id="contacto">
+        <div class="footer-contacto">
+            <div class="contacto-item">
+                <i class="fa-solid fa-envelope"></i>
+                <div>
+                    <strong>Email Oficial</strong>
+                    <a href="mailto:despenaderos.ds@escuelasproa.edu.ar">despenaderos.ds@escuelasproa.edu.ar</a>
+                </div>
+            </div>
+            <div class="contacto-item">
+                <i class="fa-solid fa-location-dot"></i>
+                <div>
+                    <strong>Ubicación</strong>
+                    <p>Despeñaderos, Córdoba</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-creditos">
+            <p>&copy; 2026 Escuela PRoA - Desarrollado por los alumnos.</p>
+        </div>
+    </footer>
 
 </body>
 </html>
