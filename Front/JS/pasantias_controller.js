@@ -36,29 +36,42 @@ async function inicializarSesion() {
         const usuarioActual = await obtenerUsuarioActual();
         esUsuarioAdmin = await esAdmin();
 
-        if (usuarioActual) {
-            const email = usuarioActual.email || "";
-            const etiquetaRol = esUsuarioAdmin ? " (Admin)" : "";
-            txtUsuarioEstado.textContent = `Sesión activa: ${email}${etiquetaRol}`;
-            
+        // Buscamos la sección en el DOM
+        const seccionAdmin = document.getElementById('seccion-admin-pasantias');
+
+        if (usuarioActual && esUsuarioAdmin) {
+            // ==========================================
+            // CASO 1: ES ADMINISTRADOR
+            // ==========================================
+            txtUsuarioEstado.textContent = `Sesión activa: ${usuarioActual.email} (Admin)`;
             btnLoginLink.classList.add('hidden');
             btnLogout.classList.remove('hidden');
 
-            if (esUsuarioAdmin && seccionAdmin) {
+            if (seccionAdmin) {
                 seccionAdmin.classList.remove('hidden');
+                seccionAdmin.style.display = 'block'; // Muestra el panel al admin
                 await cargarYDibujarPostulacionesAdmin();
             }
         } else {
-            txtUsuarioEstado.textContent = "Modo empresa / estudiante";
+            // ==========================================
+            // CASO 2: USUARIO COMÚN O NO LOGUEADO
+            // ==========================================
+            txtUsuarioEstado.textContent = "Modo lectura";
             btnLoginLink.classList.remove('hidden');
             btnLogout.classList.add('hidden');
+            
             if (seccionAdmin) {
                 seccionAdmin.classList.add('hidden');
+                seccionAdmin.style.display = 'none'; // Oculta estrictamente al usuario común
             }
         }
     } catch (err) {
-        console.error("Error al inicializar sesión en pasantías:", err);
-        txtUsuarioEstado.textContent = "Modo de consulta pública";
+        console.error("Error al inicializar sesión:", err);
+        const seccionAdmin = document.getElementById('seccion-admin-pasantias');
+        if (seccionAdmin) {
+            seccionAdmin.classList.add('hidden');
+            seccionAdmin.style.display = 'none'; // Por seguridad si ocurre un error
+        }
     }
 }
 
