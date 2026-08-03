@@ -164,4 +164,4 @@ export async function actualizarNoticia(id, {
 
     return true;
 
-}
+}

@@ -1200,4 +1200,7 @@ footer svg:hover {
     color: #1e293b;
     cursor: pointer;
 }
-
+
+.hidden {
+    display: none !important;
+}

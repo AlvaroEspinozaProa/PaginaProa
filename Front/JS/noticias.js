@@ -33,20 +33,34 @@ async function inicializarSesion() {
             btnLoginLink.classList.add('hidden');
             btnLogout.classList.remove('hidden');
 
-            if (esUsuarioAdmin && btnToggleForm) {
-                btnToggleForm.classList.remove('hidden');
+            // Solo mostrar el botón de publicar si el usuario es Admin
+            if (btnToggleForm) {
+                if (esUsuarioAdmin) {
+                    btnToggleForm.classList.remove('hidden');
+                } else {
+                    btnToggleForm.classList.add('hidden');
+                }
             }
         } else {
+            // Modo de solo lectura (Sin sesión)
             txtUsuarioEstado.textContent = "Modo de solo lectura";
             btnLoginLink.classList.remove('hidden');
             btnLogout.classList.add('hidden');
+
+            // Aseguramos que ni el botón ni la sección del formulario se vean
             if (btnToggleForm) {
                 btnToggleForm.classList.add('hidden');
+            }
+            if (seccionFormulario) {
+                seccionFormulario.classList.add('hidden');
             }
         }
     } catch (err) {
         console.error("Error comprobando sesión:", err);
         txtUsuarioEstado.textContent = "Error de conexión con usuario";
+        
+        // Ante un error de conexión, ocultamos el botón por seguridad
+        if (btnToggleForm) btnToggleForm.classList.add('hidden');
     }
 }
 
@@ -144,8 +158,8 @@ function dibujarTarjetas() {
         if (esUsuarioAdmin) {
             botonesAdminHTML = `
                 <div style="display: flex; gap: 4px;">
-                    <button onclick="editarNoticia('${noticia.id}')" type="button" class="btn-edit"><i class="fa-solid fa-pen"></i> Editar</button>
-                    <button onclick="borrarNoticia('${noticia.id}')" type="button" class="btn-delete"><i class="fa-solid fa-trash"></i> Eliminar</button>
+                    <button data-id="${noticia.id}" type="button" class="btn-edit"><i class="fa-solid fa-pen"></i> Editar</button>
+                    <button data-id="${noticia.id}" type="button" class="btn-delete"><i class="fa-solid fa-trash"></i> Eliminar</button>
                 </div>
             `;
         }
@@ -159,7 +173,7 @@ function dibujarTarjetas() {
                 ${adjuntoHTML}
               </div>
               <div class="tarjeta-acciones">
-                <button onclick="abrirNoticiaCompleta('${noticia.id}')" type="button" class="btn-read-more">Leer Más</button>
+                <button data-id="${noticia.id}" type="button" class="btn-read-more">Leer Más</button>
                 ${botonesAdminHTML}
               </div>
             </div>
@@ -317,4 +331,30 @@ document.getElementById('modal-unico').addEventListener('click', (e) => {
 document.addEventListener("DOMContentLoaded", async () => {
     await inicializarSesion();
     await cargarYDibujarNoticias();
+});
+
+// ====================================================
+// ESCUCHADOR GLOBAL DE CLICS PARA LAS TARJETAS
+// ====================================================
+contenedor.addEventListener('click', (e) => {
+    // Botón ELIMINAR
+    const btnDelete = e.target.closest('.btn-delete');
+    if (btnDelete) {
+        window.borrarNoticia(btnDelete.dataset.id);
+        return;
+    }
+
+    // Botón EDITAR
+    const btnEdit = e.target.closest('.btn-edit');
+    if (btnEdit) {
+        window.editarNoticia(btnEdit.dataset.id);
+        return;
+    }
+
+    // Botón LEER MÁS
+    const btnRead = e.target.closest('.btn-read-more');
+    if (btnRead) {
+        window.abrirNoticiaCompleta(btnRead.dataset.id);
+        return;
+    }
 });
