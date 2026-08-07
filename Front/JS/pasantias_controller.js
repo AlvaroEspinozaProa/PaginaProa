@@ -133,17 +133,31 @@ if (formPostulacion) {
 
         const resultado = await crearPostulacionEmpresa(datosEmpresa);
 
-        btnSubmit.disabled = false;
-        btnSubmit.textContent = textoOriginal;
-
         if (resultado.exito) {
+            // ==========================================
+            // ENVÍO DE CORREO CON EMAILJS
+            // ==========================================
+            const parametrosCorreo = {
+                nombre_empresa: datosEmpresa.nombre_empresa,
+                contacto_nombre: datosEmpresa.contacto_nombre,
+                email: datosEmpresa.email
+            };
+
+            // Reemplaza con tus credenciales reales de EmailJS
+            emailjs.send('service_bbydscf', 'template_54fdq9k', parametrosCorreo)
+                .then(() => {
+                    console.log('Correo de notificación enviado correctamente.');
+                })
+                .catch((err) => {
+                    console.error('Error al enviar el correo con EmailJS:', err);
+                });
+
             alert(
                 `¡Postulación recibida con éxito!\n\n` +
                 `Muchas gracias, ${datosEmpresa.contacto_nombre}. Hemos registrado la solicitud de ${datosEmpresa.nombre_empresa}.\n` +
-                `Se ha generado una notificación al correo institucional de pasantías:\n` +
-                `despenaderos.ds@escuelasproa.edu.ar\n\n` +
-                `El equipo directivo se pondrá en contacto a la brevedad.`
+                `Se ha enviado una notificación al correo institucional.`
             );
+            
             cerrarModal();
             if (esUsuarioAdmin) {
                 await cargarYDibujarPostulacionesAdmin();
@@ -151,6 +165,9 @@ if (formPostulacion) {
         } else {
             alert("Ocurrió un error al enviar la postulación. Por favor verifica los datos o intenta nuevamente.");
         }
+
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = textoOriginal;
     });
 }
 

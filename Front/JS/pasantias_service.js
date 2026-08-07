@@ -25,7 +25,6 @@ export async function crearPostulacionEmpresa({
             vacantes: parseInt(vacantes) || 1,
             mensaje: mensaje || "",
             estado: "Pendiente",
-            correo_notificacion: "despenaderos.ds@escuelasproa.edu.ar"
         })
         .select();
 
