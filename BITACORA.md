@@ -1,7 +1,7 @@
 # Bitácora de Proyecto - Sitio Web Oficial Escuela PRoA
 
 ## 📌 Resumen del Proyecto
-Rediseño y actualización del sitio web institucional de la Escuela PRoA (San Francisco / Córdoba), desarrollado en el marco de las pasantías escolares.
+Rediseño y actualización del sitio web institucional de la Escuela PRoA (Despeñaderos / Córdoba), desarrollado en el marco de las pasantías escolares.
 
 ### 👥 Equipo de Trabajo (6 Integrantes)
 - Avril Rincon
