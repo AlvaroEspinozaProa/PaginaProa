@@ -1,4 +1,4 @@
-# Guía de Trabajo - Página Proa: Dinamismo en Pasantías
+# Guía de Trabajo - Página Proa
 
 Hola equipo. Estuve auditando el código de su repositorio, prestándole especial atención a la carpeta Front/JS y a cómo están estructurando los archivos.
 
