@@ -11,7 +11,7 @@
     
     <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
+    <script src="JS/navigation.js" defer></script>
 </head>
 <body class="tablon-body">
 
@@ -19,23 +19,7 @@
     <!-- =========================================
          HEADER & NAVEGACIÓN PRINCIPAL
          ========================================= -->
-    <header>
-        <div class="logo">
-            <img src="logo.png" alt="Logo PRoA">
-            <div>
-                <h2>Escuela PRoA</h2>
-                <span>Innovación en Educación</span>
-            </div>
-        </div>
-        <nav>
-            <a href="index.html"><i class="fa-solid fa-house"></i> Inicio</a>
-            <a href="tablon.html" style="background: var(--primary-hover); color: var(--white);"><i class="fa-solid fa-bullhorn"></i> Novedades</a>
-            <a href="proyectos.html"><i class="fa-solid fa-code-branch"></i> Proyectos</a>
-            <a href="pasantias.html"><i class="fa-solid fa-briefcase"></i> Pasantías</a>
-            <a href="cde.html"><i class="fa-solid fa-users-rectangle"></i> CDE</a>
-            <a href="deporte.html"><i class="fa-solid fa-trophy"></i> Deportes</a>
-        </nav>
-    </header>
+    <header id="global-header"></header>
 
     <!-- =========================================
          BARRA SUPERIOR COMPACTA DE SESIÓN
@@ -49,6 +33,9 @@
         </div>
 
         <div class="tablon-sesion-acciones">
+            <a href="horarios.html" class="tablon-btn-action-secondary">
+                <i class="fa-solid fa-calendar-days"></i> Ver Horarios
+            </a>
             <button id="btn-toggle-form" class="btn-action-main hidden">
                  <i class="fa-solid fa-plus"></i> Publicar Nueva Noticia
             </button>
@@ -60,6 +47,7 @@
             </button>
         </div>
     </div>
+
 
     <!-- =========================================
          HERO PRINCIPAL COMPACTO
@@ -148,6 +136,43 @@
 
     <!-- Script principal de lógica de noticias -->
     <script type="module" src="./JS/noticias.js"></script>
+
+    <footer id="contacto">
+        <div class="footer-contacto">
+            <div class="contacto-item">
+                <i class="fa-solid fa-envelope"></i>
+                <div>
+                    <strong>Email Oficial</strong>
+                    <a href="mailto:despenaderos.ds@escuelaproa.edu.ar">despenaderos.ds@escuelaproa.edu.ar</a>
+                </div>
+            </div>
+            <div class="contacto-item">
+                <i class="fa-solid fa-location-dot"></i>
+                <div>
+                    <strong>Ubicación</strong>
+                    <p>Despeñaderos, Córdoba</p>
+                </div>
+            </div>
+            <div class="contacto-item">
+                <i class="fa-solid fa-hashtag"></i>
+                <div>
+                    <strong>Instagram</strong>
+                    <a href="https://www.instagram.com/proadespenaderos/">@proadespenaderos</a>
+                </div>
+            </div>
+            <div class="contacto-item">
+                <i class="fa-solid fa-hashtag"></i>
+                <div>
+                    <strong>Facebook</strong>
+                    <a href="https://www.facebook.com/proadespenaderos/">@proa.despenaderos</a>
+                </div>
+            </div>
+            
+        </div>
+        <div class="footer-creditos">
+            <p>&copy; 2026 Escuela PRoA - Desarrollado por los alumnos.</p>
+        </div>
+    </footer>
 
 </body>
 </html>

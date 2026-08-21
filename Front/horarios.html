@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horarios Escolares - Escuela PRoA</title>
+   
+    <link rel="stylesheet" href="PRoA.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+   
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="JS/navigation.js" defer></script>
+   
+    <style>
+        /* CONTENEDOR GENERAL DE LA GRILLA SEMANAL */
+        .grilla-semanal-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .columna-dia-card {
+            background: #ffffff;
+            border-radius: 12px;
+            border: 2px solid #cbd5e1;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.04);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bloques-wrapper {
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: #f8fafc;
+            flex-grow: 1;
+        }
+
+        /* ESTILOS DE BLOQUES CON TAMAÑOS Y COLORES MARCADOS */
+        .bloque-item {
+            border-radius: 8px;
+            padding: 12px 14px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            transition: transform 0.2s;
+        }
+
+        .bloque-item:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Colores institucionales marcados */
+        .tipo-ingreso {
+            background-color: #dcfce7 !important;
+            border-left: 6px solid #16a34a !important;
+            border: 1px solid #bbf7d0;
+            color: #14532d;
+        }
+
+        .tipo-recreo {
+            background-color: #e2e8f0 !important;
+            border-left: 6px solid #64748b !important;
+            border: 1px solid #cbd5e1;
+            color: #1e293b;
+        }
+
+        .tipo-almuerzo {
+            background-color: #fef08a !important;
+            border-left: 6px solid #ca8a04 !important;
+            border: 1px solid #fde047;
+            color: #713f12;
+        }
+
+        .tipo-salida {
+            background-color: #fee2e2 !important;
+            border-left: 6px solid #dc2626 !important;
+            border: 1px solid #fecaca;
+            color: #7f1d1d;
+        }
+
+        .tipo-materia {
+            background-color: #ffffff !important;
+            border-left: 6px solid #0057B8 !important;
+            border: 1px solid #e2e8f0;
+            color: #0f172a;
+        }
+
+        .hora-etiqueta {
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: rgba(0,0,0,0.04);
+            width: fit-content;
+        }
+
+        .contenido-texto {
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        /* Responsive para dispositivos móviles */
+        @media (max-width: 900px) {
+            .grilla-semanal-container {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body class="tablon-body">
+
+    <header id="global-header"></header>
+
+    <div id="bar-sesion" class="tablon-bar-sesion">
+        <div class="tablon-sesion-info">
+            <span class="tablon-badge-estado">
+                <i class="fa-solid fa-circle-user"></i>
+                <span id="txt-usuario-estado">Verificando sesión...</span>
+            </span>
+        </div>
+
+        <div class="tablon-sesion-acciones">
+            <div id="admin-acciones-container" class="hidden">
+                <button id="btn-toggle-panel" class="tablon-btn-action-main">
+                    <i class="fa-solid fa-plus"></i> Añadir Bloque Proporcional
+                </button>
+            </div>
+            <a id="btn-login-link" href="sesion.html" class="tablon-btn-action-secondary">
+                <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión (Admin)
+            </a>
+            <button id="btn-logout" class="tablon-btn-action-secondary hidden">
+                <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
+            </button>
+        </div>
+    </div>
+
+    <section class="tablon-hero">
+        <span class="etiqueta">Gestión Institucional</span>
+        <h1>📅 Horarios Escolares Oficiales</h1>
+        <p>Cronograma visual con bloques proporcionales al tiempo de duración real.</p>
+       
+        <div class="selector-cursos" id="selector-cursos">
+            <button class="btn-curso" data-curso="1° Año">1° Año</button>
+            <button class="btn-curso" data-curso="2° Año">2° Año</button>
+            <button class="btn-curso" data-curso="3° Año">3° Año</button>
+            <button class="btn-curso" data-curso="4° Año">4° Año</button>
+            <button class="btn-curso" data-curso="5° Año">5° Año</button>
+            <button class="btn-curso active" data-curso="6° Año">6° Año</button>
+        </div>
+    </section>
+
+    <main style="max-width: 1400px; margin: 0 auto 60px auto; padding: 0 15px;">
+       
+        <div id="panel-carga" class="modal-overlay hidden">
+            <div class="modal-content-card">
+                <h3 style="color: #0057B8; margin-bottom: 20px;">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Añadir Bloque para <span id="lbl-curso-activo">6° Año</span>
+                </h3>
+               
+                <form id="form-guiado">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 15px;">
+                       
+                        <div class="tablon-form-group">
+                            <label>1. Día de la Semana *</label>
+                            <select id="g-dia" required>
+                                <option value="lunes">Lunes</option>
+                                <option value="martes">Martes</option>
+                                <option value="miercoles">Miércoles</option>
+                                <option value="jueves">Jueves</option>
+                                <option value="viernes">Viernes</option>
+                            </select>
+                        </div>
+
+                        <div class="tablon-form-group">
+                            <label>2. Tipo de Bloque *</label>
+                            <select id="g-tipo-bloque" required>
+                                <option value="materia">Materia de Clase</option>
+                                <option value="recreo">Recreo / Descanso</option>
+                                <option value="almuerzo">Almuerzo / Comida</option>
+                                <option value="ingreso">Ingreso</option>
+                                <option value="salida">Salida</option>
+                            </select>
+                        </div>
+
+                        <div class="tablon-form-group">
+                            <label>3. Hora de Inicio *</label>
+                            <input type="time" id="g-hora-inicio" required value="08:00">
+                        </div>
+
+                        <div id="grupo-hora-fin" class="tablon-form-group">
+                            <label>4. Hora de Fin *</label>
+                            <input type="time" id="g-hora-fin" value="10:00" required>
+                        </div>
+
+                    </div>
+
+                    <div id="seccion-materia-datos" style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
+                        <h4 style="margin-top:0; margin-bottom: 12px; color: #0f172a; font-size: 0.95rem;">Detalles de la Materia</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div class="tablon-form-group">
+                                <label>Nombre de la Materia *</label>
+                                <input type="text" id="g-materia-nombre" placeholder="Ej: Programación / FVT">
+                            </div>
+                            <div class="tablon-form-group">
+                                <label>¿Tiene Profesor Asignado?</label>
+                                <select id="g-tiene-profe">
+                                    <option value="si">Sí, tiene profesor</option>
+                                    <option value="no">No hay profesor</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="grupo-profe-nombre" class="tablon-form-group" style="margin-top: 10px;">
+                            <label>Nombre del Profesor</label>
+                            <input type="text" id="g-profe-nombre" placeholder="Ej: PROF. ALVARO ESPINOZA">
+                        </div>
+                    </div>
+
+                    <div id="seccion-recreo-datos" class="hidden" style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
+                        <div class="tablon-form-group" style="margin:0;">
+                            <label>Texto descriptivo</label>
+                            <input type="text" id="g-recreo-texto" value="RECREO">
+                        </div>
+                    </div>
+
+                    <div class="tablon-form-actions">
+                        <button type="submit" class="tablon-btn-submit">
+                            <i class="fa-solid fa-floppy-disk"></i> Guardar Bloque Proporcional
+                        </button>
+                        <button type="button" id="btn-cerrar-panel" class="tablon-btn-cancel">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 25px; margin-bottom: 25px;">
+            <h2 id="titulo-curso-actual" style="color: #0f172a; font-weight: 800; font-size: 1.8rem; margin: 0;">Horario 6° Año</h2>
+        </div>
+       
+        <div class="grilla-semanal-container">
+           
+            <div class="columna-dia-card">
+                <div class="encabezado-dia">
+                    <span>Lunes</span>
+                    <button class="btn-agregar-contextual hidden" data-dia="lunes" title="Añadir bloque para Lunes">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+                <div id="bloques-lunes" class="bloques-wrapper">
+                    <p style="text-align:center; color:#94a3b8; font-size:0.85rem; padding:15px;">Cargando...</p>
+                </div>
+            </div>
+
+            <div class="columna-dia-card">
+                <div class="encabezado-dia">
+                    <span>Martes</span>
+                    <button class="btn-agregar-contextual hidden" data-dia="martes" title="Añadir bloque para Martes">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+                <div id="bloques-martes" class="bloques-wrapper">
+                    <p style="text-align:center; color:#94a3b8; font-size:0.85rem; padding:15px;">Cargando...</p>
+                </div>
+            </div>
+
+            <div class="columna-dia-card">
+                <div class="encabezado-dia">
+                    <span>Miércoles</span>
+                    <button class="btn-agregar-contextual hidden" data-dia="miercoles" title="Añadir bloque para Miércoles">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+                <div id="bloques-miercoles" class="bloques-wrapper">
+                    <p style="text-align:center; color:#94a3b8; font-size:0.85rem; padding:15px;">Cargando...</p>
+                </div>
+            </div>
+
+            <div class="columna-dia-card">
+                <div class="encabezado-dia">
+                    <span>Jueves</span>
+                    <button class="btn-agregar-contextual hidden" data-dia="jueves" title="Añadir bloque para Jueves">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+                <div id="bloques-jueves" class="bloques-wrapper">
+                    <p style="text-align:center; color:#94a3b8; font-size:0.85rem; padding:15px;">Cargando...</p>
+                </div>
+            </div>
+
+            <div class="columna-dia-card">
+                <div class="encabezado-dia">
+                    <span>Viernes</span>
+                    <button class="btn-agregar-contextual hidden" data-dia="viernes" title="Añadir bloque para Viernes">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+                <div id="bloques-viernes" class="bloques-wrapper">
+                    <p style="text-align:center; color:#94a3b8; font-size:0.85rem; padding:15px;">Cargando...</p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer id="contacto">
+        <div class="footer-creditos">
+            <p>Proyecto de Horarios Escolares — Escuela PRoA © 2026</p>
+        </div>
+    </footer>
+
+    <script type="module" src="./JS/horarios_asistente_main.js"></script>
+</body>
+</html>

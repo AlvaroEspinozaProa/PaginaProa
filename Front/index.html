@@ -6,29 +6,14 @@
     <link rel="stylesheet" href="PRoA.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>Inicio - Escuela PRoA</title>
+    <script src="JS/navigation.js" defer></script>
 </head>
 <body>
 
     <!-- =========================================
          HEADER & NAVEGACIÓN
          ========================================= -->
-    <header>
-        <div class="logo">
-            <img src="logo.png" alt="Logo PRoA">
-            <div>
-                <h2>Escuela PRoA</h2>
-                <span style="font-size: 0.85rem; color: #666;">Innovación en Educación</span>
-            </div>
-        </div>
-        <nav>
-            <a href="index.html"><i class="fa-solid fa-house"></i> Inicio</a>
-            <a href="tablon.html"><i class="fa-solid fa-bullhorn"></i> Novedades</a>
-            <a href="proyectos.html"><i class="fa-solid fa-code-branch"></i> Proyectos</a>
-            <a href="pasantias.html"><i class="fa-solid fa-briefcase"></i> Pasantías</a>
-            <a href="cde.html"><i class="fa-solid fa-users-rectangle"></i> CDE</a>
-            <a href="#contacto"><i class="fa-solid fa-envelope"></i> Contacto</a>
-        </nav>
-    </header>
+    <header id="global-header"></header>
 
     <!-- =========================================
          HERO SECTION (Quiénes Somos)
@@ -57,6 +42,14 @@
         </div>
         
         <div class="grid-cards">
+            <!-- Horarios Escolares -->
+            <a href="horarios.html" class="card" style="text-decoration: none; color: inherit; display: block;">
+                <i class="fa-solid fa-calendar-days icono-card"></i>
+                <h3>Horarios Escolares</h3>
+                <p>Consultá el cronograma completo de clases, materias, docentes asignados y recreos por cada año.</p>
+                <span class="doc-badge" style="margin-top: 15px; display: inline-block;">Ver Horarios ➔</span>
+            </a>
+
             <!-- Tablón / Noticias -->
             <a href="tablon.html" class="card" style="text-decoration: none; color: inherit; display: block;">
                 <i class="fa-solid fa-bullhorn icono-card"></i>
@@ -90,6 +83,7 @@
             </a>
         </div>
     </section>
+
 
     <!-- =========================================
          INFORMACIÓN DEL COLEGIO (Formación PRoA y Compromiso)
@@ -160,6 +154,8 @@
         </div>
     </section>
 
+    
+
     <!-- =========================================
          FOOTER Y CONTACTO
          ========================================= -->
@@ -179,6 +175,21 @@
                     <p>Despeñaderos, Córdoba</p>
                 </div>
             </div>
+            <div class="contacto-item">
+                <i class="fa-solid fa-hashtag"></i>
+                <div>
+                    <strong>Instagram</strong>
+                    <a href="https://www.instagram.com/proadespenaderos/">@proadespenaderos</a>
+                </div>
+            </div>
+            <div class="contacto-item">
+                <i class="fa-solid fa-hashtag"></i>
+                <div>
+                    <strong>Facebook</strong>
+                    <a href="https://www.facebook.com/proadespenaderos/">@proa.despenaderos</a>
+                </div>
+            </div>
+            
         </div>
         <div class="footer-creditos">
             <p>&copy; 2026 Escuela PRoA - Desarrollado por los alumnos.</p>
