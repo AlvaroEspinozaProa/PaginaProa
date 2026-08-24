@@ -3,34 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Hojas de estilo y fuentes -->
     <link rel="stylesheet" href="PRoA.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>Deportes - Escuela PRoA</title>
+    <script src="JS/navigation.js" defer></script>
+
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="JS/navigation.js" defer></script>
 </head>
 <body class="tablon-body">
 
 
-    <!-- =========================================
-         HEADER & NAVEGACIÓN
+        <!-- =========================================
+         HEADER & NAVEGACIÓN PRINCIPAL
          ========================================= -->
     <header id="global-header"></header>
 
-        <!-- =========================================
-         BARRA SUPERIOR DE SESIÓN
+    <!-- =========================================
+         BARRA SUPERIOR COMPACTA DE SESIÓN
          ========================================= -->
     <div id="bar-sesion" class="tablon-bar-sesion">
         <div class="tablon-sesion-info">
-            <span class="badge-estado">
+            <span class="tablon-badge-estado">
                 <i class="fa-solid fa-circle-user"></i>
-                <span id="txt-usuario-estado">Verificando sesión...</span>
+                <span id="txt-usuario-estado">Cargando estado de usuario...</span>
             </span>
         </div>
+
         <div class="tablon-sesion-acciones">
-            <a id="btn-login-link" href="sesion.html" class="btn-action-secondary">
+            <a id="btn-login-link" href="sesion.html" class="tablon-btn-action-secondary">
                 <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión (Admin)
             </a>
-            <button id="btn-logout" class="btn-action-secondary hidden">
+            <button id="btn-logout" class="tablon-btn-action-secondary hidden">
                 <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
             </button>
         </div>

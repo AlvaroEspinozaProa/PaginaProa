@@ -4,16 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="PRoA.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet"   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>Inicio - Escuela PRoA</title>
-    <script src="JS/navigation.js" defer></script>
 </head>
 <body>
 
     <!-- =========================================
          HEADER & NAVEGACIÓN
          ========================================= -->
-    <header id="global-header"></header>
+    <header>
+        <div class="logo">
+            <img src="logo.png" alt="Logo PRoA">
+            <div>
+                <h2>Escuela PRoA</h2>
+                <span style="font-size: 0.85rem; color: #666;">Innovación en Educación</span>
+            </div>
+        </div>
+        <nav>
+            <a href="index.html"><i class="fa-solid fa-house"></i> Inicio</a>
+            <a href="tablon.html"><i class="fa-solid fa-bullhorn"></i> Novedades</a>
+            <a href="proyectos.html"><i class="fa-solid fa-code-branch"></i> Proyectos</a>
+            <a href="pasantias.html"><i class="fa-solid fa-briefcase"></i> Pasantías</a>
+            <a href="cde.html"><i class="fa-solid fa-users-rectangle"></i> CDE</a>
+            <a href="#contacto"><i class="fa-solid fa-envelope"></i> Contacto</a>
+        </nav>
+    </header>
 
     <!-- =========================================
          HERO SECTION (Quiénes Somos)
@@ -42,14 +57,6 @@
         </div>
         
         <div class="grid-cards">
-            <!-- Horarios Escolares -->
-            <a href="horarios.html" class="card" style="text-decoration: none; color: inherit; display: block;">
-                <i class="fa-solid fa-calendar-days icono-card"></i>
-                <h3>Horarios Escolares</h3>
-                <p>Consultá el cronograma completo de clases, materias, docentes asignados y recreos por cada año.</p>
-                <span class="doc-badge" style="margin-top: 15px; display: inline-block;">Ver Horarios ➔</span>
-            </a>
-
             <!-- Tablón / Noticias -->
             <a href="tablon.html" class="card" style="text-decoration: none; color: inherit; display: block;">
                 <i class="fa-solid fa-bullhorn icono-card"></i>
@@ -83,7 +90,6 @@
             </a>
         </div>
     </section>
-
 
     <!-- =========================================
          INFORMACIÓN DEL COLEGIO (Formación PRoA y Compromiso)
@@ -129,6 +135,28 @@
         </div>
         <div>
             <img src="https://www.altagracianoticias.com/wp-content/uploads/2022/06/WhatsApp-Image-2022-06-27-at-11-compressed-1-960x721.jpg" alt="Edificio de la escuela" style="width:100%; border-radius:16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+        </div>
+    </section>
+
+    <!-- =========================================
+         BANNER DE NÚMEROS (Estadísticas)
+         ========================================= -->
+    <section class="numeros">
+        <h2>Nuestra Comunidad en Números</h2>
+        <p>Acompañamos el crecimiento constante de nuestros estudiantes desde 2019.</p>
+        <div class="numeros-grid">
+            <div>
+                <h3 style="font-size: 2.5rem; margin-bottom: 5px;">2022</h3>
+                <p>Inauguración Edificio</p>
+            </div>
+            <div>
+                <h3 style="font-size: 2.5rem; margin-bottom: 5px;">+150</h3>
+                <p>Estudiantes</p>
+            </div>
+            <div>
+                <h3 style="font-size: 2.5rem; margin-bottom: 5px;">3</h3>
+                <p>Clubes Estudiantiles</p>
+            </div>
         </div>
     </section>
 
@@ -305,7 +333,7 @@
                                 a cada curso.
                             </p>
 
-                            <a href="horarios.html" class="faq-boton">
+                            <a href="#" class="faq-boton">
                                 <i class="fa-solid fa-clock"></i>
                                 Ver horarios por curso
                             </a>
@@ -559,30 +587,7 @@
 
 </section>
 
-    <!-- =========================================
-         BANNER DE NÚMEROS (Estadísticas)
-         ========================================= -->
-    <section class="numeros">
-        <h2>Nuestra Comunidad en Números</h2>
-        <p>Acompañamos el crecimiento constante de nuestros estudiantes desde 2019.</p>
-        <div class="numeros-grid">
-            <div>
-                <h3 style="font-size: 2.5rem; margin-bottom: 5px;">2022</h3>
-                <p>Inauguración Edificio</p>
-            </div>
-            <div>
-                <h3 style="font-size: 2.5rem; margin-bottom: 5px;">+150</h3>
-                <p>Estudiantes</p>
-            </div>
-            <div>
-                <h3 style="font-size: 2.5rem; margin-bottom: 5px;">3</h3>
-                <p>Clubes Estudiantiles</p>
-            </div>
-        </div>
-    </section>
-
     
-
     <!-- =========================================
          FOOTER Y CONTACTO
          ========================================= -->
@@ -602,26 +607,13 @@
                     <p>Despeñaderos, Córdoba</p>
                 </div>
             </div>
-            <div class="contacto-item">
-                <i class="fa-solid fa-hashtag"></i>
-                <div>
-                    <strong>Instagram</strong>
-                    <a href="https://www.instagram.com/proadespenaderos/">@proadespenaderos</a>
-                </div>
-            </div>
-            <div class="contacto-item">
-                <i class="fa-solid fa-hashtag"></i>
-                <div>
-                    <strong>Facebook</strong>
-                    <a href="https://www.facebook.com/proadespenaderos/">@proa.despenaderos</a>
-                </div>
-            </div>
-            
         </div>
         <div class="footer-creditos">
             <p>&copy; 2026 Escuela PRoA - Desarrollado por los alumnos.</p>
         </div>
     </footer>
 
+
+    
 </body>
 </html>
