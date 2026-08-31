@@ -96,6 +96,18 @@ nav a:hover, nav a.active {
     color: var(--white);
 }
 
+/* Botón hamburguesa: oculto en escritorio */
+.nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.7rem;
+    color: var(--primary);
+    cursor: pointer;
+    padding: 8px;
+    line-height: 1;
+}
+
 /* =========================================
    HERO SECTION (Soporta texto centrado e imagen al lado)
    ========================================= */
@@ -438,10 +450,35 @@ footer svg:hover {
    ========================================= */
 @media (max-width: 768px) {
     header {
-        flex-direction: column;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
         padding: 16px;
         background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(10px);
+    }
+
+    .nav-toggle {
+        display: block;
+    }
+
+    nav {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 5px;
+        margin-top: 15px;
+        order: 3;
+    }
+
+    nav.nav-open {
+        display: flex;
+    }
+
+    nav a {
+        justify-content: center;
     }
 
     .hero, .destacado {
@@ -2293,4 +2330,63 @@ footer svg:hover {
     .faq-respuesta {
         padding: 0 5px 18px 20px;
     }
+}
+
+
+/* =========================================
+   MAPA DE UBICACIÓN
+   ========================================= */
+
+.mapa-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+
+    border-radius: 16px;
+    overflow: hidden;
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+
+    aspect-ratio: 16 / 9;
+}
+
+.mapa-wrapper iframe {
+    width: 100%;
+    height: 100%;
+
+    border: 0;
+    display: block;
+}
+
+@media (max-width: 600px) {
+    .mapa-wrapper {
+        aspect-ratio: 4 / 3;
+        border-radius: 12px;
+    }
+}
+
+
+/* =========================================
+   FAQ — LINKS DE DESCARGA DE DOCUMENTOS
+   ========================================= */
+
+.faq-doc-link {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 6px;
+
+    color: #65798b;
+    text-decoration: none;
+
+    transition: 0.2s ease;
+}
+
+.faq-doc-link:hover {
+    color: #0057B8;
+    text-decoration: underline;
+}
+
+.faq-doc-link i {
+    color: #00AEEF;
+    font-size: 0.7rem;
 }

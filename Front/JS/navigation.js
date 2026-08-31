@@ -45,8 +45,34 @@ document.addEventListener("DOMContentLoaded", () => {
         navElement.appendChild(link);
     });
 
+    // Construcción del botón hamburguesa (solo se muestra en mobile via CSS)
+    const toggleBtn = document.createElement("button");
+    toggleBtn.className = "nav-toggle";
+    toggleBtn.setAttribute("aria-label", "Abrir menú");
+    toggleBtn.setAttribute("aria-expanded", "false");
+    toggleBtn.innerHTML = `<i class="fa-solid fa-bars"></i>`;
+
+    // Abrir/cerrar el menú al tocar el botón
+    toggleBtn.addEventListener("click", () => {
+        const isOpen = navElement.classList.toggle("nav-open");
+        toggleBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        toggleBtn.innerHTML = isOpen
+            ? `<i class="fa-solid fa-xmark"></i>`
+            : `<i class="fa-solid fa-bars"></i>`;
+    });
+
+    // Cerrar el menú automáticamente al elegir una opción (mobile)
+    navElement.addEventListener("click", (e) => {
+        if (e.target.closest("a")) {
+            navElement.classList.remove("nav-open");
+            toggleBtn.setAttribute("aria-expanded", "false");
+            toggleBtn.innerHTML = `<i class="fa-solid fa-bars"></i>`;
+        }
+    });
+
     // Limpiar contenido previo e inyectar cabecera unificada
     header.innerHTML = "";
     header.appendChild(logoDiv);
+    header.appendChild(toggleBtn);
     header.appendChild(navElement);
 });
