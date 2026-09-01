@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="JS/navigation.js" defer></script>
    
     <style>
@@ -119,6 +120,21 @@
                 gap: 15px;
             }
         }
+
+        /* Reglas optimizadas para impresión y exportación a PDF */
+        @media print {
+            #global-header, .tablon-bar-sesion, .tablon-hero, footer, .bloque-acciones, .btn-agregar-contextual {
+                display: none !important;
+            }
+            body {
+                background: #ffffff !important;
+            }
+            .grilla-semanal-container {
+                display: grid !important;
+                grid-template-columns: repeat(5, 1fr) !important;
+                gap: 10px !important;
+            }
+        }
     </style>
 </head>
 <body class="tablon-body">
@@ -134,6 +150,9 @@
         </div>
 
         <div class="tablon-sesion-acciones">
+            <button id="btn-exportar-pdf" class="tablon-btn-action-secondary" title="Exportar horario actual a PDF">
+                <i class="fa-solid fa-file-pdf" style="color: #e11d48;"></i> Exportar PDF
+            </button>
             <div id="admin-acciones-container" class="hidden">
                 <button id="btn-toggle-panel" class="tablon-btn-action-main">
                     <i class="fa-solid fa-plus"></i> Añadir Bloque Proporcional

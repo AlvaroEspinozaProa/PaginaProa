@@ -69,6 +69,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
+    const btnExportarPdf = document.getElementById("btn-exportar-pdf");
+    if (btnExportarPdf) {
+        btnExportarPdf.addEventListener("click", () => {
+            exportarHorarioAPDF();
+        });
+    }
+
 
     await cargarGrillaProporcional(cursoActual);
 
@@ -481,18 +488,63 @@ async function cargarGrillaProporcional(curso) {
     }
 
     // ====================================================
-// LÓGICA ACORDEÓN DESPLEGABLE DE DÍAS (RESPONSIVE)
+    // LÓGICA ACORDEÓN DESPLEGABLE DE DÍAS (RESPONSIVE)
+    // ====================================================
+    document.addEventListener("click", (e) => {
+        const btnDia = e.target.closest(".dia-header-btn");
+        if (!btnDia) return;
+
+        const tarjeta = btnDia.closest(".columna-dia-card");
+        const cuerpo = tarjeta.querySelector(".dia-cuerpo");
+
+        if (cuerpo) {
+            btnDia.classList.toggle("activo");
+            cuerpo.classList.toggle("desplegado");
+        }
+    });
+}
+
 // ====================================================
-document.addEventListener("click", (e) => {
-    const btnDia = e.target.closest(".dia-header-btn");
-    if (!btnDia) return;
-
-    const tarjeta = btnDia.closest(".columna-dia-card");
-    const cuerpo = tarjeta.querySelector(".dia-cuerpo");
-
-    if (cuerpo) {
-        btnDia.classList.toggle("activo");
-        cuerpo.classList.toggle("desplegado");
+// EXPORTACIÓN DE HORARIOS A FORMATO PDF
+// ====================================================
+function exportarHorarioAPDF() {
+    const elemento = document.querySelector(".grilla-semanal-container");
+    const btnExportar = document.getElementById("btn-exportar-pdf");
+    if (!elemento) {
+        alert("No se encontró la grilla de horarios para exportar.");
+        return;
     }
-});
+
+    if (typeof html2pdf !== "undefined") {
+        const nombreArchivo = `Horario_Escuela_PRoA_${cursoActual.replace(/\s+/g, '_')}.pdf`;
+        const opciones = {
+            margin: [0.3, 0.3, 0.3, 0.3],
+            filename: nombreArchivo,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true, logging: false },
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' }
+        };
+
+        const textoOriginal = btnExportar ? btnExportar.innerHTML : "";
+        if (btnExportar) {
+            btnExportar.disabled = true;
+            btnExportar.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Generando PDF...`;
+        }
+
+        html2pdf().set(opciones).from(elemento).save().then(() => {
+            if (btnExportar) {
+                btnExportar.disabled = false;
+                btnExportar.innerHTML = textoOriginal;
+            }
+        }).catch(err => {
+            console.error("Error exportando PDF con html2pdf:", err);
+            if (btnExportar) {
+                btnExportar.disabled = false;
+                btnExportar.innerHTML = textoOriginal;
+            }
+            window.print();
+        });
+    } else {
+        window.print();
+    }
 }

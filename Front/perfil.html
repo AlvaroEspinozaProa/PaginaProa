@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - Escuela PRoA</title>
+    
+    <link rel="stylesheet" href="proa.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .perfil-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        /* Contenedor Uiverse.io */
+        .perfil-card {
+            max-width: 520px;
+            width: 100%;
+            background: linear-gradient(180deg, #ffffff 0%, #f8fbfd 100%);
+            border-radius: 28px;
+            padding: 40px 35px;
+            border: 4px solid #ffffff;
+            box-shadow: 0 20px 40px -15px rgba(0, 87, 184, 0.18);
+            text-align: center;
+            position: relative;
+        }
+
+        .perfil-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 5px;
+            background: linear-gradient(90deg, #0057B8, #00AEEF);
+            border-radius: 0 0 10px 10px;
+        }
+
+        .perfil-avatar {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 20px;
+            border: 4px solid #0077cc;
+            box-shadow: 0 10px 25px rgba(0, 119, 204, 0.25);
+            background-color: #f1f5f9;
+        }
+
+        .perfil-nombre {
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: #0057B8;
+            margin-bottom: 5px;
+        }
+
+        .perfil-email {
+            font-size: 0.95rem;
+            color: #64748b;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .perfil-info-grid {
+            text-align: left;
+            margin-top: 25px;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 12px 16px;
+            background: #ffffff;
+            border-radius: 14px;
+            border: 1px solid #edf2f7;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+        }
+
+        .info-label {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #334155;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-label i {
+            color: #0077cc;
+        }
+
+        .badge-rol {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            letter-spacing: 0.03em;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .rol-admin {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        }
+
+        .rol-estudiante {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        }
+
+        .rol-comun {
+            background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+        }
+
+        .badge-estado {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .estado-pendiente { background: #f59e0b; }
+        .estado-contactado { background: #0284c7; }
+        .estado-aceptado { background: #16a34a; }
+        .estado-rechazado { background: #dc2626; }
+        .estado-nopostulado { background: #64748b; }
+
+        .info-nota-estudiante {
+            font-size: 0.82rem;
+            color: #475569;
+            background: #eff6ff;
+            border-left: 4px solid #2563eb;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-top: -5px;
+            line-height: 1.5;
+        }
+
+        .btn-logout {
+            margin-top: 30px;
+            width: 100%;
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: #ffffff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 16px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 20px -6px rgba(220, 38, 38, 0.4);
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-logout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 25px -6px rgba(220, 38, 38, 0.5);
+            background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+        }
+
+        .btn-logout:active {
+            transform: translateY(0);
+        }
+    </style>
+
+    <!-- Supabase JS Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="JS/navigation.js" defer></script>
+</head>
+<body>
+
+    <!-- Header global unificado -->
+    <header id="global-header"></header>
+
+    <div class="perfil-wrapper">
+        <div class="perfil-card">
+            <img id="avatar-usuario" class="perfil-avatar" src="" alt="Foto de perfil">
+            <h1 id="nombre-usuario" class="perfil-nombre">Cargando...</h1>
+            <p id="email-usuario" class="perfil-email"><i class="fa-solid fa-envelope"></i> <span>...</span></p>
+
+            <div class="perfil-info-grid">
+                <div class="info-row">
+                    <span class="info-label"><i class="fa-solid fa-user-shield"></i> Rol de Usuario:</span>
+                    <span id="span-rol" class="badge-rol">Cargando...</span>
+                </div>
+
+                <div id="info-estudiante-extra" class="info-nota-estudiante" style="display: none;">
+                    <i class="fa-solid fa-circle-info"></i> <em>Los estudiantes con correo @escuelasproa.edu.ar tendrán funciones especiales próximamente.</em>
+                </div>
+
+                <div class="info-row">
+                    <span class="info-label"><i class="fa-solid fa-briefcase"></i> Postulación a Pasantías:</span>
+                    <span id="span-estado-postulacion" class="badge-estado">Cargando...</span>
+                </div>
+            </div>
+
+            <button id="btn-cerrar-sesion" class="btn-logout">
+                <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
+            </button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { obtenerPerfil, cerrarSesion } from "./JS/auth.js";
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            const perfil = await obtenerPerfil();
+
+            if (!perfil) {
+                // Si visitante no tiene sesión activa, redirigir silenciosamente al login
+                window.location.href = "sesion.html";
+                return;
+            }
+
+            // Fallback de avatar con DiceBear SVG si no existe avatar_url
+            const email = perfil.email || "user";
+            const defaultAvatar = `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(email)}`;
+            
+            const imgAvatar = document.getElementById("avatar-usuario");
+            imgAvatar.src = perfil.avatar_url && perfil.avatar_url.trim() !== "" ? perfil.avatar_url : defaultAvatar;
+            imgAvatar.onerror = () => { imgAvatar.src = defaultAvatar; };
+
+            document.getElementById("nombre-usuario").textContent = perfil.nombre || "Usuario PRoA";
+            document.getElementById("email-usuario").querySelector("span").textContent = perfil.email || "";
+
+            // Rol Badge
+            const spanRol = document.getElementById("span-rol");
+            const rol = (perfil.rol || "comun").toLowerCase();
+
+            if (rol === "admin") {
+                spanRol.className = "badge-rol rol-admin";
+                spanRol.innerHTML = `<i class="fa-solid fa-crown"></i> Administrador`;
+            } else if (rol === "estudiante") {
+                spanRol.className = "badge-rol rol-estudiante";
+                spanRol.innerHTML = `<i class="fa-solid fa-graduation-cap"></i> Estudiante`;
+                document.getElementById("info-estudiante-extra").style.display = "block";
+            } else {
+                spanRol.className = "badge-rol rol-comun";
+                spanRol.innerHTML = `<i class="fa-solid fa-building"></i> Externo / Empresa`;
+            }
+
+            // Estado de Postulación Badge
+            const spanEstado = document.getElementById("span-estado-postulacion");
+            const estado = perfil.estado_postulacion || "No postulado";
+            spanEstado.textContent = estado;
+
+            const estadoLower = estado.toLowerCase();
+            if (estadoLower.includes("pendiente")) {
+                spanEstado.className = "badge-estado estado-pendiente";
+            } else if (estadoLower.includes("contactado")) {
+                spanEstado.className = "badge-estado estado-contactado";
+            } else if (estadoLower.includes("aceptado")) {
+                spanEstado.className = "badge-estado estado-aceptado";
+            } else if (estadoLower.includes("rechazado")) {
+                spanEstado.className = "badge-estado estado-rechazado";
+            } else {
+                spanEstado.className = "badge-estado estado-nopostulado";
+            }
+
+            // Botón Cerrar Sesión
+            document.getElementById("btn-cerrar-sesion").addEventListener("click", async () => {
+                await cerrarSesion();
+            });
+        });
+    </script>
+</body>
+</html>

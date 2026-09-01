@@ -1,138 +1,104 @@
 import supabase from "./supabase.js";
 
-// ===============================
-// VALIDAR CORREO INSTITUCIONAL
-// ===============================
-
+// Helper para verificar si un correo pertenece al dominio de estudiantes
 export function esCorreoInstitucional(email) {
-    if (!email) return false;
-    return email.trim().toLowerCase().endsWith("@escuelasproa.edu.ar");
+    return Boolean(email && email.toLowerCase().endsWith("@escuelasproa.edu.ar"));
 }
 
-// ===============================
-// OBTENER USUARIO ACTUAL
-// ===============================
-
-export async function obtenerUsuarioActual() {
-
-    const {
-        data: { user },
-        error
-    } = await supabase.auth.getUser();
-
-    if (error) {
-        console.error(error);
-        return null;
-    }
-
-    return user;
-}
-
-// ===============================
-// OBTENER PERFIL
-// ===============================
-
-export async function obtenerPerfil() {
-
-    const usuario = await obtenerUsuarioActual();
-
-    if (!usuario) return null;
-
-    const { data, error } = await supabase
-        .from("perfiles")
-        .select("*")
-        .eq("id", usuario.id)
-        .single();
-
-    if (error) {
-        console.warn("No se encontró perfil en tabla 'perfiles' o ocurrió un error:", error.message);
-        return null;
-    }
-
-    return data;
-}
-
-// Lista de correos administradores por defecto (Para pruebas y respaldo)
-const CORREOS_ADMIN_INICIALES = [
-    "aeperalta@escuelasproa.edu.ar",
-    "admin@escuelasproa.edu.ar"
-];
-
-// ===============================
-// OBTENER ROL
-// ===============================
-
-export async function obtenerRol() {
-
-    const usuario = await obtenerUsuarioActual();
-
-    if (!usuario) return null;
-
-    // 1. Verificar si existe registro en la tabla 'perfiles' de Supabase
-    const perfil = await obtenerPerfil();
-
-    if (perfil && perfil.rol) {
-        return perfil.rol;
-    }
-
-    // 2. Verificar metadatos de usuario en Supabase Auth
-    if (usuario.user_metadata && usuario.user_metadata.rol) {
-        return usuario.user_metadata.rol;
-    }
-
-    // 3. Verificación rápida por correo para el equipo de desarrollo/pasantía
-    const emailNormalizado = (usuario.email || "").toLowerCase().trim();
-    if (CORREOS_ADMIN_INICIALES.includes(emailNormalizado)) {
-        return "admin";
-    }
-
-    return "estudiante";
-}
-
-
-// ===============================
-// ¿ESTÁ LOGUEADO?
-// ===============================
-
-export async function estaLogueado() {
-
-    const usuario = await obtenerUsuarioActual();
-
-    return usuario !== null;
-}
-
-// ===============================
-// ¿ES ADMIN?
-// ===============================
-
+// Verificar si el usuario actual es admin (silencioso en try/catch)
 export async function esAdmin() {
+    try {
+        const user = await obtenerUsuarioActual();
+        if (!user) return false;
 
-    const rol = await obtenerRol();
+        const { data, error } = await supabase
+            .from('perfiles')
+            .select('rol')
+            .eq('id', user.id)
+            .maybeSingle();
 
-    return rol === "admin";
+        if (error || !data) return false;
+        return data.rol === 'admin';
+    } catch (err) {
+        return false;
+    }
 }
 
-// ===============================
-// LOGIN
-// ===============================
+// Obtener usuario actual autenticado (silencioso en try/catch)
+export async function obtenerUsuarioActual() {
+    try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (error || !session) return null;
+        return session.user;
+    } catch (err) {
+        return null;
+    }
+}
 
+// Obtener perfil completo (nombre, rol, avatar_url, estado_postulacion)
+export async function obtenerPerfil() {
+    try {
+        const user = await obtenerUsuarioActual();
+        if (!user) return null;
+
+        const { data, error } = await supabase
+            .from('perfiles')
+            .select('*')
+            .eq('id', user.id)
+            .maybeSingle();
+
+        if (error || !data) return null;
+        return data;
+    } catch (err) {
+        return null;
+    }
+}
+
+// Iniciar sesión
 export async function iniciarSesion(email, password) {
-
-    return await supabase.auth.signInWithPassword({
-
-        email,
-        password
-
+    const { data, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
     });
-
+    return { data, error };
 }
 
-// ===============================
-// LOGOUT
-// ===============================
+// Registrar usuario
+export async function registrarUsuario(email, password, nombre) {
+    try {
+        const { data, error } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                data: { nombre }
+            }
+        });
+        return { data, error };
+    } catch (err) {
+        return { data: null, error: err };
+    }
+}
 
+// Recuperar contraseña
+export async function recuperarContraseña(email) {
+    try {
+        const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: window.location.origin + '/sesion.html',
+        });
+        return { data, error };
+    } catch (err) {
+        return { data: null, error: err };
+    }
+}
+
+// Cerrar sesión
 export async function cerrarSesion() {
-
-    return await supabase.auth.signOut();
-
-}
+    try {
+        const { error } = await supabase.auth.signOut();
+        if (!error) {
+            window.location.href = "index.html";
+        }
+    } catch (err) {
+        window.location.href = "index.html";
+    }
+}

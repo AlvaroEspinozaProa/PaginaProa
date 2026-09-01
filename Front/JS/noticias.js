@@ -24,6 +24,7 @@ async function inicializarSesion() {
     try {
         usuarioActual = await obtenerUsuarioActual();
         esUsuarioAdmin = await esAdmin();
+        const btnPerfilLink = document.getElementById('btn-perfil-link');
 
         if (usuarioActual) {
             const email = usuarioActual.email || "";
@@ -32,6 +33,7 @@ async function inicializarSesion() {
             
             btnLoginLink.classList.add('hidden');
             btnLogout.classList.remove('hidden');
+            if (btnPerfilLink) btnPerfilLink.classList.remove('hidden');
 
             // Solo mostrar el botón de publicar si el usuario es Admin
             if (btnToggleForm) {
@@ -46,6 +48,7 @@ async function inicializarSesion() {
             txtUsuarioEstado.textContent = "Modo de solo lectura";
             btnLoginLink.classList.remove('hidden');
             btnLogout.classList.add('hidden');
+            if (btnPerfilLink) btnPerfilLink.classList.add('hidden');
 
             // Aseguramos que ni el botón ni la sección del formulario se vean
             if (btnToggleForm) {

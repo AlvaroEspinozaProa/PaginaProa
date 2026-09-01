@@ -35,34 +35,40 @@ async function inicializarSesion() {
     try {
         const usuarioActual = await obtenerUsuarioActual();
         esUsuarioAdmin = await esAdmin();
+        const btnPerfilLink = document.getElementById('btn-perfil-link');
 
         // Buscamos la sección en el DOM
         const seccionAdmin = document.getElementById('seccion-admin-pasantias');
 
-        if (usuarioActual && esUsuarioAdmin) {
-            // ==========================================
-            // CASO 1: ES ADMINISTRADOR
-            // ==========================================
-            txtUsuarioEstado.textContent = `Sesión activa: ${usuarioActual.email} (Admin)`;
+        if (usuarioActual) {
+            const email = usuarioActual.email || "";
+            const etiquetaRol = esUsuarioAdmin ? " (Admin)" : "";
+            txtUsuarioEstado.textContent = `Sesión activa: ${email}${etiquetaRol}`;
+            
             btnLoginLink.classList.add('hidden');
             btnLogout.classList.remove('hidden');
+            if (btnPerfilLink) btnPerfilLink.classList.remove('hidden');
 
-            if (seccionAdmin) {
+            if (esUsuarioAdmin && seccionAdmin) {
                 seccionAdmin.classList.remove('hidden');
                 seccionAdmin.style.display = 'block'; // Muestra el panel al admin
                 await cargarYDibujarPostulacionesAdmin();
+            } else if (seccionAdmin) {
+                seccionAdmin.classList.add('hidden');
+                seccionAdmin.style.display = 'none';
             }
         } else {
             // ==========================================
-            // CASO 2: USUARIO COMÚN O NO LOGUEADO
+            // CASO 2: USUARIO NO LOGUEADO
             // ==========================================
             txtUsuarioEstado.textContent = "Modo lectura";
             btnLoginLink.classList.remove('hidden');
             btnLogout.classList.add('hidden');
+            if (btnPerfilLink) btnPerfilLink.classList.add('hidden');
             
             if (seccionAdmin) {
                 seccionAdmin.classList.add('hidden');
-                seccionAdmin.style.display = 'none'; // Oculta estrictamente al usuario común
+                seccionAdmin.style.display = 'none'; // Oculta estrictamente
             }
         }
     } catch (err) {

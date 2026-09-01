@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iniciar Sesión - Escuela PRoA</title>
+    <title>Registro de Cuenta - Escuela PRoA</title>
     
     <link rel="stylesheet" href="proa.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -16,7 +16,7 @@
             flex-direction: column;
         }
 
-        .login-wrapper {
+        .register-wrapper {
             flex: 1;
             display: flex;
             align-items: center;
@@ -26,7 +26,7 @@
 
         /* Contenedor Uiverse.io */
         .uiverse-card {
-            max-width: 400px;
+            max-width: 440px;
             width: 100%;
             background: linear-gradient(180deg, #ffffff 0%, #f8fbfd 100%);
             border-radius: 28px;
@@ -110,22 +110,6 @@
             background: #ffffff;
         }
 
-        .forgot-link {
-            display: block;
-            text-align: right;
-            font-size: 0.82rem;
-            color: #0077cc;
-            text-decoration: none;
-            font-weight: 500;
-            margin-top: -4px;
-            transition: color 0.2s ease;
-        }
-
-        .forgot-link:hover {
-            color: #0057B8;
-            text-decoration: underline;
-        }
-
         .uiverse-btn {
             width: 100%;
             font-weight: 700;
@@ -162,7 +146,7 @@
             min-height: 20px;
         }
 
-        .register-footer {
+        .login-footer {
             margin-top: 25px;
             padding-top: 20px;
             border-top: 1px solid #e2e8f0;
@@ -170,13 +154,13 @@
             color: #64748b;
         }
 
-        .register-footer a {
+        .login-footer a {
             color: #0077cc;
             font-weight: 700;
             text-decoration: none;
         }
 
-        .register-footer a:hover {
+        .login-footer a:hover {
             text-decoration: underline;
         }
     </style>
@@ -190,13 +174,18 @@
     <!-- Header global unificado -->
     <header id="global-header"></header>
 
-    <div class="login-wrapper">
+    <div class="register-wrapper">
         <div class="uiverse-card">
             <img src="logo.png" alt="Logo PRoA" class="uiverse-logo">
-            <h1 class="uiverse-heading">Iniciar Sesión</h1>
-            <p class="uiverse-subheading">Acceso a la plataforma de la Escuela PRoA</p>
+            <h1 class="uiverse-heading">Crear Cuenta</h1>
+            <p class="uiverse-subheading">Registro para estudiantes y empresas colaboradoras</p>
 
-            <form id="formLogin" class="uiverse-form">
+            <form id="formRegistro" class="uiverse-form">
+                <div class="input-group">
+                    <i class="fa-solid fa-user"></i>
+                    <input required class="uiverse-input" type="text" id="nombre" placeholder="Nombre completo o Empresa">
+                </div>
+
                 <div class="input-group">
                     <i class="fa-solid fa-envelope"></i>
                     <input required class="uiverse-input" type="email" id="email" placeholder="Correo electrónico">
@@ -204,25 +193,28 @@
 
                 <div class="input-group">
                     <i class="fa-solid fa-lock"></i>
-                    <input required class="uiverse-input" type="password" id="password" placeholder="Contraseña">
+                    <input required class="uiverse-input" type="password" id="password" placeholder="Contraseña (mínimo 6 caracteres)">
                 </div>
 
-                <a href="#" id="btnForgot" class="forgot-link">¿Olvidaste tu contraseña?</a>
+                <div class="input-group">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <input required class="uiverse-input" type="password" id="confirmPassword" placeholder="Confirmar contraseña">
+                </div>
 
-                <button class="uiverse-btn" type="submit" id="btnLogin">
-                    <i class="fa-solid fa-right-to-bracket"></i> Ingresar
+                <button class="uiverse-btn" type="submit" id="btnRegister">
+                    <i class="fa-solid fa-user-plus"></i> Registrarse
                 </button>
             </form>
 
             <div id="mensaje" class="mensaje-estado"></div>
 
-            <div class="register-footer">
-                ¿No tienes una cuenta aún? <a href="registro.html">Regístrate aquí</a>
+            <div class="login-footer">
+                ¿Ya tienes una cuenta? <a href="sesion.html">Inicia sesión aquí</a>
             </div>
         </div>
     </div>
 
-    <!-- Script modular de inicio de sesión -->
-    <script type="module" src="./JS/login.js"></script>
+    <!-- Script modular de registro -->
+    <script type="module" src="./JS/registro.js"></script>
 </body>
 </html>
