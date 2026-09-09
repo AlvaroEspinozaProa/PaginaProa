@@ -80,12 +80,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Verificación dinámica de sesión activa (silenciosa)
     try {
-        const { obtenerUsuarioActual } = await import("./auth.js");
-        const user = await obtenerUsuarioActual();
-        if (user) {
+        const { obtenerPerfil } = await import("./auth.js");
+        const perfil = await obtenerPerfil();
+        if (perfil) {
             const perfilLink = navElement.querySelector('#nav-link-perfil') || navElement.querySelector('a[href="perfil.html"]');
             if (perfilLink) {
-                perfilLink.innerHTML = `<i class="fa-solid fa-user-gear"></i> Mi Perfil <span style="display:inline-block; width:8px; height:8px; background-color:#22c55e; border-radius:50%; margin-left:5px; vertical-align:middle;" title="Sesión activa"></span>`;
+                const defaultAvatar = `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(perfil.email || 'user')}`;
+                const fotoUrl = perfil.avatar_url && perfil.avatar_url.trim() !== "" ? perfil.avatar_url : defaultAvatar;
+
+                perfilLink.innerHTML = `<img src="${fotoUrl}" alt="Foto de Perfil" class="nav-avatar" onerror="this.src='${defaultAvatar}'"> Mi Perfil <span class="sesion-dot" title="Sesión activa"></span>`;
             }
         }
     } catch (e) {

@@ -46,7 +46,7 @@ header {
     box-shadow: 0 5px 20px rgba(0, 0, 0, .08);
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: 1100;
 }
 
 .logo {
@@ -96,6 +96,70 @@ nav a:hover, nav a.active {
     color: var(--white);
 }
 
+.sesion-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: #22c55e;
+    border-radius: 50%;
+    margin-left: 5px;
+    vertical-align: middle;
+}
+
+/* "Mi Perfil" queda alineado en la misma fila que el resto del menú, como un
+   ícono circular de avatar al final, en vez de un botón rectangular con texto. */
+@media (min-width: 769px) {
+    /* Todos los links quedan uno al lado del otro, sin pasar a una segunda fila */
+    nav {
+        flex-wrap: nowrap;
+    }
+
+    nav a#nav-link-perfil {
+        width: 42px;
+        height: 42px;
+        margin-left: 6px;
+        padding: 0;
+        border-radius: 50%;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 0;
+        background: var(--bg-light);
+        border: 2px solid #cbd5e1;
+        position: relative;
+    }
+
+    nav a#nav-link-perfil i {
+        font-size: 1.1rem;
+    }
+
+    nav a#nav-link-perfil:hover,
+    nav a#nav-link-perfil.active {
+        border-color: var(--primary-hover);
+    }
+
+    /* El puntito verde de "sesión activa" pasa a ser un badge sobre el círculo */
+    nav a#nav-link-perfil .sesion-dot {
+        position: absolute;
+        bottom: 1px;
+        right: 1px;
+        margin-left: 0;
+        border: 2px solid var(--white);
+    }
+}
+
+/* En pantallas intermedias, achicamos un poco el nav para que las 7 opciones
+   más el avatar entren cómodas en una sola fila. */
+@media (min-width: 769px) and (max-width: 1100px) {
+    nav {
+        gap: 6px;
+    }
+
+    nav a {
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
+}
+
 /* Botón hamburguesa: oculto en escritorio */
 .nav-toggle {
     display: none;
@@ -106,6 +170,26 @@ nav a:hover, nav a.active {
     cursor: pointer;
     padding: 8px;
     line-height: 1;
+}
+
+/* Tamaño por defecto (Celulares y pantallas chicas) */
+.nav-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+    vertical-align: middle;
+    margin-right: 6px;
+    border: 1.5px solid #0077cc;
+}
+
+/* Solo para pantallas de computadora (a partir de 768px) */
+@media (min-width: 768px) {
+    .nav-avatar {
+        width: 55px;
+        height: 55px;
+        border-width: 2px;
+    }
 }
 
 /* =========================================
@@ -2390,3 +2474,636 @@ footer svg:hover {
     color: #00AEEF;
     font-size: 0.7rem;
 }
+
+
+/* =========================================
+   MÓDULO DE RESEÑAS DE PASANTÍAS
+   ========================================= */
+
+.resenas-seccion {
+    padding: 60px 8%;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    position: relative;
+    z-index: 1;
+    scroll-margin-top: 90px;
+}
+
+.resenas-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* BARRA SUPERIOR DE CONTROL DE SESIÓN Y ACCESO */
+.resenas-sesion-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 35px;
+    padding: 14px 22px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    box-shadow: 0 4px 15px rgba(0, 87, 184, 0.04);
+}
+
+.resenas-badge-estado {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #334155;
+    font-size: 0.88rem;
+    font-weight: 500;
+}
+
+.resenas-badge-estado i {
+    color: #0077cc;
+    font-size: 1rem;
+}
+
+.resenas-btn-crear {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    background: #0077cc;
+    color: #ffffff;
+    border: none;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s ease;
+    box-shadow: 0 4px 12px rgba(0, 119, 204, 0.22);
+}
+
+.resenas-btn-crear:hover {
+    background: #0057B8;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 87, 184, 0.3);
+}
+
+/* GRILLA ADAPTABLE DE TARJETAS DE RESEÑA */
+.resenas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+    align-items: start;
+}
+
+/* TARJETA DE RESEÑA */
+.resena-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    align-self: start;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 8px 25px rgba(0, 87, 184, 0.06);
+}
+
+.resena-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 35px rgba(0, 87, 184, 0.12);
+}
+
+.resena-card-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.resena-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e2e8f0;
+    flex-shrink: 0;
+}
+
+.resena-autor-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.resena-empresa-titulo {
+    font-size: 1.02rem;
+    font-weight: 600;
+    color: #0f172a;
+    margin: 0 0 2px 0;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.resena-fecha {
+    font-size: 0.78rem;
+    color: #64748b;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* CONTROLES DE ADMINISTRADOR EN LA TARJETA */
+.resena-admin-acciones {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.resena-btn-admin-edit,
+.resena-btn-admin-delete {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.resena-btn-admin-edit {
+    background: #e0f2fe;
+    color: #0284c7;
+}
+
+.resena-btn-admin-edit:hover {
+    background: #0284c7;
+    color: #ffffff;
+}
+
+.resena-btn-admin-delete {
+    background: #ffe4e6;
+    color: #e11d48;
+}
+
+.resena-btn-admin-delete:hover {
+    background: #e11d48;
+    color: #ffffff;
+}
+
+/* ESTRELLAS Y PUNTACIÓN */
+.resena-calificacion-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.resena-estrellas-list {
+    display: flex;
+    gap: 4px;
+    font-size: 0.95rem;
+}
+
+.estrella-llena {
+    color: #ffc107;
+}
+
+.estrella-vacia {
+    color: #cbd5e1;
+}
+
+.resena-puntaje-num {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #475569;
+}
+
+/* TEXTO DEL COMENTARIO */
+.resena-comentario-texto {
+    font-size: 0.92rem;
+    color: #334155;
+    line-height: 1.6;
+    margin-bottom: 16px;
+    flex: 1;
+    white-space: pre-line;
+    word-break: break-word;
+}
+
+/* IMAGEN ADJUNTA EN LA TARJETA (MINI CARRUSEL HORIZONTAL DINO & LIMPIO) */
+.resena-imagen-adjunta {
+    margin-bottom: 16px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    position: relative;
+}
+
+.resena-carousel-track {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    padding: 6px;
+}
+
+.resena-carousel-track::-webkit-scrollbar {
+    height: 5px;
+}
+
+.resena-carousel-track::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+.resena-carousel-item {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    max-height: 230px;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.resena-carousel-multi .resena-carousel-item {
+    flex: 0 0 88%;
+}
+
+.resena-carousel-item:hover {
+    transform: scale(1.01);
+}
+
+.resena-carousel-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(15, 23, 42, 0.75);
+    color: #ffffff;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    backdrop-filter: blur(4px);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    pointer-events: none;
+}
+
+/* PREVISUALIZACIÓN DE IMAGEN EN MODAL DE EDICIÓN ADMIN */
+.resena-edit-preview-container {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 12px;
+    border-radius: 12px;
+}
+
+.resena-edit-preview-img-wrapper {
+    max-height: 140px;
+    overflow: hidden;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+}
+
+.resena-edit-img-thumb {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    display: block;
+}
+
+/* PIE DE TARJETA Y BOTÓN ME GUSTA */
+.resena-card-footer {
+    border-top: 1px solid #f1f5f9;
+    padding-top: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.resena-btn-like {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 0.84rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.resena-btn-like:hover {
+    background: #ffe4e6;
+    border-color: #fecdd3;
+    color: #e11d48;
+}
+
+.resena-btn-like.activo {
+    background: #ffe4e6;
+    border-color: #fda4af;
+    color: #e11d48;
+    font-weight: 600;
+}
+
+.resena-btn-like.activo i {
+    color: #e11d48;
+}
+
+.resena-like-count {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.05);
+    font-size: 0.78rem;
+}
+
+/* ESTADOS VACÍOS Y DE CARGA DE RESEÑAS */
+.resenas-empty,
+.resenas-loading {
+    text-align: center;
+    padding: 50px 20px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    grid-column: 1 / -1;
+}
+
+.resenas-empty h3 {
+    font-size: 1.15rem;
+    color: #1e293b;
+    margin-bottom: 6px;
+}
+
+.resenas-empty p {
+    font-size: 0.88rem;
+    color: #64748b;
+}
+
+/* =========================================
+   MODALES FLOTANTES (CREAR & EDITAR RESEÑA)
+   ========================================= */
+
+.resena-modal-mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 20px;
+}
+
+.resena-modal-box {
+    background: #ffffff;
+    width: 100%;
+    max-width: 550px;
+    border-radius: 20px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    animation: resenaModalSlideUp 0.3s ease-out;
+}
+
+@keyframes resenaModalSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.resena-modal-header {
+    padding: 20px 24px;
+    background: linear-gradient(135deg, #0077cc, #0057B8);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.resena-header-admin {
+    background: linear-gradient(135deg, #1e293b, #334155);
+}
+
+.resena-modal-header h3 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.resena-modal-close-x {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 1.6rem;
+    cursor: pointer;
+    line-height: 1;
+    opacity: 0.8;
+    transition: 0.2s ease;
+}
+
+.resena-modal-close-x:hover {
+    opacity: 1;
+}
+
+.resena-modal-form {
+    padding: 24px;
+}
+
+/* CAMPOS PRECARGADOS DE SOLO LECTURA */
+.resena-empresa-preview {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #f8fafc;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 20px;
+}
+
+.resena-preview-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #cbd5e1;
+}
+
+.resena-preview-info {
+    flex: 1;
+}
+
+.resena-input-readonly {
+    width: 100%;
+    background: transparent;
+    border: none;
+    font-weight: 600;
+    color: #0f172a;
+    font-size: 0.95rem;
+    outline: none;
+}
+
+/* CAMPOS DE FORMULARIO Y SELECTOR DE ESTRELLAS */
+.resena-form-group {
+    margin-bottom: 20px;
+}
+
+.resena-form-label {
+    display: block;
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: #334155;
+    margin-bottom: 6px;
+}
+
+.resena-star-picker {
+    display: flex;
+    gap: 8px;
+    font-size: 1.6rem;
+    cursor: pointer;
+    margin-top: 4px;
+}
+
+.star-icon {
+    transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.star-icon:hover {
+    transform: scale(1.2);
+}
+
+.star-on {
+    color: #ffc107;
+}
+
+.star-off {
+    color: #cbd5e1;
+}
+
+.resena-textarea {
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 0.9rem;
+    color: #1e293b;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.resena-textarea:focus {
+    border-color: #0077cc;
+    box-shadow: 0 0 0 3px rgba(0, 119, 204, 0.15);
+}
+
+.resena-input-file {
+    width: 100%;
+    font-size: 0.85rem;
+    color: #475569;
+}
+
+.resena-form-help {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.75rem;
+    color: #94a3b8;
+}
+
+.resena-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.resena-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    background: #0077cc;
+    color: #ffffff;
+    border: none;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.resena-btn-primary:hover {
+    background: #0057B8;
+}
+
+.resena-btn-secondary {
+    padding: 10px 18px;
+    border-radius: 10px;
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.resena-btn-secondary:hover {
+    background: #e2e8f0;
+    color: #1e293b;
+}
+
+/* =========================================
+   RESEÑAS — RESPONSIVE
+   ========================================= */
+
+@media (max-width: 768px) {
+    .resenas-seccion {
+        padding: 40px 5%;
+    }
+
+    .resenas-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .resenas-sesion-bar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .resenas-btn-crear {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .resena-modal-box {
+        border-radius: 14px;
+    }
+}

@@ -159,6 +159,41 @@
     </section>
 
     <!-- =========================================
+         MÓDULO DE RESEÑAS DE PASANTÍAS
+         ========================================= -->
+    <section id="seccion-resenas" class="resenas-seccion">
+        <div class="resenas-container">
+            
+            <!-- Barra Superior de Control de Sesión y Acceso del Módulo -->
+            <div id="bar-sesion-resenas" class="resenas-sesion-bar">
+                <div class="resenas-sesion-info">
+                    <span id="txt-resenas-sesion-estado" class="resenas-badge-estado">
+                        <i class="fa-solid fa-circle-notch fa-spin"></i> Cargando sesión...
+                    </span>
+                </div>
+                <div class="resenas-sesion-acciones">
+                    <button id="btn-abrir-modal-resena" type="button" class="resenas-btn-crear hidden">
+                        <i class="fa-solid fa-plus-circle"></i> Subir Reseña
+                    </button>
+                </div>
+            </div>
+
+            <!-- Encabezado de la Sección de Reseñas -->
+            <div class="seccion-header" style="margin-bottom: 35px;">
+                <span class="seccion-etiqueta">Experiencias & Testimonios</span>
+                <h2>Reseñas de Pasantías Profesionalizantes</h2>
+                <p>Conoce las opiniones y vivencias de las empresas que colaboran con los pasantes de la Escuela PRoA.</p>
+            </div>
+
+            <!-- Grilla Adaptable de Tarjetas de Reseña -->
+            <div id="resenas-grid" class="resenas-grid">
+                <!-- Se inyectan dinámicamente mediante JS -->
+            </div>
+
+        </div>
+    </section>
+
+    <!-- =========================================
          PIE DE PÁGINA / FOOTER
          ========================================= -->
     <footer id="contacto">
@@ -266,6 +301,129 @@
                     </div>
                 </form>
             </div>
+        </div>
+    </div>
+
+    <!-- =========================================
+         MODAL DE CREACIÓN DE RESEÑA (EMPRESAS)
+         ========================================= -->
+    <div id="modal-crear-resena" class="resena-modal-mask hidden">
+        <div class="resena-modal-box">
+            <div class="resena-modal-header">
+                <h3><i class="fa-solid fa-star-half-stroke"></i> Publicar Reseña de Pasantía</h3>
+                <button type="button" class="resena-modal-close-x" onclick="document.getElementById('btn-cerrar-modal-resena').click()">&times;</button>
+            </div>
+
+            <form id="form-crear-resena" class="resena-modal-form">
+                <!-- Datos precargados de la Empresa (Read-Only) -->
+                <div class="resena-empresa-preview">
+                    <img id="resena-empresa-avatar-img" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Avatar Empresa" class="resena-preview-avatar">
+                    <div class="resena-preview-info">
+                        <label class="resena-form-label">Empresa / Institución (Fijo por Sesión)</label>
+                        <input type="text" id="resena-empresa-nombre" class="resena-input-readonly" readonly disabled value="Cargando empresa...">
+                    </div>
+                </div>
+
+                <!-- Selector Interactivo de Calificación (Estrellas) -->
+                <div class="resena-form-group">
+                    <label class="resena-form-label">Calificación de la Pasantía *</label>
+                    <div id="star-picker-crear" class="resena-star-picker">
+                        <i class="fa-solid fa-star star-icon star-on" data-val="1"></i>
+                        <i class="fa-solid fa-star star-icon star-on" data-val="2"></i>
+                        <i class="fa-solid fa-star star-icon star-on" data-val="3"></i>
+                        <i class="fa-solid fa-star star-icon star-on" data-val="4"></i>
+                        <i class="fa-solid fa-star star-icon star-on" data-val="5"></i>
+                    </div>
+                    <input type="hidden" id="resena-calificacion" value="5">
+                </div>
+
+                <!-- Comentario Obligatorio -->
+                <div class="resena-form-group">
+                    <label for="resena-comentario" class="resena-form-label">Comentario u Opinión *</label>
+                    <textarea id="resena-comentario" class="resena-textarea" rows="4" required placeholder="Describe el desempeño de los pasantes, los proyectos desarrollados o la experiencia de trabajo con la Escuela PRoA..."></textarea>
+                </div>
+
+                <!-- Adjunto de Imagen Opcional -->
+                <div class="resena-form-group">
+                    <label for="resena-imagen-file" class="resena-form-label">Imágenes de la Pasantía (Opcional)</label>
+                    <input type="file" id="resena-imagen-file" class="resena-input-file" accept="image/*" multiple>
+                    <small class="resena-form-help">Puedes seleccionar múltiples fotos (JPG, PNG, WEBP).</small>
+                </div>
+
+                <!-- Botones de Acción -->
+                <div class="resena-modal-actions">
+                    <button type="submit" id="btn-submit-resena" class="resena-btn-primary">
+                        <i class="fa-solid fa-paper-plane"></i> Enviar Reseña
+                    </button>
+                    <button type="button" id="btn-cerrar-modal-resena" class="resena-btn-secondary">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- =========================================
+         MODAL DE EDICIÓN DE RESEÑA (ADMINISTRADOR)
+         ========================================= -->
+    <div id="modal-editar-resena" class="resena-modal-mask hidden">
+        <div class="resena-modal-box">
+            <div class="resena-modal-header resena-header-admin">
+                <h3><i class="fa-solid fa-user-shield"></i> Editar Reseña (Administración)</h3>
+                <button type="button" class="resena-modal-close-x" onclick="document.getElementById('btn-cerrar-modal-edit-resena').click()">&times;</button>
+            </div>
+
+            <form id="form-editar-resena" class="resena-modal-form">
+                <input type="hidden" id="resena-edit-id">
+
+                <!-- Selector Interactivo de Calificación -->
+                <div class="resena-form-group">
+                    <label class="resena-form-label">Modificar Calificación *</label>
+                    <div id="star-picker-editar" class="resena-star-picker">
+                        <i class="fa-solid fa-star star-icon star-on" data-val="1"></i>
+                        <i class="fa-solid fa-star star-icon star-on" data-val="2"></i>
+                        <i class="fa-solid fa-star star-icon star-on" data-val="3"></i>
+                        <i class="fa-solid fa-star star-icon star-on" data-val="4"></i>
+                        <i class="fa-solid fa-star star-icon star-on" data-val="5"></i>
+                    </div>
+                    <input type="hidden" id="resena-edit-calificacion" value="5">
+                </div>
+
+                <!-- Modificar Comentario -->
+                <div class="resena-form-group">
+                    <label for="resena-edit-comentario" class="resena-form-label">Modificar Comentario *</label>
+                    <textarea id="resena-edit-comentario" class="resena-textarea" rows="4" required></textarea>
+                </div>
+
+                <!-- Imagen Adjunta Actual y Cambio/Eliminación -->
+                <div class="resena-form-group">
+                    <label class="resena-form-label">Imagen de la Pasantía</label>
+                    
+                    <!-- Previsualización si existe imagen -->
+                    <div id="resena-edit-imagen-preview-box" class="resena-edit-preview-container hidden" style="margin-bottom: 10px;">
+                        <div class="resena-edit-preview-img-wrapper">
+                            <img id="resena-edit-imagen-preview-img" src="" alt="Previsualización Imagen Adjunta" class="resena-edit-img-thumb">
+                        </div>
+                        <label class="resena-checkbox-label" style="margin-top: 8px; display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; color: #e11d48; cursor: pointer;">
+                            <input type="checkbox" id="resena-edit-eliminar-imagen-check">
+                            <span><i class="fa-solid fa-trash"></i> Eliminar foto adjunta actual</span>
+                        </label>
+                    </div>
+
+                    <label for="resena-edit-imagen-file" class="resena-form-label" style="font-size: 0.8rem; color: #64748b; font-weight: normal;">Subir o reemplazar imágenes (Opcional):</label>
+                    <input type="file" id="resena-edit-imagen-file" class="resena-input-file" accept="image/*" multiple>
+                </div>
+
+                <!-- Botones de Acción -->
+                <div class="resena-modal-actions">
+                    <button type="submit" id="btn-submit-edit-resena" class="resena-btn-primary">
+                        <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
+                    </button>
+                    <button type="button" id="btn-cerrar-modal-edit-resena" class="resena-btn-secondary">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 

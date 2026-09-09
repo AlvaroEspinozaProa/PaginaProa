@@ -60,6 +60,72 @@
             background-color: #f1f5f9;
         }
 
+        /* Contenedor del avatar: permite click o arrastrar-y-soltar para cambiar la foto */
+        .perfil-avatar-wrapper {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .perfil-avatar-wrapper .perfil-avatar {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .perfil-avatar-overlay {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: rgba(0, 87, 184, 0.65);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            pointer-events: none;
+        }
+
+        .perfil-avatar-overlay i {
+            font-size: 1.3rem;
+        }
+
+        .perfil-avatar-wrapper:hover .perfil-avatar-overlay,
+        .perfil-avatar-wrapper.arrastrando .perfil-avatar-overlay {
+            opacity: 1;
+        }
+
+        .perfil-avatar-wrapper.arrastrando {
+            outline: 3px dashed #0077cc;
+            outline-offset: 4px;
+        }
+
+        .perfil-avatar-wrapper.subiendo .perfil-avatar-overlay {
+            opacity: 1;
+        }
+
+        .perfil-foto-input {
+            display: none;
+        }
+
+        .perfil-foto-estado {
+            font-size: 0.8rem;
+            margin: -10px 0 15px;
+            min-height: 1.1em;
+        }
+
+        .perfil-foto-estado.ok { color: #16a34a; }
+        .perfil-foto-estado.error { color: #dc2626; }
+
         .perfil-nombre {
             font-size: 1.7rem;
             font-weight: 800;
@@ -208,10 +274,17 @@
 
     <div class="perfil-wrapper">
         <div class="perfil-card">
-            <img id="avatar-usuario" class="perfil-avatar" src="" alt="Foto de perfil">
+            <div id="avatar-wrapper" class="perfil-avatar-wrapper" title="Hacé click o arrastrá una imagen para cambiar tu foto">
+                <img id="avatar-usuario" class="perfil-avatar" src="" alt="Foto de perfil">
+                <div class="perfil-avatar-overlay">
+                    <i class="fa-solid fa-camera"></i>
+                    <span id="avatar-overlay-texto">Cambiar foto</span>
+                </div>
+            </div>
+            <input type="file" id="input-foto-perfil" class="perfil-foto-input" accept="image/png, image/jpeg, image/webp">
+            <p id="foto-estado" class="perfil-foto-estado"></p>
             <h1 id="nombre-usuario" class="perfil-nombre">Cargando...</h1>
             <p id="email-usuario" class="perfil-email"><i class="fa-solid fa-envelope"></i> <span>...</span></p>
-
             <div class="perfil-info-grid">
                 <div class="info-row">
                     <span class="info-label"><i class="fa-solid fa-user-shield"></i> Rol de Usuario:</span>
@@ -235,7 +308,11 @@
     </div>
 
     <script type="module">
-        import { obtenerPerfil, cerrarSesion } from "./JS/auth.js";
+        import { obtenerPerfil, cerrarSesion, obtenerUsuarioActual } from "./JS/auth.js";
+        import supabase from "./JS/supabase.js";
+
+        const TAMANIO_MAX_MB = 5;
+        const NOMBRE_BUCKET_AVATARES = "avatars";
 
         document.addEventListener("DOMContentLoaded", async () => {
             const perfil = await obtenerPerfil();
@@ -294,6 +371,120 @@
             // Botón Cerrar Sesión
             document.getElementById("btn-cerrar-sesion").addEventListener("click", async () => {
                 await cerrarSesion();
+            });
+
+            // ==============================================
+            // CAMBIAR FOTO DE PERFIL (click o arrastrar y soltar)
+            // ==============================================
+            const avatarWrapper = document.getElementById("avatar-wrapper");
+            const inputFoto = document.getElementById("input-foto-perfil");
+            const overlayTexto = document.getElementById("avatar-overlay-texto");
+            const estadoFoto = document.getElementById("foto-estado");
+
+            function mostrarEstadoFoto(texto, tipo) {
+                estadoFoto.textContent = texto;
+                estadoFoto.className = "perfil-foto-estado" + (tipo ? " " + tipo : "");
+            }
+
+            const TIPOS_MIME_PERMITIDOS = ["image/png", "image/jpeg", "image/webp"];
+
+            function validarArchivo(file) {
+                if (!file) return "No se seleccionó ningún archivo.";
+                if (!TIPOS_MIME_PERMITIDOS.includes(file.type)) return "Formato no válido. Usá una imagen PNG, JPEG o WEBP.";
+                if (file.size > TAMANIO_MAX_MB * 1024 * 1024) return `La imagen no puede pesar más de ${TAMANIO_MAX_MB}MB.`;
+                return null;
+            }
+
+            async function subirFotoPerfil(file) {
+                const errorValidacion = validarArchivo(file);
+                if (errorValidacion) {
+                    mostrarEstadoFoto(errorValidacion, "error");
+                    return;
+                }
+
+                const user = await obtenerUsuarioActual();
+                if (!user) {
+                    mostrarEstadoFoto("Tu sesión expiró, iniciá sesión de nuevo.", "error");
+                    return;
+                }
+
+                // Vista previa inmediata mientras se sube
+                const previaUrl = URL.createObjectURL(file);
+                imgAvatar.src = previaUrl;
+
+                avatarWrapper.classList.add("subiendo");
+                overlayTexto.textContent = "Subiendo...";
+                mostrarEstadoFoto("Subiendo tu nueva foto...", "");
+
+                try {
+                    const extension = (file.name.split(".").pop() || "jpg").toLowerCase();
+                    // Un solo archivo por usuario (se pisa cada vez que sube uno nuevo)
+                    const rutaArchivo = `${user.id}/avatar.${extension}`;
+
+                    const { error: errorSubida } = await supabase.storage
+                        .from(NOMBRE_BUCKET_AVATARES)
+                        .upload(rutaArchivo, file, { upsert: true, cacheControl: "3600" });
+
+                    if (errorSubida) throw errorSubida;
+
+                    const { data: urlPublica } = supabase.storage
+                        .from(NOMBRE_BUCKET_AVATARES)
+                        .getPublicUrl(rutaArchivo);
+
+                    // Cache-busting para que se vea el cambio al toque
+                    const nuevaUrl = `${urlPublica.publicUrl}?t=${Date.now()}`;
+
+                    const { error: errorUpdate } = await supabase
+                        .from("perfiles")
+                        .update({ avatar_url: nuevaUrl })
+                        .eq("id", user.id);
+
+                    if (errorUpdate) throw errorUpdate;
+
+                    imgAvatar.src = nuevaUrl;
+                    mostrarEstadoFoto("¡Foto de perfil actualizada!", "ok");
+                } catch (err) {
+                    console.error("Error subiendo la foto de perfil:", err);
+                    imgAvatar.src = perfil.avatar_url && perfil.avatar_url.trim() !== "" ? perfil.avatar_url : defaultAvatar;
+                    mostrarEstadoFoto(err && err.message ? err.message : "No se pudo subir la foto. Probá de nuevo.", "error");
+                } finally {
+                    avatarWrapper.classList.remove("subiendo");
+                    overlayTexto.textContent = "Cambiar foto";
+                    URL.revokeObjectURL(previaUrl);
+                }
+            }
+
+            avatarWrapper.addEventListener("click", () => inputFoto.click());
+
+            inputFoto.addEventListener("change", () => {
+                if (inputFoto.files && inputFoto.files[0]) {
+                    subirFotoPerfil(inputFoto.files[0]);
+                    inputFoto.value = "";
+                }
+            });
+
+            ["dragenter", "dragover"].forEach(evento => {
+                avatarWrapper.addEventListener(evento, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    avatarWrapper.classList.add("arrastrando");
+                });
+            });
+
+            ["dragleave", "dragend"].forEach(evento => {
+                avatarWrapper.addEventListener(evento, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    avatarWrapper.classList.remove("arrastrando");
+                });
+            });
+
+            avatarWrapper.addEventListener("drop", (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                avatarWrapper.classList.remove("arrastrando");
+                const archivo = e.dataTransfer.files && e.dataTransfer.files[0];
+                if (archivo) subirFotoPerfil(archivo);
             });
         });
     </script>

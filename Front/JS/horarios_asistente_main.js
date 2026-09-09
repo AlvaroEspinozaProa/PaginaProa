@@ -517,12 +517,30 @@ function exportarHorarioAPDF() {
 
     if (typeof html2pdf !== "undefined") {
         const nombreArchivo = `Horario_Escuela_PRoA_${cursoActual.replace(/\s+/g, '_')}.pdf`;
+
+        // Armamos una página "a medida" del contenido (ancho x alto reales de la
+        // grilla, en pulgadas) para que el horario entre siempre completo en una
+        // sola hoja, sin importar cuántos bloques tenga cada día.
+        const margenIn = 0.3;
+        const anchoContenidoIn = elemento.scrollWidth / 96;
+        const altoContenidoIn = elemento.scrollHeight / 96;
+        const anchoPaginaIn = anchoContenidoIn + margenIn * 2;
+        const altoPaginaIn = altoContenidoIn + margenIn * 2;
+
         const opciones = {
-            margin: [0.3, 0.3, 0.3, 0.3],
+            margin: [margenIn, margenIn, margenIn, margenIn],
             filename: nombreArchivo,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2, useCORS: true, logging: false },
-            jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' }
+            jsPDF: {
+                unit: 'in',
+                format: [anchoPaginaIn, altoPaginaIn],
+                orientation: anchoPaginaIn >= altoPaginaIn ? 'landscape' : 'portrait'
+            },
+            // La página ya tiene el tamaño exacto del contenido, así que en la
+            // práctica nunca debería hacer falta una segunda hoja; 'avoid-all'
+            // queda solo como resguardo para no cortar un bloque a la mitad.
+            pagebreak: { mode: ['avoid-all'] }
         };
 
         const textoOriginal = btnExportar ? btnExportar.innerHTML : "";

@@ -318,7 +318,10 @@ botonesFiltro.forEach(btn => {
     });
 });
 
+import { inicializarModuloResenas } from "./pasantias_resenas.js";
+
 // Inicializar al cargar el DOM
 document.addEventListener('DOMContentLoaded', async () => {
     await inicializarSesion();
+    await inicializarModuloResenas();
 });
