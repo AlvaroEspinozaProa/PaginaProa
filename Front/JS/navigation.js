@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         currentPage = "index.html";
     }
 
-    // Definición de los elementos del menú de navegación global
+    // Definición de los elementos base del menú de navegación global
     const navItems = [
         { href: "index.html", icon: "fa-solid fa-house", text: "Inicio" },
         { href: "tablon.html", icon: "fa-solid fa-bullhorn", text: "Novedades" },
@@ -16,8 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         { href: "pasantias.html", icon: "fa-solid fa-briefcase", text: "Pasantías" },
         { href: "cde.html", icon: "fa-solid fa-users-rectangle", text: "CDE" },
         { href: "deporte.html", icon: "fa-solid fa-trophy", text: "Deportes" },
-        { href: "horarios.html", icon: "fa-solid fa-calendar-days", text: "Horarios" },
-        { href: "perfil.html", icon: "fa-solid fa-user-gear", text: "Mi Perfil", id: "nav-link-perfil" }
+        { href: "horarios.html", icon: "fa-solid fa-calendar-days", text: "Horarios" }
     ];
 
     // Construcción del logo
@@ -33,28 +32,60 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Construcción del menú de navegación
     const navElement = document.createElement("nav");
-    navItems.forEach(item => {
-        const link = document.createElement("a");
-        link.href = item.href;
-        if (item.id) link.id = item.id;
-        
-        // Agregar clase activa si corresponde a la página actual
-        if (currentPage.toLowerCase() === item.href.toLowerCase()) {
-            link.className = "active";
-        }
-        
-        link.innerHTML = `<i class="${item.icon}"></i> ${item.text}`;
-        navElement.appendChild(link);
-    });
 
-    // Construcción del botón hamburguesa (solo se muestra en mobile via CSS)
+    // Función auxiliar para renderizar los links del menú de forma consistente
+    function construirLinksMenu(esAdminUser = false, perfilData = null) {
+        navElement.innerHTML = "";
+
+        let itemsCompletos = [...navItems];
+
+        // Si es admin, insertamos el Panel Admin antes de Mi Perfil o al final
+        if (esAdminUser) {
+            itemsCompletos.push({ href: "admin.html", icon: "fa-solid fa-user-shield", text: "Panel Admin", id: "nav-link-admin" });
+        }
+
+        // Agregamos Mi Perfil al final
+        const avatarSeed = perfilData?.email || 'user';
+        const defaultAvatar = `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(avatarSeed)}`;
+        const fotoUrl = perfilData?.avatar_url && perfilData.avatar_url.trim() !== "" ? perfilData.avatar_url : defaultAvatar;
+
+        itemsCompletos.push({ 
+            href: "perfil.html", 
+            icon: `<img src="${fotoUrl}" alt="Perfil" class="nav-avatar" onerror="this.src='${defaultAvatar}'">`, 
+            text: `Mi Perfil <span class="sesion-dot" title="Sesión activa"></span>`, 
+            id: "nav-link-perfil",
+            esHtmlIcon: true
+        });
+
+        itemsCompletos.forEach(item => {
+            const link = document.createElement("a");
+            link.href = item.href;
+            if (item.id) link.id = item.id;
+            
+            if (currentPage.toLowerCase() === item.href.toLowerCase()) {
+                link.className = "active";
+            }
+
+            if (item.esHtmlIcon) {
+                link.innerHTML = `${item.icon} ${item.text}`;
+            } else {
+                link.innerHTML = `<i class="${item.icon}"></i> ${item.text}`;
+            }
+
+            navElement.appendChild(link);
+        });
+    }
+
+    // Renderizado inicial estándar (por si demora la sesión)
+    construirLinksMenu(false, null);
+
+    // Construcción del botón hamburguesa (solo mobile)
     const toggleBtn = document.createElement("button");
     toggleBtn.className = "nav-toggle";
     toggleBtn.setAttribute("aria-label", "Abrir menú");
     toggleBtn.setAttribute("aria-expanded", "false");
     toggleBtn.innerHTML = `<i class="fa-solid fa-bars"></i>`;
 
-    // Abrir/cerrar el menú al tocar el botón
     toggleBtn.addEventListener("click", () => {
         const isOpen = navElement.classList.toggle("nav-open");
         toggleBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
@@ -63,7 +94,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             : `<i class="fa-solid fa-bars"></i>`;
     });
 
-    // Cerrar el menú automáticamente al elegir una opción (mobile)
     navElement.addEventListener("click", (e) => {
         if (e.target.closest("a")) {
             navElement.classList.remove("nav-open");
@@ -72,110 +102,24 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
-    // =========================================
-    // GESTIÓN DE MODO OSCURO GLOBAL (ACCESIBLE)
-    // =========================================
-    const temaGuardado = localStorage.getItem("proa-theme") || 
-        (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-    
-    function aplicarTema(tema) {
-        if (tema === "dark") {
-            document.documentElement.setAttribute("data-theme", "dark");
-        } else {
-            document.documentElement.removeAttribute("data-theme");
-        }
-        localStorage.setItem("proa-theme", tema);
-        actualizarBotonesTema(tema);
-    }
-
-    function actualizarBotonesTema(tema) {
-        const esOscuro = tema === "dark";
-        const icono = esOscuro ? "fa-sun" : "fa-moon";
-        const texto = esOscuro ? "Modo Claro" : "Modo Oscuro";
-
-        const btnNav = document.getElementById("btn-theme-toggle-nav");
-        if (btnNav) {
-            btnNav.innerHTML = `<i class="fa-solid ${icono}"></i> ${texto}`;
-            btnNav.setAttribute("aria-label", `Cambiar a ${esOscuro ? 'Modo Claro' : 'Modo Oscuro'}`);
-        }
-
-        const btnFloating = document.getElementById("btn-theme-toggle-floating");
-        if (btnFloating) {
-            btnFloating.innerHTML = `<i class="fa-solid ${icono}"></i> <span>${texto}</span>`;
-            btnFloating.setAttribute("aria-label", `Cambiar a ${esOscuro ? 'Modo Claro' : 'Modo Oscuro'}`);
-        }
-    }
-
-    // Iniciar tema guardado
-    aplicarTema(temaGuardado);
-
-    // Botón de alternancia en el Header
-    const themeNavBtn = document.createElement("button");
-    themeNavBtn.id = "btn-theme-toggle-nav";
-    themeNavBtn.className = "theme-toggle-nav";
-    themeNavBtn.type = "button";
-    themeNavBtn.addEventListener("click", () => {
-        const actual = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
-        aplicarTema(actual === "dark" ? "light" : "dark");
-    });
-    navElement.appendChild(themeNavBtn);
-
-    // Botón Flotante de alternancia (accesible en cualquier punto de la página)
-    if (!document.getElementById("btn-theme-toggle-floating")) {
-        const themeFloatingBtn = document.createElement("button");
-        themeFloatingBtn.id = "btn-theme-toggle-floating";
-        themeFloatingBtn.className = "theme-toggle-floating";
-        themeFloatingBtn.type = "button";
-        themeFloatingBtn.addEventListener("click", () => {
-            const actual = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
-            aplicarTema(actual === "dark" ? "light" : "dark");
-        });
-        document.body.appendChild(themeFloatingBtn);
-    }
-
-    actualizarBotonesTema(document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light");
-
-    // Limpiar contenido previo e inyectar cabecera unificada
+    // Inyectar cabecera base de inmediato
     header.innerHTML = "";
     header.appendChild(logoDiv);
     header.appendChild(toggleBtn);
     header.appendChild(navElement);
 
-    // Verificación dinámica de sesión activa y rol de administrador (silenciosa)
+    // Verificación dinámica de sesión y roles de manera segura
     try {
         const { obtenerPerfil, esAdmin } = await import("./auth.js");
         const perfil = await obtenerPerfil();
         const esAdministrador = await esAdmin();
 
         if (perfil) {
-            const perfilLink = navElement.querySelector('#nav-link-perfil') || navElement.querySelector('a[href="perfil.html"]');
-            if (perfilLink) {
-                const defaultAvatar = `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(perfil.email || 'user')}`;
-                const fotoUrl = perfil.avatar_url && perfil.avatar_url.trim() !== "" ? perfil.avatar_url : defaultAvatar;
-
-                perfilLink.innerHTML = `<img src="${fotoUrl}" alt="Foto de Perfil" class="nav-avatar" onerror="this.src='${defaultAvatar}'"> Mi Perfil <span class="sesion-dot" title="Sesión activa"></span>`;
-            }
-
-            // Si el usuario es Administrador, inyectar el acceso al Panel Admin
-            if (esAdministrador || (perfil.rol && perfil.rol.toLowerCase() === 'admin')) {
-                if (!navElement.querySelector('a[href="admin.html"]')) {
-                    const adminLink = document.createElement("a");
-                    adminLink.href = "admin.html";
-                    adminLink.className = currentPage.toLowerCase() === "admin.html" ? "active nav-link-admin" : "nav-link-admin";
-                    adminLink.style.color = "#0057B8";
-                    adminLink.style.fontWeight = "700";
-                    adminLink.innerHTML = `<i class="fa-solid fa-user-shield"></i> Panel Admin`;
-
-                    const perfilLink = navElement.querySelector('#nav-link-perfil');
-                    if (perfilLink) {
-                        navElement.insertBefore(adminLink, perfilLink);
-                    } else {
-                        navElement.insertBefore(adminLink, themeNavBtn);
-                    }
-                }
-            }
+            const esAdminUser = esAdministrador || (perfil.rol && perfil.rol.toLowerCase() === 'admin');
+            // Re-renderizamos el menú completo con los permisos y el avatar del usuario ya validados
+            construirLinksMenu(esAdminUser, perfil);
         }
     } catch (e) {
-        // Silencioso si auth no está disponible en este contexto
+        console.warn("No se pudo verificar la sesión en el header:", e);
     }
 });
