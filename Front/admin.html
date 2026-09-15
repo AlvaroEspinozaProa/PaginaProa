@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Escuela PRoA</title>
+    <link rel="stylesheet" href="PRoA.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 25px;
+            max-width: 1350px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        @media (max-width: 900px) {
+            .admin-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .admin-sidebar {
+            background: #ffffff;
+            padding: 24px 18px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            height: fit-content;
+        }
+
+        .admin-sidebar-title {
+            font-size: 0.825rem;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 16px;
+            padding-left: 8px;
+        }
+
+        .admin-menu-btn {
+            width: 100%;
+            text-align: left;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border: none;
+            background: transparent;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .admin-menu-btn:hover {
+            background: #f1f5f9;
+            color: #0057B8;
+        }
+
+        .admin-menu-btn.activo {
+            background: #0057B8;
+            color: #ffffff;
+            box-shadow: 0 4px 10px rgba(0, 87, 184, 0.25);
+        }
+
+        .admin-tab-content {
+            background: #ffffff;
+            padding: 32px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            min-height: 550px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Toolbar & Controls */
+        .admin-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .admin-search-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            padding: 8px 14px;
+            border-radius: 8px;
+            flex: 1;
+            min-width: 240px;
+        }
+
+        .admin-search-box input {
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 0.9rem;
+            color: #1e293b;
+        }
+
+        .admin-filters {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-select {
+            padding: 8px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            background: #ffffff;
+            font-size: 0.9rem;
+            color: #334155;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* Stats Cards */
+        .admin-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .stat-card .stat-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-top: 4px;
+        }
+
+        .stat-card .stat-label {
+            font-size: 0.8rem;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        /* Responsive Table */
+        .admin-table-container {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        .admin-table th {
+            background: #f1f5f9;
+            color: #475569;
+            font-weight: 700;
+            padding: 14px 16px;
+            border-bottom: 1px solid #e2e8f0;
+            white-space: nowrap;
+        }
+
+        .admin-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            color: #334155;
+            vertical-align: middle;
+        }
+
+        .admin-table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        /* Badges */
+        .badge-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        .badge-pendiente {
+            background: #fff7ed;
+            color: #c2410c;
+            border: 1px solid #ffedd5;
+        }
+
+        .badge-aprobado {
+            background: #f0fdf4;
+            color: #15803d;
+            border: 1px solid #dcfce7;
+        }
+
+        .badge-rechazado {
+            background: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #fee2e2;
+        }
+
+        .badge-en-revision {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border: 1px solid #dbeafe;
+        }
+
+        .badge-role {
+            background: #f1f5f9;
+            color: #0f172a;
+            border: 1px solid #cbd5e1;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-role-admin {
+            background: #e0e7ff;
+            color: #3730a3;
+            border: 1px solid #c7d2fe;
+        }
+
+        /* Action Buttons */
+        .btn-action-icon {
+            border: none;
+            background: #f1f5f9;
+            color: #475569;
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-action-icon:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+        .btn-action-danger {
+            background: #fef2f2;
+            color: #ef4444;
+        }
+
+        .btn-action-danger:hover {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .btn-action-primary {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .btn-action-primary:hover {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .btn-admin-submit {
+            background: #0057B8;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-admin-submit:hover {
+            background: #004494;
+        }
+
+        /* Form Styles */
+        .admin-form-group {
+            margin-bottom: 16px;
+        }
+
+        .admin-form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+
+        .admin-form-input, .admin-form-textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #1e293b;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .admin-form-input:focus, .admin-form-textarea:focus {
+            border-color: #0057B8;
+            box-shadow: 0 0 0 3px rgba(0, 87, 184, 0.15);
+        }
+
+        /* Modal Styles */
+        .admin-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .admin-modal-card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 16px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            animation: modalFadeIn 0.2s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.96); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .admin-modal-header {
+            padding: 20px 24px;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-modal-header h3 {
+            margin: 0;
+            font-size: 1.15rem;
+            color: #0f172a;
+        }
+
+        .admin-modal-body {
+            padding: 24px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .admin-modal-footer {
+            padding: 16px 24px;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            text-align: right;
+        }
+
+        .btn-close-modal {
+            background: transparent;
+            border: none;
+            font-size: 1.25rem;
+            color: #64748b;
+            cursor: pointer;
+        }
+
+        .btn-close-modal:hover {
+            color: #0f172a;
+        }
+    </style>
+</head>
+<body class="tablon-body">
+
+    <!-- Cabecera global -->
+    <header id="global-header"></header>
+
+    <!-- Barra de estado del administrador -->
+    <div id="bar-sesion" class="tablon-bar-sesion">
+        <div class="tablon-sesion-info">
+            <span class="tablon-badge-estado">
+                <i class="fa-solid fa-user-shield"></i>
+                <span id="txt-usuario-estado">Verificando credenciales de administrador...</span>
+            </span>
+        </div>
+        <div class="tablon-sesion-acciones">
+            <button id="btn-logout" class="tablon-btn-action-secondary">
+                <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
+            </button>
+        </div>
+    </div>
+
+    <!-- Layout Principal -->
+    <main class="admin-layout">
+        <!-- Menú Lateral -->
+        <aside class="admin-sidebar">
+            <div class="admin-sidebar-title">Módulos de Control</div>
+            <button class="admin-menu-btn activo" data-tab="tab-pasantias"><i class="fa-solid fa-briefcase"></i> Pasantías</button>
+            <button class="admin-menu-btn" data-tab="tab-noticias"><i class="fa-solid fa-bullhorn"></i> Comunicados</button>
+            <button class="admin-menu-btn" data-tab="tab-horarios"><i class="fa-solid fa-calendar-days"></i> Horarios</button>
+            <button class="admin-menu-btn" data-tab="tab-usuarios"><i class="fa-solid fa-users"></i> Usuarios</button>
+        </aside>
+
+        <!-- Secciones de Contenido -->
+        <section class="admin-tab-content">
+            <!-- Pestaña Pasantías -->
+            <div id="tab-pasantias" class="tab-pane">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                    <h2 style="margin: 0; color: #0f172a;"><i class="fa-solid fa-building-circle-check"></i> Postulaciones de Empresas</h2>
+                </div>
+
+                <!-- Tarjetas de Estadísticas -->
+                <div class="admin-stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Total</div>
+                        <div class="stat-value" id="stat-pasantias-total">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label" style="color: #c2410c;">Pendientes</div>
+                        <div class="stat-value" id="stat-pasantias-pendientes" style="color: #c2410c;">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label" style="color: #15803d;">Aprobadas</div>
+                        <div class="stat-value" id="stat-pasantias-aprobadas" style="color: #15803d;">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label" style="color: #b91c1c;">Rechazadas</div>
+                        <div class="stat-value" id="stat-pasantias-rechazadas" style="color: #b91c1c;">0</div>
+                    </div>
+                </div>
+
+                <!-- Barra de herramientas: Búsqueda y Filtro -->
+                <div class="admin-toolbar">
+                    <div class="admin-search-box">
+                        <i class="fa-solid fa-magnifying-glass" style="color: #94a3b8;"></i>
+                        <input type="text" id="input-buscar-pasantias" placeholder="Buscar por empresa, contacto o correo...">
+                    </div>
+                    <div class="admin-filters">
+                        <label for="select-filtro-estado" style="font-weight: 600; font-size: 0.85rem; color: #64748b;">Estado:</label>
+                        <select id="select-filtro-estado" class="admin-select">
+                            <option value="todos">Todos los estados</option>
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="En revisión">En revisión</option>
+                            <option value="Aprobado">Aprobado</option>
+                            <option value="Rechazado">Rechazado</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Tabla de postulaciones -->
+                <div id="contenedor-pasantias-admin">Cargando postulaciones...</div>
+            </div>
+
+            <!-- Pestaña Noticias -->
+            <div id="tab-noticias" class="tab-pane hidden">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px;">
+                    <h2 style="margin: 0; color: #0f172a;"><i class="fa-solid fa-newspaper"></i> Gestión del Tablón de Novedades</h2>
+                    <button id="btn-nueva-noticia" class="btn-admin-submit">
+                        <i class="fa-solid fa-plus"></i> Crear Comunicado
+                    </button>
+                </div>
+
+                <!-- Formulario Nueva Noticia (Oculto por defecto) -->
+                <div id="card-formulario-noticia" class="admin-toolbar hidden" style="flex-direction: column; align-items: stretch; background: #ffffff; border: 1px solid #cbd5e1;">
+                    <h3 style="margin-top: 0; margin-bottom: 16px; color: #0f172a;"><i class="fa-solid fa-pen-to-square"></i> Publicar Nuevo Comunicado</h3>
+                    <form id="form-noticia-admin">
+                        <div class="admin-form-group">
+                            <label for="noticia-titulo">Título del Comunicado</label>
+                            <input type="text" id="noticia-titulo" class="admin-form-input" placeholder="Ej: Inscripciones abiertas para la Expo PRoA 2026" required>
+                        </div>
+                        <div class="admin-form-group">
+                            <label for="noticia-resumen">Resumen Corto</label>
+                            <input type="text" id="noticia-resumen" class="admin-form-input" placeholder="Breve descripción que se mostrará en la vista previa" required>
+                        </div>
+                        <div class="admin-form-group">
+                            <label for="noticia-contenido">Contenido Completo</label>
+                            <textarea id="noticia-contenido" class="admin-form-textarea" rows="4" placeholder="Escriba aquí el detalle completo de la noticia..." required></textarea>
+                        </div>
+                        <div class="admin-form-group">
+                            <label for="noticia-archivo">Archivo / Adjunto (Opcional - Imagen o PDF)</label>
+                            <input type="file" id="noticia-archivo" class="admin-form-input" accept="image/*,.pdf,.doc,.docx">
+                        </div>
+                        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                            <button type="button" id="btn-cancelar-noticia" class="tablon-btn-action-secondary">Cancelar</button>
+                            <button type="submit" id="btn-guardar-noticia" class="btn-admin-submit"><i class="fa-solid fa-paper-plane"></i> Publicar</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="contenedor-noticias-admin" style="margin-top: 20px;">Cargando noticias...</div>
+            </div>
+
+            <!-- Pestaña Horarios -->
+            <div id="tab-horarios" class="tab-pane hidden">
+                <h2 style="color: #0f172a;"><i class="fa-solid fa-clock"></i> Asistente de Horarios Escolares</h2>
+                <div id="contenedor-horarios-admin" style="margin-top: 20px;">Cargando gestión de horarios...</div>
+            </div>
+
+            <!-- Pestaña Usuarios -->
+            <div id="tab-usuarios" class="tab-pane hidden">
+                <h2 style="color: #0f172a;"><i class="fa-solid fa-users-gear"></i> Cuentas y Roles Registrados</h2>
+                <div id="contenedor-usuarios-admin" style="margin-top: 20px;">Cargando perfiles de Supabase...</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal genérico para detalles/mensajes -->
+    <div id="admin-modal-detalles" class="admin-modal-overlay hidden">
+        <div class="admin-modal-card">
+            <div class="admin-modal-header">
+                <h3 id="modal-detalles-titulo">Detalles de la Postulación</h3>
+                <button id="btn-cerrar-modal" class="btn-close-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="modal-detalles-body" class="admin-modal-body">
+                <!-- Contenido dinámico -->
+            </div>
+            <div class="admin-modal-footer">
+                <button id="btn-cerrar-modal-footer" class="tablon-btn-action-secondary">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="./JS/navigation.js"></script>
+    <script type="module" src="./JS/admin_controller.js"></script>
+</body>
+</html>

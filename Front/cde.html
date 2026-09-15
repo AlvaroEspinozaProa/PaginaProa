@@ -12,23 +12,95 @@
 
     <header id="global-header"></header>
 
-    <section class="tablon-hero" style="text-align: center; padding: 80px 20px;">
+    <!-- =========================================
+         HERO SECTION CDE
+         ========================================= -->
+    <section class="tablon-hero" style="text-align: center; padding: 60px 20px;">
         <span class="etiqueta">Representación Estudiantil</span>
         <h1>👥 Centro de Estudiantes (CDE)</h1>
-        <p>Espacio de participación democrática, debates y organización de actividades escolares.</p>
+        <p>Espacio de participación democrática, debates, proyectos comunitarios y voz activa de los alumnos de la Escuela PRoA Despeñaderos.</p>
     </section>
 
-    <section class="seccion-comun" style="text-align: center; padding: 50px 20px;">
-        <div style="max-width: 600px; margin: 0 auto; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
-            <i class="fa-solid fa-users" style="font-size: 3rem; color: var(--primary); margin-bottom: 20px;"></i>
-            <h2>Próximamente</h2>
-            <p style="color: #666; margin-top: 10px;">Aquí encontrarás las propuestas, actividades, comunicados oficiales y proyectos organizados por los delegados del Centro de Estudiantes.</p>
+    <!-- =========================================
+         GRILLA DE ACTIVIDADES DEL CDE
+         ========================================= -->
+    <main class="seccion-comun seccion-fondo" style="padding: 50px 20px;">
+        <div class="max-w-6xl" style="max-width: 1200px; margin: 0 auto;">
+            <div class="seccion-header">
+                <h2>Iniciativas y Proyectos del CDE</h2>
+                <p>Canalización de propuestas estudiantiles, organización de eventos y representación institucional.</p>
+            </div>
+            
+            <div class="grid-cards" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+                <!-- Tarjeta 1: Representación & Actos -->
+                <div class="card" style="padding: 0; overflow: hidden; border-radius: 16px; text-align: left;">
+                    <img src="banderas.jpeg" alt="Representación Institucional y Actos" style="width: 100%; height: 200px; object-fit: cover;">
+                    <div style="padding: 24px;">
+                        <span class="badge-tag"><i class="fa-solid fa-flag"></i> Institucional</span>
+                        <h3 style="margin-top: 8px;">Representación & Valores</h3>
+                        <p style="margin-top: 8px; font-size: 0.9rem; color: var(--text-muted);">Acompañamiento a abanderados y participación activa en los actos y jornadas cívicas de la escuela.</p>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 2: Convivencia & Patio -->
+                <div class="card" style="padding: 0; overflow: hidden; border-radius: 16px; text-align: left;">
+                    <img src="centros.jpeg" alt="Espacios de Convivencia Estudiantil" style="width: 100%; height: 200px; object-fit: cover;">
+                    <div style="padding: 24px;">
+                        <span class="badge-tag"><i class="fa-solid fa-comments"></i> Participación</span>
+                        <h3 style="margin-top: 8px;">Asambleas & Convivencia</h3>
+                        <p style="margin-top: 8px; font-size: 0.9rem; color: var(--text-muted);">Espacios abiertos de diálogo, recepción de sugerencias de delegados y mejora continua de la vida escolar.</p>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 3: Zona de Descanso & Recreos -->
+                <div class="card" style="padding: 0; overflow: hidden; border-radius: 16px; text-align: left;">
+                    <img src="zonaD.jpeg" alt="Zona D y Espacios de Descanso" style="width: 100%; height: 200px; object-fit: cover;">
+                    <div style="padding: 24px;">
+                        <span class="badge-tag"><i class="fa-solid fa-couch"></i> Proyectos CDE</span>
+                        <h3 style="margin-top: 8px;">Zona D — Espacios de Estructura</h3>
+                        <p style="margin-top: 8px; font-size: 0.9rem; color: var(--text-muted);">Adecuación y equipamiento de áreas de descanso y estudio colectivo promovidos por la comisión directiva del CDE.</p>
+                    </div>
+                </div>
+            </div>
         </div>
-    </section>
+    </main>
 
+    <!-- =========================================
+         FOOTER INSTITUCIONAL
+         ========================================= -->
     <footer id="contacto">
+        <div class="footer-contacto">
+            <div class="contacto-item">
+                <i class="fa-solid fa-envelope"></i>
+                <div>
+                    <strong>Email Oficial</strong>
+                    <a href="mailto:despenaderos.ds@escuelaproa.edu.ar">despenaderos.ds@escuelaproa.edu.ar</a>
+                </div>
+            </div>
+            <div class="contacto-item">
+                <i class="fa-solid fa-location-dot"></i>
+                <div>
+                    <strong>Ubicación</strong>
+                    <p>Despeñaderos, Córdoba</p>
+                </div>
+            </div>
+            <div class="contacto-item">
+                <i class="fa-solid fa-hashtag"></i>
+                <div>
+                    <strong>Instagram</strong>
+                    <a href="https://www.instagram.com/proadespenaderos/">@proadespenaderos</a>
+                </div>
+            </div>
+            <div class="contacto-item">
+                <i class="fa-solid fa-hashtag"></i>
+                <div>
+                    <strong>Facebook</strong>
+                    <a href="https://www.facebook.com/proadespenaderos/">@proa.despenaderos</a>
+                </div>
+            </div>
+        </div>
         <div class="footer-creditos">
-            <p>Portal Institucional — Escuela PRoA © 2026</p>
+            <p>&copy; 2026 Escuela PRoA - Desarrollado por los alumnos.</p>
         </div>
     </footer>
 

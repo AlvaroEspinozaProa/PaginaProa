@@ -5,30 +5,134 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="PRoA.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <title>Proyectos - Escuela PRoA</title>
+    <title>Proyectos Tecnológicos - Escuela PRoA</title>
     <script src="JS/navigation.js" defer></script>
 </head>
 <body class="tablon-body">
 
     <header id="global-header"></header>
 
-    <section class="tablon-hero" style="text-align: center; padding: 80px 20px;">
-        <span class="etiqueta">Portafolio Escolar</span>
-        <h1>💻 Proyectos de los Estudiantes</h1>
-        <p>Galería de software, prototipos de hardware y proyectos tecnológicos desarrollados en la Escuela PRoA.</p>
+    <!-- =========================================
+         HERO SECTION PROYECTOS
+         ========================================= -->
+    <section class="tablon-hero" style="text-align: center; padding: 60px 20px;">
+        <span class="etiqueta">Portafolio Escolar & Innovación</span>
+        <h1>💻 Proyectos Destacados de los Estudiantes</h1>
+        <p>Explora las iniciativas de desarrollo de software, automatización, robótica y compromiso social creadas en la Escuela PRoA Despeñaderos.</p>
     </section>
 
-    <section class="seccion-comun" style="text-align: center; padding: 50px 20px;">
-        <div style="max-width: 600px; margin: 0 auto; background: white; padding: 40px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
-            <i class="fa-solid fa-code" style="font-size: 3rem; color: var(--primary); margin-bottom: 20px;"></i>
-            <h2>Próximamente</h2>
-            <p style="color: #666; margin-top: 10px;">Estamos compilando los mejores proyectos de desarrollo de software y robótica de nuestros estudiantes para compartirlos con toda la comunidad.</p>
+    <!-- =========================================
+         GRILLA DE PROYECTOS INSTITUCIONALES
+         ========================================= -->
+    <main class="seccion-comun seccion-fondo" style="padding: 50px 20px;">
+        <div class="max-w-6xl" style="max-width: 1200px; margin: 0 auto;">
+            
+            <div class="grid-cards" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;">
+                
+                <!-- Proyecto 1: Bike Spot -->
+                <div class="card" style="padding: 0; overflow: hidden; border-radius: 16px; text-align: left;">
+                    <img src="proyectobicis.jpg" alt="Proyecto Bike Spot" style="width: 100%; height: 210px; object-fit: cover;">
+                    <div style="padding: 24px;">
+                        <span class="badge-tag"><i class="fa-solid fa-bicycle"></i> Sustentabilidad & IoT</span>
+                        <h3 style="margin-top: 8px;">Bike Spot — Movilidad Ecológica</h3>
+                        <p style="margin-top: 8px; font-size: 0.9rem; color: var(--text-muted);">Sistema inteligente de gestión y monitoreo del estacionamiento de bicicletas ecológicas del colegio, incentivando la movilidad sostenible.</p>
+                    </div>
+                </div>
+
+                <!-- Proyecto 2: Desarrollo de Software & Muestra Inmersiva -->
+                <div class="card" style="padding: 0; overflow: hidden; border-radius: 16px; text-align: left;">
+                    <img src="proyectos apps.jpeg" alt="Desarrollo de Software y Muestra Inmersiva" style="width: 100%; height: 210px; object-fit: cover;">
+                    <div style="padding: 24px;">
+                        <span class="badge-tag"><i class="fa-solid fa-laptop-code"></i> Software & Web</span>
+                        <h3 style="margin-top: 8px;">Muestra Inmersiva de Apps</h3>
+                        <p style="margin-top: 8px; font-size: 0.9rem; color: var(--text-muted);">Plataformas web, aplicaciones móviles y soluciones de automatización programadas por los estudiantes de ciclo orientado.</p>
+                    </div>
+                </div>
+
+                <!-- Proyecto 3: Jardín Tecnológico -->
+                <div class="card" style="padding: 0; overflow: hidden; border-radius: 16px; text-align: left;">
+                    <img src="proyecto jardi.jpg" alt="Proyecto Huerta y Jardín Tecnológico" style="width: 100%; height: 210px; object-fit: cover;">
+                    <div style="padding: 24px;">
+                        <span class="badge-tag"><i class="fa-solid fa-seedling"></i> Automatización & Ciencias</span>
+                        <h3 style="margin-top: 8px;">Jardín & Huerta Inteligente</h3>
+                        <p style="margin-top: 8px; font-size: 0.9rem; color: var(--text-muted);">Integración de sensores de humedad y riego automatizado aplicados al cultivo escolar sustentable y al aprendizaje botánico.</p>
+                    </div>
+                </div>
+
+                <!-- Proyecto 4: Biblioteca Digital -->
+                <div class="card" style="padding: 0; overflow: hidden; border-radius: 16px; text-align: left;">
+                    <img src="biblioteca.jpeg" alt="Biblioteca Digital y Sala de Estudio" style="width: 100%; height: 210px; object-fit: cover;">
+                    <div style="padding: 24px;">
+                        <span class="badge-tag"><i class="fa-solid fa-book-bookmark"></i> Gestión Educativa</span>
+                        <h3 style="margin-top: 8px;">Biblioteca Digital PRoA</h3>
+                        <p style="margin-top: 8px; font-size: 0.9rem; color: var(--text-muted);">Catalogo online y sistema de reserva digital para material bibliográfico, guías de estudio y recursos multimedia escolares.</p>
+                    </div>
+                </div>
+
+                <!-- Proyecto 5: Mural Cultural -->
+                <div class="card" style="padding: 0; overflow: hidden; border-radius: 16px; text-align: left;">
+                    <img src="muralcentro.jpeg" alt="Mural Cultural y Expresión Estudiantil" style="width: 100%; height: 210px; object-fit: cover;">
+                    <div style="padding: 24px;">
+                        <span class="badge-tag"><i class="fa-solid fa-palette"></i> Arte & Identidad</span>
+                        <h3 style="margin-top: 8px;">Mural Digital & Expresión</h3>
+                        <p style="margin-top: 8px; font-size: 0.9rem; color: var(--text-muted);">Espacio colaborativo de diseño visual y expresión cultural que fusiona la identidad institucional con arte digital.</p>
+                    </div>
+                </div>
+
+                <!-- Proyecto 6: Video Recorrido Institucional -->
+                <div class="card" style="padding: 0; overflow: hidden; border-radius: 16px; text-align: left;">
+                    <video controls poster="coleentrada.jpeg" style="width: 100%; height: 210px; object-fit: cover; background: #000;">
+                        <source src="videocole.mp4" type="video/mp4">
+                        Tu navegador no soporta reproducción de video HTML5.
+                    </video>
+                    <div style="padding: 24px;">
+                        <span class="badge-tag"><i class="fa-solid fa-circle-play"></i> Video Institucional</span>
+                        <h3 style="margin-top: 8px;">Recorrido Institucional PRoA</h3>
+                        <p style="margin-top: 8px; font-size: 0.9rem; color: var(--text-muted);">Muestra audiovisual de las instalaciones, laboratorios y actividades cotidianas de nuestra comunidad educativa.</p>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
-    </section>
+    </main>
 
+    <!-- =========================================
+         FOOTER INSTITUCIONAL
+         ========================================= -->
     <footer id="contacto">
+        <div class="footer-contacto">
+            <div class="contacto-item">
+                <i class="fa-solid fa-envelope"></i>
+                <div>
+                    <strong>Email Oficial</strong>
+                    <a href="mailto:despenaderos.ds@escuelaproa.edu.ar">despenaderos.ds@escuelaproa.edu.ar</a>
+                </div>
+            </div>
+            <div class="contacto-item">
+                <i class="fa-solid fa-location-dot"></i>
+                <div>
+                    <strong>Ubicación</strong>
+                    <p>Despeñaderos, Córdoba</p>
+                </div>
+            </div>
+            <div class="contacto-item">
+                <i class="fa-solid fa-hashtag"></i>
+                <div>
+                    <strong>Instagram</strong>
+                    <a href="https://www.instagram.com/proadespenaderos/">@proadespenaderos</a>
+                </div>
+            </div>
+            <div class="contacto-item">
+                <i class="fa-solid fa-hashtag"></i>
+                <div>
+                    <strong>Facebook</strong>
+                    <a href="https://www.facebook.com/proadespenaderos/">@proa.despenaderos</a>
+                </div>
+            </div>
+        </div>
         <div class="footer-creditos">
-            <p>Portal Institucional — Escuela PRoA © 2026</p>
+            <p>&copy; 2026 Escuela PRoA - Desarrollado por los alumnos.</p>
         </div>
     </footer>
 

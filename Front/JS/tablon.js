@@ -60,42 +60,52 @@ export async function subirArchivo(file) {
 //======================================
 
 export async function publicarNoticia({
-
     titulo,
     resumen,
     contenido,
-    archivo
-
+    archivo,
+    etiqueta
 }) {
-
     let archivo_url = null;
 
     if (archivo) {
-
         archivo_url = await subirArchivo(archivo);
-
     }
 
-    const { error } = await supabase
+    // Asegurar prefijo de etiqueta en el resumen si se especificó
+    let resumenFinal = resumen;
+    if (etiqueta && !resumen.trim().startsWith("[")) {
+        resumenFinal = `[${etiqueta}] ${resumen}`;
+    }
+
+    const payload = {
+        titulo,
+        resumen: resumenFinal,
+        contenido,
+        archivo_url
+    };
+
+    if (etiqueta) {
+        payload.etiqueta = etiqueta;
+    }
+
+    let { error } = await supabase
         .from(TABLA)
-        .insert({
+        .insert(payload);
 
-            titulo,
-            resumen,
-            contenido,
-            archivo_url
-
-        });
+    // Fallback por si la columna "etiqueta" aún no fue creada en Supabase
+    if (error && error.message && error.message.includes("etiqueta")) {
+        delete payload.etiqueta;
+        const result = await supabase.from(TABLA).insert(payload);
+        error = result.error;
+    }
 
     if (error) {
-
         console.error(error);
         return false;
-
     }
 
     return true;
-
 }
 
 //======================================
@@ -103,21 +113,17 @@ export async function publicarNoticia({
 //======================================
 
 export async function eliminarNoticia(id) {
-
     const { error } = await supabase
         .from(TABLA)
         .delete()
         .eq("id", id);
 
     if (error) {
-
         console.error(error);
         return false;
-
     }
 
     return true;
-
 }
 
 //======================================
@@ -125,43 +131,50 @@ export async function eliminarNoticia(id) {
 //======================================
 
 export async function actualizarNoticia(id, {
-
     titulo,
     resumen,
     contenido,
-    archivo
-
+    archivo,
+    etiqueta
 }) {
+    let resumenFinal = resumen;
+    if (etiqueta && !resumen.trim().startsWith("[")) {
+        resumenFinal = `[${etiqueta}] ${resumen}`;
+    }
 
     const datosActualizar = {
-
         titulo,
-        resumen,
+        resumen: resumenFinal,
         contenido
-
     };
 
     if (archivo) {
-
         const archivo_url = await subirArchivo(archivo);
         if (archivo_url) {
             datosActualizar.archivo_url = archivo_url;
         }
-
     }
 
-    const { error } = await supabase
+    if (etiqueta) {
+        datosActualizar.etiqueta = etiqueta;
+    }
+
+    let { error } = await supabase
         .from(TABLA)
         .update(datosActualizar)
         .eq("id", id);
 
-    if (error) {
+    // Fallback por si la columna "etiqueta" aún no fue creada en Supabase
+    if (error && error.message && error.message.includes("etiqueta")) {
+        delete datosActualizar.etiqueta;
+        const result = await supabase.from(TABLA).update(datosActualizar).eq("id", id);
+        error = result.error;
+    }
 
+    if (error) {
         console.error(error);
         return false;
-
     }
 
     return true;
-
 }

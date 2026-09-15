@@ -72,16 +72,81 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
+    // =========================================
+    // GESTIÓN DE MODO OSCURO GLOBAL (ACCESIBLE)
+    // =========================================
+    const temaGuardado = localStorage.getItem("proa-theme") || 
+        (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    
+    function aplicarTema(tema) {
+        if (tema === "dark") {
+            document.documentElement.setAttribute("data-theme", "dark");
+        } else {
+            document.documentElement.removeAttribute("data-theme");
+        }
+        localStorage.setItem("proa-theme", tema);
+        actualizarBotonesTema(tema);
+    }
+
+    function actualizarBotonesTema(tema) {
+        const esOscuro = tema === "dark";
+        const icono = esOscuro ? "fa-sun" : "fa-moon";
+        const texto = esOscuro ? "Modo Claro" : "Modo Oscuro";
+
+        const btnNav = document.getElementById("btn-theme-toggle-nav");
+        if (btnNav) {
+            btnNav.innerHTML = `<i class="fa-solid ${icono}"></i> ${texto}`;
+            btnNav.setAttribute("aria-label", `Cambiar a ${esOscuro ? 'Modo Claro' : 'Modo Oscuro'}`);
+        }
+
+        const btnFloating = document.getElementById("btn-theme-toggle-floating");
+        if (btnFloating) {
+            btnFloating.innerHTML = `<i class="fa-solid ${icono}"></i> <span>${texto}</span>`;
+            btnFloating.setAttribute("aria-label", `Cambiar a ${esOscuro ? 'Modo Claro' : 'Modo Oscuro'}`);
+        }
+    }
+
+    // Iniciar tema guardado
+    aplicarTema(temaGuardado);
+
+    // Botón de alternancia en el Header
+    const themeNavBtn = document.createElement("button");
+    themeNavBtn.id = "btn-theme-toggle-nav";
+    themeNavBtn.className = "theme-toggle-nav";
+    themeNavBtn.type = "button";
+    themeNavBtn.addEventListener("click", () => {
+        const actual = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+        aplicarTema(actual === "dark" ? "light" : "dark");
+    });
+    navElement.appendChild(themeNavBtn);
+
+    // Botón Flotante de alternancia (accesible en cualquier punto de la página)
+    if (!document.getElementById("btn-theme-toggle-floating")) {
+        const themeFloatingBtn = document.createElement("button");
+        themeFloatingBtn.id = "btn-theme-toggle-floating";
+        themeFloatingBtn.className = "theme-toggle-floating";
+        themeFloatingBtn.type = "button";
+        themeFloatingBtn.addEventListener("click", () => {
+            const actual = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+            aplicarTema(actual === "dark" ? "light" : "dark");
+        });
+        document.body.appendChild(themeFloatingBtn);
+    }
+
+    actualizarBotonesTema(document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light");
+
     // Limpiar contenido previo e inyectar cabecera unificada
     header.innerHTML = "";
     header.appendChild(logoDiv);
     header.appendChild(toggleBtn);
     header.appendChild(navElement);
 
-    // Verificación dinámica de sesión activa (silenciosa)
+    // Verificación dinámica de sesión activa y rol de administrador (silenciosa)
     try {
-        const { obtenerPerfil } = await import("./auth.js");
+        const { obtenerPerfil, esAdmin } = await import("./auth.js");
         const perfil = await obtenerPerfil();
+        const esAdministrador = await esAdmin();
+
         if (perfil) {
             const perfilLink = navElement.querySelector('#nav-link-perfil') || navElement.querySelector('a[href="perfil.html"]');
             if (perfilLink) {
@@ -89,6 +154,25 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const fotoUrl = perfil.avatar_url && perfil.avatar_url.trim() !== "" ? perfil.avatar_url : defaultAvatar;
 
                 perfilLink.innerHTML = `<img src="${fotoUrl}" alt="Foto de Perfil" class="nav-avatar" onerror="this.src='${defaultAvatar}'"> Mi Perfil <span class="sesion-dot" title="Sesión activa"></span>`;
+            }
+
+            // Si el usuario es Administrador, inyectar el acceso al Panel Admin
+            if (esAdministrador || (perfil.rol && perfil.rol.toLowerCase() === 'admin')) {
+                if (!navElement.querySelector('a[href="admin.html"]')) {
+                    const adminLink = document.createElement("a");
+                    adminLink.href = "admin.html";
+                    adminLink.className = currentPage.toLowerCase() === "admin.html" ? "active nav-link-admin" : "nav-link-admin";
+                    adminLink.style.color = "#0057B8";
+                    adminLink.style.fontWeight = "700";
+                    adminLink.innerHTML = `<i class="fa-solid fa-user-shield"></i> Panel Admin`;
+
+                    const perfilLink = navElement.querySelector('#nav-link-perfil');
+                    if (perfilLink) {
+                        navElement.insertBefore(adminLink, perfilLink);
+                    } else {
+                        navElement.insertBefore(adminLink, themeNavBtn);
+                    }
+                }
             }
         }
     } catch (e) {

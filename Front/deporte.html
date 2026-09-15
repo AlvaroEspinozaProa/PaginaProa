@@ -45,32 +45,52 @@
     <!-- =========================================
          HERO SECTION (Cabecera de la Sección)
          ========================================= -->
-    <section class="tablon-hero">
-        <div class="hero-texto">
-            <span class="etiqueta">Deportes</span>
-            <h1>Programas Deportivos</h1>
-            <p>Descubre los programas deportivos disponibles para los estudiantes de la Escuela PRoA.</p>
-        </div>
-        <div class="hero-imagen">
-            <img src="https://static.vecteezy.com/system/resources/thumbnails/045/740/243/small/a-variety-of-sports-equipment-including-an-american-football-a-soccer-ball-a-tennis-racket-a-tennis-ball-and-a-basketball-photo.jpg" alt="Equipamiento deportivo">
-        </div>
+    <section class="tablon-hero" style="text-align: center; padding: 60px 20px;">
+        <span class="etiqueta">Deportes & Salud</span>
+        <h1>🏆 Programas Deportivos y Recreativos</h1>
+        <p>Impulsamos el trabajo en equipo, la convivencia escolar y la actividad física en la Escuela PRoA Despeñaderos.</p>
     </section>
 
     <!-- =========================================
          CONTENIDO PRINCIPAL
          ========================================= -->
-    <main class="seccion-comun seccion-fondo">
-        <div class="seccion-header">
-            <h2>Subtítulo de la Sección</h2>
-            <p>Texto orientativo para guiar al usuario a través del contenido desplegado.</p>
-        </div>
-        
-        <div class="grid-cards">
-            <!-- Plantilla de Tarjeta Genérica -->
-            <div class="card">
-                <i class="fa-solid fa-circle-info icono-card"></i>
-                <h3>Elemento o Artículo</h3>
-                <p>Aquí puedes redactar el contenido principal, descripciones, o integrar dinámicamente los elementos mediante JavaScript.</p>
+    <main class="seccion-comun seccion-fondo" style="padding: 50px 20px;">
+        <div class="max-w-6xl" style="max-width: 1200px; margin: 0 auto;">
+            <div class="seccion-header">
+                <h2>Actividades y Torneos Institucionales</h2>
+                <p>Conocé las disciplinas deportivas y espacios de recreación activa integrados en nuestro proyecto escolar.</p>
+            </div>
+            
+            <div class="grid-cards" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+                <!-- Tarjeta 1: Torneos & Reconocimientos -->
+                <div class="card" style="padding: 0; overflow: hidden; border-radius: 16px; text-align: left;">
+                    <img src="trofeos.jpeg" alt="Trofeos y Premios Deportivos" style="width: 100%; height: 200px; object-fit: cover;">
+                    <div style="padding: 24px;">
+                        <span class="badge-tag"><i class="fa-solid fa-trophy"></i> Competencias</span>
+                        <h3 style="margin-top: 8px;">Torneos Intercolegiales</h3>
+                        <p style="margin-top: 8px; font-size: 0.9rem; color: var(--text-muted);">Participación destacada en competencias provinciales y ligas escolares CBA Plays y Tecnobuho.</p>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 2: Recreación & Tenis de Mesa -->
+                <div class="card" style="padding: 0; overflow: hidden; border-radius: 16px; text-align: left;">
+                    <img src="pingpong.jpeg" alt="Torneo de Ping Pong" style="width: 100%; height: 200px; object-fit: cover;">
+                    <div style="padding: 24px;">
+                        <span class="badge-tag"><i class="fa-solid fa-table-tennis-paddle-ball"></i> Recreación</span>
+                        <h3 style="margin-top: 8px;">Tenis de Mesa & Club Activo</h3>
+                        <p style="margin-top: 8px; font-size: 0.9rem; color: var(--text-muted);">Espacio diario de juego y torneos de ping-pong durante los recreos y jornadas deportivas.</p>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 3: Deportes en Equipo -->
+                <div class="card" style="padding: 0; overflow: hidden; border-radius: 16px; text-align: left;">
+                    <img src="centropelotas.jpeg" alt="Juegos Deportivos en el Patio" style="width: 100%; height: 200px; object-fit: cover;">
+                    <div style="padding: 24px;">
+                        <span class="badge-tag"><i class="fa-solid fa-futbol"></i> Trabajo en Equipo</span>
+                        <h3 style="margin-top: 8px;">Deportes de Conjunto</h3>
+                        <p style="margin-top: 8px; font-size: 0.9rem; color: var(--text-muted);">Fútbol, vóley y vóley de playa desarrollados en los patios institucionales y áreas deportivas comunitarias.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </main>

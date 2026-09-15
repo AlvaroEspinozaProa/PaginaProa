@@ -301,6 +301,10 @@
                 </div>
             </div>
 
+            <a id="btn-acceso-admin" href="admin.html" class="btn-admin-panel" style="display: none; text-decoration: none; margin-bottom: 12px; background: #0057B8; color: #ffffff; padding: 14px 24px; border-radius: 16px; font-size: 0.95rem; font-weight: 700; text-align: center; justify-content: center; align-items: center; gap: 10px; box-shadow: 0 10px 20px -6px rgba(0, 87, 184, 0.4); transition: all 0.25s ease;">
+                <i class="fa-solid fa-user-shield"></i> Panel de Administración
+            </a>
+
             <button id="btn-cerrar-sesion" class="btn-logout">
                 <i class="fa-solid fa-right-from-bracket"></i> Cerrar Sesión
             </button>
@@ -341,6 +345,8 @@
             if (rol === "admin") {
                 spanRol.className = "badge-rol rol-admin";
                 spanRol.innerHTML = `<i class="fa-solid fa-crown"></i> Administrador`;
+                const btnAdmin = document.getElementById("btn-acceso-admin");
+                if (btnAdmin) btnAdmin.style.display = "flex";
             } else if (rol === "estudiante") {
                 spanRol.className = "badge-rol rol-estudiante";
                 spanRol.innerHTML = `<i class="fa-solid fa-graduation-cap"></i> Estudiante`;
