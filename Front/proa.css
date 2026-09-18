@@ -3256,3 +3256,77 @@ footer svg:hover {
         border-radius: 14px;
     }
 }
+
+.preguntas-frecuentes {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 70px 20px;
+}
+
+.preguntas-frecuentes h2 {
+    text-align: center;
+    font-size: 2.2rem;
+    margin: 10px 0;
+}
+
+.descripcion-faq {
+    text-align: center;
+    margin-bottom: 35px;
+    color: #666;
+}
+
+.faq {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.faq details {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.faq details:hover {
+    border-color: #168dcc;
+}
+
+.faq summary {
+    padding: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    list-style: none;
+    position: relative;
+    padding-right: 50px;
+}
+
+.faq summary::-webkit-details-marker {
+    display: none;
+}
+
+.faq summary::after {
+    content: "+";
+    position: absolute;
+    right: 20px;
+    font-size: 22px;
+    transition: 0.3s;
+}
+
+.faq details[open] summary::after {
+    content: "−";
+}
+
+.respuesta {
+    padding: 0 20px 20px;
+    color: #555;
+    line-height: 1.6;
+    border-top: 1px solid #eee;
+}
+
+.respuesta p {
+    margin: 15px 0 0;
+}
