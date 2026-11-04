@@ -215,13 +215,19 @@ export async function actualizarResena(id, {
             imagen_url: finalImagenUrl
         };
 
-        const { error } = await supabase
+        const { data, error } = await supabase
             .from(TABLA_RESENAS)
             .update(datosActualizar)
-            .eq("id", id);
+            .eq("id", id)
+            .select();
 
         if (error) {
             console.error("Error al actualizar reseña en Supabase:", error);
+            return false;
+        }
+
+        if (!data || data.length === 0) {
+            console.warn("No se afectó ninguna fila al actualizar reseña (posible bloqueo RLS)");
             return false;
         }
 
@@ -237,13 +243,19 @@ export async function actualizarResena(id, {
 // ======================================
 export async function eliminarResena(id) {
     try {
-        const { error } = await supabase
+        const { data, error } = await supabase
             .from(TABLA_RESENAS)
             .delete()
-            .eq("id", id);
+            .eq("id", id)
+            .select();
 
         if (error) {
             console.error("Error al eliminar reseña en Supabase:", error);
+            return false;
+        }
+
+        if (!data || data.length === 0) {
+            console.warn("No se afectó ninguna fila al eliminar reseña (posible bloqueo RLS)");
             return false;
         }
 

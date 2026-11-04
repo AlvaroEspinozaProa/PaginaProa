@@ -47,9 +47,26 @@ export async function obtenerPerfil() {
             .eq('id', user.id)
             .maybeSingle();
 
-        if (error || !data) return null;
-        return data;
+        if (!error && data) {
+            return {
+                ...data,
+                email: data.email || user.email,
+                nombre: data.nombre || user.user_metadata?.nombre || (user.email ? user.email.split('@')[0] : "Usuario"),
+                rol: data.rol || (esCorreoInstitucional(user.email) ? 'estudiante' : 'comun')
+            };
+        }
+
+        // Fallback resiliente: el usuario está autenticado en Supabase pero aún no tiene fila en 'perfiles'
+        return {
+            id: user.id,
+            email: user.email,
+            nombre: user.user_metadata?.nombre || (user.email ? user.email.split('@')[0] : "Usuario"),
+            rol: esCorreoInstitucional(user.email) ? 'estudiante' : 'comun',
+            avatar_url: null,
+            estado_postulacion: 'No postulado'
+        };
     } catch (err) {
+        console.warn("Excepción al obtener perfil:", err);
         return null;
     }
 }
@@ -84,6 +101,18 @@ export async function recuperarContraseña(email) {
     try {
         const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
             redirectTo: window.location.origin + '/sesion.html',
+        });
+        return { data, error };
+    } catch (err) {
+        return { data: null, error: err };
+    }
+}
+
+// Actualizar contraseña tras recuperación (PASSWORD_RECOVERY)
+export async function actualizarContraseña(nuevaPassword) {
+    try {
+        const { data, error } = await supabase.auth.updateUser({
+            password: nuevaPassword
         });
         return { data, error };
     } catch (err) {

@@ -57,13 +57,19 @@ export async function obtenerPostulacionesEmpresas() {
 // 3. ACTUALIZAR ESTADO DE POSTULACIÓN (ADMIN)
 // ======================================
 export async function actualizarEstadoPostulacion(id, nuevoEstado) {
-    const { error } = await supabase
+    const { data, error } = await supabase
         .from(TABLA_PASANTIAS)
         .update({ estado: nuevoEstado })
-        .eq("id", id);
+        .eq("id", id)
+        .select();
 
     if (error) {
         console.error("Error al actualizar estado en Supabase:", error);
+        return false;
+    }
+
+    if (!data || data.length === 0) {
+        console.warn("No se afectó ninguna fila al actualizar (posible bloqueo RLS o ID inválido)");
         return false;
     }
 
@@ -74,13 +80,19 @@ export async function actualizarEstadoPostulacion(id, nuevoEstado) {
 // 4. ELIMINAR POSTULACIÓN (ADMIN)
 // ======================================
 export async function eliminarPostulacionEmpresa(id) {
-    const { error } = await supabase
+    const { data, error } = await supabase
         .from(TABLA_PASANTIAS)
         .delete()
-        .eq("id", id);
+        .eq("id", id)
+        .select();
 
     if (error) {
         console.error("Error al eliminar postulación en Supabase:", error);
+        return false;
+    }
+
+    if (!data || data.length === 0) {
+        console.warn("No se afectó ninguna fila al eliminar (posible bloqueo RLS)");
         return false;
     }
 

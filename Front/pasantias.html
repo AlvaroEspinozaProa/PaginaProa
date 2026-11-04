@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pasantías & Prácticas Profesionalizantes - Escuela PRoA</title>
+    <link rel="icon" type="image/png" href="logo.png">
     
     <!-- Hojas de estilo y fuentes -->
-    <link rel="stylesheet" href="PRoA.css">
+    <link rel="stylesheet" href="proa.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="JS/navigation.js" defer></script>
+    <script type="module" src="./JS/navigation.js"></script>
 </head>
 <body class="tablon-body">
 
@@ -35,7 +36,7 @@
             <a id="btn-perfil-link" href="perfil.html" class="tablon-btn-action-secondary hidden">
                 <i class="fa-solid fa-user"></i> Mi Perfil
             </a>
-            <a id="btn-login-link" href="sesion.html" class="tablon-btn-action-secondary">
+            <a id="btn-login-link" href="sesion.html" class="tablon-btn-action-secondary hidden">
                 <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión
             </a>
             <button id="btn-logout" class="tablon-btn-action-secondary hidden">
@@ -47,7 +48,7 @@
     <!-- =========================================
          HERO PRINCIPAL DE PASANTÍAS
          ========================================= -->
-    <section class="pasantias-hero">
+    <section class="page-hero">
         <span class="etiqueta">Prácticas Profesionalizantes</span>
         <h1>Vinculando Estudiantes con el Sector Productivo</h1>
         <p>Impulsamos el talento técnico de las Escuelas PRoA conectando a nuestros estudiantes de desarrollo de software con empresas e instituciones comprometidas con la formación profesional.</p>
@@ -68,15 +69,23 @@
     <div class="seccion-comun" style="padding-top: 20px; padding-bottom: 0;">
         <div class="max-w-6xl" style="max-width: 1200px; margin: 0 auto;">
             <section id="seccion-admin-pasantias" class="pasantias-admin-section hidden">
-                <div class="pasantias-admin-header">
-                    <h2><i class="fa-solid fa-user-shield"></i> Panel de Administrador: Postulaciones de Empresas</h2>
+                <div class="pasantias-admin-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                    <div>
+                        <h2><i class="fa-solid fa-user-shield"></i> Panel de Administrador: Postulaciones de Empresas</h2>
+                        <span style="font-size: 0.85rem; color: #64748b;">Gestioná las postulaciones o accede a todas las herramientas en el panel de administración.</span>
+                    </div>
+                    <div>
+                        <a href="admin.html#empresas" class="btn-principal" style="padding: 8px 14px; font-size: 0.85rem; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Panel Admin
+                        </a>
+                    </div>
                     
-                    <div class="pasantias-filtros">
-                        <button id="filtro-todos" class="btn-filtro activo">Todas</button>
-                        <button id="filtro-pendiente" class="btn-filtro">Pendientes</button>
-                        <button id="filtro-contactado" class="btn-filtro">Contactados</button>
-                        <button id="filtro-aprobado" class="btn-filtro">Aprobados</button>
-                        <button id="filtro-rechazado" class="btn-filtro">Rechazados</button>
+                    <div class="pasantias-filtros" style="width: 100%; margin-top: 10px;">
+                        <button id="filtro-todos" class="btn-filtro activo" data-estado="Todos">Todas</button>
+                        <button id="filtro-pendiente" class="btn-filtro" data-estado="Pendiente">Pendientes</button>
+                        <button id="filtro-contactado" class="btn-filtro" data-estado="Contactado">Contactados</button>
+                        <button id="filtro-aprobado" class="btn-filtro" data-estado="Aprobado">Aprobados</button>
+                        <button id="filtro-rechazado" class="btn-filtro" data-estado="Rechazado">Rechazados</button>
                     </div>
                 </div>
 

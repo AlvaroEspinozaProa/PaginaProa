@@ -224,7 +224,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             let minInicio = convertirMinutos(horaInicio);
             let minFin = (tipo === "ingreso" || tipo === "salida") ? minInicio + 30 : convertirMinutos(horaFin);
-            let duracionMinutos = Math.max(30, minFin - minInicio);
+
+            if (tipo !== "ingreso" && tipo !== "salida") {
+                if (!horaFin) {
+                    alert("Por favor, ingresa la hora de finalización.");
+                    return;
+                }
+                if (minFin <= minInicio) {
+                    alert("La hora de finalización debe ser posterior a la hora de inicio.");
+                    return;
+                }
+            }
+
+            let duracionMinutos = (tipo === "ingreso" || tipo === "salida") ? 30 : (minFin - minInicio);
 
 
             // Guardamos el orden exacto con base en los minutos de la hora de inicio (ej: 08:00 = 480 min)
@@ -486,22 +498,6 @@ async function cargarGrillaProporcional(curso) {
             });
         });
     }
-
-    // ====================================================
-    // LÓGICA ACORDEÓN DESPLEGABLE DE DÍAS (RESPONSIVE)
-    // ====================================================
-    document.addEventListener("click", (e) => {
-        const btnDia = e.target.closest(".dia-header-btn");
-        if (!btnDia) return;
-
-        const tarjeta = btnDia.closest(".columna-dia-card");
-        const cuerpo = tarjeta.querySelector(".dia-cuerpo");
-
-        if (cuerpo) {
-            btnDia.classList.toggle("activo");
-            cuerpo.classList.toggle("desplegado");
-        }
-    });
 }
 
 // ====================================================
@@ -549,12 +545,18 @@ function exportarHorarioAPDF() {
             btnExportar.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Generando PDF...`;
         }
 
+        // Ocultar botones de administración para que no salgan en el PDF exportado (REL-15)
+        const botonesAdmin = elemento.querySelectorAll(".btn-bloque-admin, .btn-agregar-bloque, .btn-editar-bloque, .btn-borrar-bloque, .acciones-bloque, .btn-accion-admin");
+        botonesAdmin.forEach(btn => btn.style.display = "none");
+
         html2pdf().set(opciones).from(elemento).save().then(() => {
+            botonesAdmin.forEach(btn => btn.style.display = "");
             if (btnExportar) {
                 btnExportar.disabled = false;
                 btnExportar.innerHTML = textoOriginal;
             }
         }).catch(err => {
+            botonesAdmin.forEach(btn => btn.style.display = "");
             console.error("Error exportando PDF con html2pdf:", err);
             if (btnExportar) {
                 btnExportar.disabled = false;

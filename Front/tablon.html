@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tablón de Novedades Oficial - Escuela PRoA</title>
+    <link rel="icon" type="image/png" href="logo.png">
     
     <!-- Hojas de estilo y fuentes -->
-    <link rel="stylesheet" href="PRoA.css">
+    <link rel="stylesheet" href="proa.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="JS/navigation.js" defer></script>
+    <script type="module" src="./JS/navigation.js"></script>
 </head>
 <body class="tablon-body">
 
@@ -42,7 +43,7 @@
             <a id="btn-perfil-link" href="perfil.html" class="tablon-btn-action-secondary hidden">
                 <i class="fa-solid fa-user"></i> Mi Perfil
             </a>
-            <a id="btn-login-link" href="sesion.html" class="btn-action-secondary">
+            <a id="btn-login-link" href="sesion.html" class="btn-action-secondary hidden">
                 <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión
             </a>
             <button id="btn-logout" class="btn-action-secondary hidden">
@@ -55,7 +56,7 @@
     <!-- =========================================
          HERO PRINCIPAL COMPACTO
          ========================================= -->
-    <section class="tablon-hero">
+    <section class="page-hero">
         <span class="etiqueta">Comunicados & Anuncios</span>
         <h1>📢 Tablón de Novedades</h1>
         <p>Espacio institucional para la publicación y consulta de noticias oficiales, comunicados y novedades del Centro de Estudiantes.</p>

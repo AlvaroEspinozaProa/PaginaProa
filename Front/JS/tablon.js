@@ -6,45 +6,44 @@ const TABLA = "Tablon";
 //======================================
 // OBTENER TODAS LAS NOTICIAS
 //======================================
-
 export async function obtenerNoticias() {
-
     const { data, error } = await supabase
         .from(TABLA)
         .select("*")
         .order("created_at", { ascending: false });
 
     if (error) {
-
-        console.error(error);
+        console.error("Error al obtener noticias:", error);
         return [];
-
     }
 
-    return data;
-
+    return data || [];
 }
 
 //======================================
-// SUBIR ARCHIVO
+// SUBIR ARCHIVO (REL-07)
 //======================================
-
 export async function subirArchivo(file) {
-
     if (!file) return null;
 
-    const nombreArchivo =
-        Date.now() + "_" + file.name.replaceAll(" ", "_");
+    // Sanitización robusta: normalizar tildes, eñes, espacios y caracteres no ASCII
+    const nombreLimpio = file.name
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-zA-Z0-9._-]/g, "_");
+
+    const nombreArchivo = `${Date.now()}_${nombreLimpio}`;
 
     const { error } = await supabase.storage
         .from(BUCKET)
-        .upload(nombreArchivo, file);
+        .upload(nombreArchivo, file, {
+            cacheControl: "3600",
+            upsert: false
+        });
 
     if (error) {
-
-        console.error(error);
-        return null;
-
+        console.error("Error al subir archivo a Storage:", error);
+        throw new Error(`No se pudo subir el archivo: ${error.message}`);
     }
 
     const { data } = supabase.storage
@@ -52,13 +51,11 @@ export async function subirArchivo(file) {
         .getPublicUrl(nombreArchivo);
 
     return data.publicUrl;
-
 }
 
 //======================================
-// CREAR NOTICIA
+// CREAR NOTICIA (REL-19 & SEC-04)
 //======================================
-
 export async function publicarNoticia({
     titulo,
     resumen,
@@ -69,57 +66,87 @@ export async function publicarNoticia({
     let archivo_url = null;
 
     if (archivo) {
-        archivo_url = await subirArchivo(archivo);
+        try {
+            archivo_url = await subirArchivo(archivo);
+        } catch (err) {
+            console.error(err);
+            return { exito: false, error: err.message };
+        }
     }
 
-    // Asegurar prefijo de etiqueta en el resumen si se especificó
-    let resumenFinal = resumen;
-    if (etiqueta && !resumen.trim().startsWith("[")) {
-        resumenFinal = `[${etiqueta}] ${resumen}`;
-    }
-
+    // No se antepone [Etiqueta] al texto del resumen (REL-19)
     const payload = {
-        titulo,
-        resumen: resumenFinal,
-        contenido,
+        titulo: titulo.trim(),
+        resumen: resumen.trim(),
+        contenido: contenido.trim(),
         archivo_url
     };
 
-    if (etiqueta) {
-        payload.etiqueta = etiqueta;
+    if (etiqueta && etiqueta.trim() !== "") {
+        payload.etiqueta = etiqueta.trim();
     }
 
-    let { error } = await supabase
+    let { data, error } = await supabase
         .from(TABLA)
-        .insert(payload);
+        .insert(payload)
+        .select();
 
-    // Fallback por si la columna "etiqueta" aún no fue creada en Supabase
+    // Fallback por si la columna "etiqueta" aún no fue creada en la tabla de Supabase
     if (error && error.message && error.message.includes("etiqueta")) {
         delete payload.etiqueta;
-        const result = await supabase.from(TABLA).insert(payload);
+        const result = await supabase.from(TABLA).insert(payload).select();
+        data = result.data;
         error = result.error;
     }
 
     if (error) {
-        console.error(error);
-        return false;
+        console.error("Error al publicar noticia en Supabase:", error);
+        return { exito: false, error: error.message };
     }
 
-    return true;
+    if (!data || data.length === 0) {
+        return { exito: false, error: "No se pudo insertar la noticia (bloqueo RLS)." };
+    }
+
+    return { exito: true, data: data[0] };
 }
 
 //======================================
-// ELIMINAR
+// ELIMINAR NOTICIA (SEC-04)
 //======================================
-
 export async function eliminarNoticia(id) {
-    const { error } = await supabase
+    // Si la noticia tenía un archivo adjunto, intentamos borrarlo de Storage
+    try {
+        const { data: noticia } = await supabase
+            .from(TABLA)
+            .select("archivo_url")
+            .eq("id", id)
+            .maybeSingle();
+
+        if (noticia && noticia.archivo_url) {
+            const partes = noticia.archivo_url.split("/");
+            const pathArchivo = partes[partes.length - 1];
+            if (pathArchivo) {
+                await supabase.storage.from(BUCKET).remove([decodeURIComponent(pathArchivo)]);
+            }
+        }
+    } catch (e) {
+        console.warn("No se pudo limpiar el archivo adjunto huérfano de Storage:", e);
+    }
+
+    const { data, error } = await supabase
         .from(TABLA)
         .delete()
-        .eq("id", id);
+        .eq("id", id)
+        .select();
 
     if (error) {
-        console.error(error);
+        console.error("Error al eliminar noticia:", error);
+        return false;
+    }
+
+    if (!data || data.length === 0) {
+        console.warn("No se eliminó ninguna fila (posible bloqueo RLS).");
         return false;
     }
 
@@ -127,9 +154,8 @@ export async function eliminarNoticia(id) {
 }
 
 //======================================
-// ACTUALIZAR / EDITAR NOTICIA
+// ACTUALIZAR / EDITAR NOTICIA (REL-19 & SEC-04)
 //======================================
-
 export async function actualizarNoticia(id, {
     titulo,
     resumen,
@@ -137,42 +163,49 @@ export async function actualizarNoticia(id, {
     archivo,
     etiqueta
 }) {
-    let resumenFinal = resumen;
-    if (etiqueta && !resumen.trim().startsWith("[")) {
-        resumenFinal = `[${etiqueta}] ${resumen}`;
-    }
-
     const datosActualizar = {
-        titulo,
-        resumen: resumenFinal,
-        contenido
+        titulo: titulo.trim(),
+        resumen: resumen.trim(),
+        contenido: contenido.trim()
     };
 
     if (archivo) {
-        const archivo_url = await subirArchivo(archivo);
-        if (archivo_url) {
-            datosActualizar.archivo_url = archivo_url;
+        try {
+            const archivo_url = await subirArchivo(archivo);
+            if (archivo_url) {
+                datosActualizar.archivo_url = archivo_url;
+            }
+        } catch (err) {
+            console.error("Error al subir nuevo archivo en edición:", err);
+            return false;
         }
     }
 
-    if (etiqueta) {
-        datosActualizar.etiqueta = etiqueta;
+    if (etiqueta && etiqueta.trim() !== "") {
+        datosActualizar.etiqueta = etiqueta.trim();
     }
 
-    let { error } = await supabase
+    let { data, error } = await supabase
         .from(TABLA)
         .update(datosActualizar)
-        .eq("id", id);
+        .eq("id", id)
+        .select();
 
-    // Fallback por si la columna "etiqueta" aún no fue creada en Supabase
+    // Fallback si no existe la columna etiqueta
     if (error && error.message && error.message.includes("etiqueta")) {
         delete datosActualizar.etiqueta;
-        const result = await supabase.from(TABLA).update(datosActualizar).eq("id", id);
+        const result = await supabase.from(TABLA).update(datosActualizar).eq("id", id).select();
+        data = result.data;
         error = result.error;
     }
 
     if (error) {
-        console.error(error);
+        console.error("Error al actualizar noticia:", error);
+        return false;
+    }
+
+    if (!data || data.length === 0) {
+        console.warn("No se afectó ninguna noticia al actualizar (posible bloqueo RLS).");
         return false;
     }
 

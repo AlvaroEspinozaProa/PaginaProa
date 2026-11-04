@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Horarios Escolares - Escuela PRoA</title>
+    <link rel="icon" type="image/png" href="logo.png">
    
-    <link rel="stylesheet" href="PRoA.css">
+    <link rel="stylesheet" href="proa.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="JS/navigation.js" defer></script>
+    <script type="module" src="./JS/navigation.js"></script>
    
     <style>
         /* CONTENEDOR GENERAL DE LA GRILLA SEMANAL */
@@ -171,7 +172,7 @@
         </div>
     </div>
 
-    <section class="tablon-hero">
+    <section class="page-hero">
         <span class="etiqueta">Gestión Institucional</span>
         <h1>📅 Horarios Escolares Oficiales</h1>
         <p>Cronograma visual con bloques proporcionales al tiempo de duración real.</p>
@@ -341,8 +342,38 @@
     </main>
 
     <footer id="contacto">
+        <div class="footer-contacto">
+            <div class="contacto-item">
+                <i class="fa-solid fa-envelope"></i>
+                <div>
+                    <strong>Email Oficial</strong>
+                    <a href="mailto:despenaderos.ds@escuelaproa.edu.ar">despenaderos.ds@escuelaproa.edu.ar</a>
+                </div>
+            </div>
+            <div class="contacto-item">
+                <i class="fa-solid fa-location-dot"></i>
+                <div>
+                    <strong>Ubicación</strong>
+                    <p>Despeñaderos, Córdoba</p>
+                </div>
+            </div>
+            <div class="contacto-item">
+                <i class="fa-solid fa-hashtag"></i>
+                <div>
+                    <strong>Instagram</strong>
+                    <a href="https://www.instagram.com/proadespenaderos/">@proadespenaderos</a>
+                </div>
+            </div>
+            <div class="contacto-item">
+                <i class="fa-solid fa-hashtag"></i>
+                <div>
+                    <strong>Facebook</strong>
+                    <a href="https://www.facebook.com/proadespenaderos/">@proa.despenaderos</a>
+                </div>
+            </div>
+        </div>
         <div class="footer-creditos">
-            <p>Proyecto de Horarios Escolares — Escuela PRoA © 2026</p>
+            <p>&copy; 2026 Escuela PRoA - Desarrollado por los alumnos.</p>
         </div>
     </footer>
 

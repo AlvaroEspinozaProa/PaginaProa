@@ -12,6 +12,8 @@ import {
     toggleLikeResena
 } from "./resenas_service.js";
 
+import { escaparHTML, sanitizarUrl, sanitizarAtributo } from "./utils.js";
+
 // Estado local del módulo de reseñas
 let usuarioActual = null;
 let esUsuarioAdmin = false;
@@ -133,7 +135,8 @@ function dibujarTarjetasResenas(resenas) {
 
         // Nombre y Foto de la empresa / usuario autor
         const nombreAutor = r.nombre_empresa || "Empresa Colaboradora";
-        const avatarImg = r.foto_empresa || "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
+        const avatarImg = sanitizarUrl(r.foto_empresa, "https://cdn-icons-png.flaticon.com/512/3135/3135715.png");
+        const resenaIdSanitizado = sanitizarAtributo(r.id);
 
         const estrellasHtml = generarEstrellasHTML(r.calificacion || 5);
         const meGustaClase = r.user_liked ? "activo" : "";
@@ -147,19 +150,19 @@ function dibujarTarjetasResenas(resenas) {
         const htmlImagenes = generarContenedorImagenesHTML(imagenesAdjuntas);
 
         html += `
-            <article class="resena-card" data-id="${r.id}">
+            <article class="resena-card" data-id="${resenaIdSanitizado}">
                 <header class="resena-card-header">
-                    <img src="${avatarImg}" alt="${escaparHTML(nombreAutor)}" class="resena-avatar" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
+                    <img src="${avatarImg}" alt="${escaparHTML(nombreAutor)}" class="resena-avatar" onerror="this.onerror=null; this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
                     <div class="resena-autor-info">
                         <h4 class="resena-empresa-titulo">${escaparHTML(nombreAutor)}</h4>
                         <span class="resena-fecha"><i class="fa-regular fa-calendar-check"></i> ${fechaFormatted}</span>
                     </div>
                     ${puedeEditarOBorrar ? `
                         <div class="resena-admin-acciones">
-                            <button type="button" class="resena-btn-admin-edit" data-id="${r.id}" title="Editar Reseña">
+                            <button type="button" class="resena-btn-admin-edit" data-id="${resenaIdSanitizado}" title="Editar Reseña">
                                 <i class="fa-solid fa-pen"></i>
                             </button>
-                            <button type="button" class="resena-btn-admin-delete" data-id="${r.id}" title="Eliminar Reseña">
+                            <button type="button" class="resena-btn-admin-delete" data-id="${resenaIdSanitizado}" title="Eliminar Reseña">
                                 <i class="fa-solid fa-trash-can"></i>
                             </button>
                         </div>
@@ -168,7 +171,7 @@ function dibujarTarjetasResenas(resenas) {
 
                 <div class="resena-calificacion-bar">
                     ${estrellasHtml}
-                    <span class="resena-puntaje-num">${r.calificacion || 5}.0 / 5</span>
+                    <span class="resena-puntaje-num">${Number(r.calificacion) || 5}.0 / 5</span>
                 </div>
 
                 <p class="resena-comentario-texto">${escaparHTML(r.comentario)}</p>
@@ -176,10 +179,10 @@ function dibujarTarjetasResenas(resenas) {
                 ${htmlImagenes}
 
                 <footer class="resena-card-footer">
-                    <button type="button" class="resena-btn-like ${meGustaClase}" data-id="${r.id}">
+                    <button type="button" class="resena-btn-like ${meGustaClase}" data-id="${resenaIdSanitizado}">
                         <i class="${meGustaIcono}"></i>
                         <span>Me gusta</span>
-                        <strong class="resena-like-count">${r.likes_count || 0}</strong>
+                        <strong class="resena-like-count">${Number(r.likes_count) || 0}</strong>
                     </button>
                 </footer>
             </article>
@@ -206,9 +209,13 @@ function generarContenedorImagenesHTML(imagenes) {
     const esMultiples = imagenes.length > 1;
     const claseMultiples = esMultiples ? "resena-carousel-multi" : "";
 
-    let itemsHtml = imagenes.map((url, idx) => `
-        <img src="${url}" alt="Foto Pasantía ${idx + 1}" loading="lazy" class="resena-carousel-item" onerror="this.style.display='none'">
-    `).join("");
+    let itemsHtml = imagenes.map((url, idx) => {
+        const urlSegura = sanitizarUrl(url);
+        if (!urlSegura) return "";
+        return `<img src="${urlSegura}" alt="Foto Pasantía ${idx + 1}" loading="lazy" class="resena-carousel-item" onerror="this.style.display='none'">`;
+    }).filter(Boolean).join("");
+
+    if (!itemsHtml) return "";
 
     return `
         <div class="resena-imagen-adjunta ${claseMultiples}">
@@ -540,7 +547,7 @@ function configurarDelegacionEventosGrid() {
 }
 
 function abrirModalEditar(resenaId) {
-    const resena = listaResenasCache.find(r => r.id === resenaId);
+    const resena = listaResenasCache.find(r => String(r.id) === String(resenaId));
     if (!resena) return;
 
     const modalEditar = document.getElementById("modal-editar-resena");
@@ -568,7 +575,7 @@ function abrirModalEditar(resenaId) {
 
     const imagenes = obtenerListaImagenes(resena.imagen_url);
     if (imagenes.length > 0) {
-        if (previewImg) previewImg.src = imagenes[0];
+        if (previewImg) previewImg.src = sanitizarUrl(imagenes[0]);
         if (previewBox) {
             previewBox.classList.remove("hidden");
             previewBox.style.display = "block";
@@ -584,15 +591,4 @@ function abrirModalEditar(resenaId) {
         modalEditar.classList.remove("hidden");
         modalEditar.style.display = "flex";
     }
-}
-
-// Auxiliar para escapar texto HTML y prevenir XSS
-function escaparHTML(str) {
-    if (!str) return "";
-    return str
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
 }

@@ -170,9 +170,9 @@ function renderizarTablaPasantias(postulaciones) {
     postulaciones.forEach(p => { 
         const estadoActual = p.estado || "Pendiente";
         let badgeClass = "badge-pendiente";
-        if (estadoActual === "Aprobado") badgeClass = "badge-aprobado";
+        if (estadoActual === "Aprobado" || estadoActual === "Aceptado") badgeClass = "badge-aprobado";
         else if (estadoActual === "Rechazado") badgeClass = "badge-rechazado";
-        else if (estadoActual === "En revisión") badgeClass = "badge-en-revision";
+        else if (estadoActual === "Contactado" || estadoActual === "En revisión") badgeClass = "badge-en-revision";
 
         html += `<tr> 
             <td>
@@ -188,8 +188,8 @@ function renderizarTablaPasantias(postulaciones) {
             <td>
                 <select class="admin-select select-cambiar-estado" data-id="${p.id}" style="padding: 4px 8px; font-size: 0.8rem;">
                     <option value="Pendiente" ${estadoActual === "Pendiente" ? "selected" : ""}>Pendiente</option>
-                    <option value="En revisión" ${estadoActual === "En revisión" ? "selected" : ""}>En revisión</option>
-                    <option value="Aprobado" ${estadoActual === "Aprobado" ? "selected" : ""}>Aprobado</option>
+                    <option value="Contactado" ${(estadoActual === "Contactado" || estadoActual === "En revisión") ? "selected" : ""}>Contactado</option>
+                    <option value="Aprobado" ${(estadoActual === "Aprobado" || estadoActual === "Aceptado") ? "selected" : ""}>Aprobado</option>
                     <option value="Rechazado" ${estadoActual === "Rechazado" ? "selected" : ""}>Rechazado</option>
                 </select>
             </td> 

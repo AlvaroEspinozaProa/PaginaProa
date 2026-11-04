@@ -11,6 +11,9 @@ import {
     cerrarSesion
 } from "./auth.js";
 
+import { inicializarModuloResenas } from "./pasantias_resenas.js";
+import { escaparHTML, sanitizarAtributo } from "./utils.js";
+
 // Elementos DOM principales
 const txtUsuarioEstado = document.getElementById('txt-usuario-estado');
 const btnLoginLink = document.getElementById('btn-login-link');
@@ -227,22 +230,28 @@ function dibujarTabla() {
         });
 
         const claseBadge = obtenerClaseBadge(p.estado);
+        const empresaEscapada = escaparHTML(p.nombre_empresa || "Empresa");
+        const rubroEscapado = escaparHTML(p.rubro || 'General');
+        const contactoEscapado = escaparHTML(p.contacto_nombre || "Sin contacto");
+        const emailEscapado = escaparHTML(p.email || "");
+        const telefonoEscapado = escaparHTML(p.telefono || 'Sin teléfono');
+        const idSanitizado = sanitizarAtributo(p.id);
 
         html += `
             <tr>
                 <td>
-                    <strong>${p.nombre_empresa}</strong><br>
-                    <span style="font-size:0.78rem; color:#64748b;">${p.rubro || 'General'}</span>
+                    <strong>${empresaEscapada}</strong><br>
+                    <span style="font-size:0.78rem; color:#64748b;">${rubroEscapado}</span>
                 </td>
-                <td>${p.contacto_nombre}</td>
+                <td>${contactoEscapado}</td>
                 <td>
-                    <a href="mailto:${p.email}" style="color:#0077cc; text-decoration:none;">${p.email}</a><br>
-                    <span style="font-size:0.78rem; color:#64748b;">${p.telefono || 'Sin teléfono'}</span>
+                    <a href="mailto:${emailEscapado}" style="color:#0077cc; text-decoration:none;">${emailEscapado}</a><br>
+                    <span style="font-size:0.78rem; color:#64748b;">${telefonoEscapado}</span>
                 </td>
-                <td><strong style="color:#0057B8;">${p.vacantes || 1}</strong></td>
+                <td><strong style="color:#0057B8;">${Number(p.vacantes) || 1}</strong></td>
                 <td>${fecha}</td>
                 <td>
-                    <select onchange="cambiarEstadoPostulacion('${p.id}', this.value)" class="select-estado ${claseBadge}">
+                    <select onchange="cambiarEstadoPostulacion('${idSanitizado}', this.value)" class="select-estado ${claseBadge}">
                         <option value="Pendiente" ${p.estado === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
                         <option value="Contactado" ${p.estado === 'Contactado' ? 'selected' : ''}>Contactado</option>
                         <option value="Aprobado" ${p.estado === 'Aprobado' ? 'selected' : ''}>Aprobado</option>
@@ -250,7 +259,7 @@ function dibujarTabla() {
                     </select>
                 </td>
                 <td>
-                    <button onclick="eliminarPostulacion('${p.id}')" type="button" class="btn-delete" style="padding:6px 10px;">
+                    <button onclick="eliminarPostulacion('${idSanitizado}')" type="button" class="btn-delete" style="padding:6px 10px;" title="Eliminar postulación">
                         <i class="fa-solid fa-trash"></i>
                     </button>
                 </td>
@@ -280,7 +289,7 @@ function obtenerClaseBadge(estado) {
 window.cambiarEstadoPostulacion = async function(id, nuevoEstado) {
     const exito = await actualizarEstadoPostulacion(id, nuevoEstado);
     if (exito) {
-        const item = listaPostulaciones.find(p => p.id === id);
+        const item = listaPostulaciones.find(p => String(p.id) === String(id));
         if (item) item.estado = nuevoEstado;
         dibujarTabla();
     } else {
@@ -307,18 +316,22 @@ botonesFiltro.forEach(btn => {
         botonesFiltro.forEach(b => b.classList.remove('activo'));
         e.target.classList.add('activo');
         
-        filtroActual = e.target.textContent.trim();
-        if (filtroActual === "Todas") filtroActual = "Todos";
-        if (filtroActual === "Pendientes") filtroActual = "Pendiente";
-        if (filtroActual === "Contactados") filtroActual = "Contactado";
-        if (filtroActual === "Aprobados") filtroActual = "Aprobado";
-        if (filtroActual === "Rechazados") filtroActual = "Rechazado";
+        // Priorizar data-estado si existe; si no, normalizar texto
+        const dataEstado = e.target.getAttribute('data-estado');
+        if (dataEstado) {
+            filtroActual = dataEstado;
+        } else {
+            filtroActual = e.target.textContent.trim();
+            if (filtroActual === "Todas") filtroActual = "Todos";
+            if (filtroActual === "Pendientes") filtroActual = "Pendiente";
+            if (filtroActual === "Contactados") filtroActual = "Contactado";
+            if (filtroActual === "Aprobados") filtroActual = "Aprobado";
+            if (filtroActual === "Rechazados") filtroActual = "Rechazado";
+        }
 
         dibujarTabla();
     });
 });
-
-import { inicializarModuloResenas } from "./pasantias_resenas.js";
 
 // Inicializar al cargar el DOM
 document.addEventListener('DOMContentLoaded', async () => {

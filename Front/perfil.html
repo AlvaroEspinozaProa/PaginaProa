@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Perfil - Escuela PRoA</title>
+    <link rel="icon" type="image/png" href="logo.png">
     
     <link rel="stylesheet" href="proa.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -265,7 +266,7 @@
 
     <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="JS/navigation.js" defer></script>
+    <script type="module" src="./JS/navigation.js"></script>
 </head>
 <body>
 
@@ -364,9 +365,9 @@
             const estadoLower = estado.toLowerCase();
             if (estadoLower.includes("pendiente")) {
                 spanEstado.className = "badge-estado estado-pendiente";
-            } else if (estadoLower.includes("contactado")) {
+            } else if (estadoLower.includes("contactado") || estadoLower.includes("revisión") || estadoLower.includes("revision")) {
                 spanEstado.className = "badge-estado estado-contactado";
-            } else if (estadoLower.includes("aceptado")) {
+            } else if (estadoLower.includes("aceptado") || estadoLower.includes("aprobado")) {
                 spanEstado.className = "badge-estado estado-aceptado";
             } else if (estadoLower.includes("rechazado")) {
                 spanEstado.className = "badge-estado estado-rechazado";

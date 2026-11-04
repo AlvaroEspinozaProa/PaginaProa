@@ -1,10 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
 /* =========================================
-   VARIABLES GLOBALES (Paleta Clara Institucional)
+   VARIABLES GLOBALES Y TEMATIZACIÓN POR SECCIÓN (Punto 5)
    ========================================= */
 :root {
     --primary: #0077cc;
-    --primary-hover: #00aaff;
+    --primary-hover: #0099e6;
+    --primary-dark: #0057B8;
     --secondary: #0057B8;
+    --accent: #00AEEF;
+    --hero-gradient: linear-gradient(135deg, #0057B8 0%, #0077cc 50%, #00AEEF 100%);
+    --tint: rgba(0, 119, 204, 0.1);
+    --footer-bg: #0a1c36;
     --dark: #1e293b;
     --text-muted: #64748b;
     --text-main: #334155;
@@ -15,11 +22,122 @@
     --shadow-color: rgba(0, 0, 0, 0.08);
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+/* Inicio: Azul Institucional */
+body[data-seccion="inicio"] {
+    --primary: #0077cc;
+    --primary-hover: #0099e6;
+    --primary-dark: #0057B8;
+    --secondary: #0057B8;
+    --accent: #00AEEF;
+    --hero-gradient: linear-gradient(135deg, #0057B8 0%, #0077cc 50%, #00AEEF 100%);
+    --tint: rgba(0, 119, 204, 0.12);
+    --footer-bg: #0a1c36;
+}
+
+/* Novedades / Tablón: Naranja Comunicaciones */
+body[data-seccion="novedades"] {
+    --primary: #ea580c;
+    --primary-hover: #f97316;
+    --primary-dark: #c2410c;
+    --secondary: #c2410c;
+    --accent: #fb923c;
+    --hero-gradient: linear-gradient(135deg, #9a3412 0%, #c2410c 45%, #ea580c 100%);
+    --tint: rgba(234, 88, 12, 0.12);
+    --footer-bg: #2c1208;
+}
+
+/* Proyectos: Violeta Innovación */
+body[data-seccion="proyectos"] {
+    --primary: #7c3aed;
+    --primary-hover: #8b5cf6;
+    --primary-dark: #5b21b6;
+    --secondary: #5b21b6;
+    --accent: #a78bfa;
+    --hero-gradient: linear-gradient(135deg, #4c1d95 0%, #6d28d9 45%, #8b5cf6 100%);
+    --tint: rgba(124, 58, 237, 0.12);
+    --footer-bg: #1c0b3b;
+}
+
+/* Pasantías: Teal / Esmeralda Profesional */
+body[data-seccion="pasantias"] {
+    --primary: #0f766e;
+    --primary-hover: #14b8a6;
+    --primary-dark: #115e59;
+    --secondary: #115e59;
+    --accent: #2dd4bf;
+    --hero-gradient: linear-gradient(135deg, #134e4a 0%, #0f766e 45%, #0d9488 100%);
+    --tint: rgba(15, 118, 110, 0.12);
+    --footer-bg: #062523;
+}
+
+/* CDE: Bordó / Carmesí Representación */
+body[data-seccion="cde"] {
+    --primary: #be123c;
+    --primary-hover: #f43f5e;
+    --primary-dark: #9f1239;
+    --secondary: #9f1239;
+    --accent: #fb7185;
+    --hero-gradient: linear-gradient(135deg, #881337 0%, #9f1239 45%, #be123c 100%);
+    --tint: rgba(190, 18, 60, 0.12);
+    --footer-bg: #2b0611;
+}
+
+/* Deportes: Verde Energía */
+body[data-seccion="deportes"] {
+    --primary: #15803d;
+    --primary-hover: #22c55e;
+    --primary-dark: #166534;
+    --secondary: #166534;
+    --accent: #4ade80;
+    --hero-gradient: linear-gradient(135deg, #14532d 0%, #166534 45%, #15803d 100%);
+    --tint: rgba(21, 128, 61, 0.12);
+    --footer-bg: #072312;
+}
+
+/* Horarios: Índigo Académico */
+body[data-seccion="horarios"] {
+    --primary: #4338ca;
+    --primary-hover: #6366f1;
+    --primary-dark: #3730a3;
+    --secondary: #3730a3;
+    --accent: #818cf8;
+    --hero-gradient: linear-gradient(135deg, #312e81 0%, #3730a3 45%, #4f46e5 100%);
+    --tint: rgba(67, 56, 202, 0.12);
+    --footer-bg: #14123b;
+}
+
+/* Admin: Gris Pizarra / Carbón de Gestión */
+body[data-seccion="admin"] {
+    --primary: #334155;
+    --primary-hover: #475569;
+    --primary-dark: #1e293b;
+    --secondary: #1e293b;
+    --accent: #64748b;
+    --hero-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 45%, #334155 100%);
+    --tint: rgba(51, 65, 85, 0.12);
+    --footer-bg: #0f172a;
+}
+
+/* Perfil y Acceso */
+body[data-seccion="perfil"],
+body[data-seccion="auth"] {
+    --primary: #0077cc;
+    --primary-hover: #0099e6;
+    --primary-dark: #0057B8;
+    --secondary: #0057B8;
+    --accent: #00AEEF;
+    --hero-gradient: linear-gradient(135deg, #0057B8 0%, #0077cc 50%, #00AEEF 100%);
+    --tint: rgba(0, 119, 204, 0.12);
+    --footer-bg: #0a1c36;
+}
 
 /* =========================================
    RESETO Y BASE GENERAL
    ========================================= */
+html {
+    scroll-behavior: smooth;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -81,131 +199,372 @@ th {
 /* =========================================
    HEADER & NAVEGACIÓN
    ========================================= */
-header {
+#global-header {
     width: 100%;
+    min-height: 76px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 18px 8%;
+    padding: 12px clamp(16px, 3.5vw, 44px);
     background: var(--white);
-    box-shadow: 0 5px 20px rgba(0, 0, 0, .08);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
     position: sticky;
     top: 0;
     z-index: 1100;
 }
 
+/* Enlace del logo principal */
 .logo {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .logo img {
-    width: 70px;
-    height: 70px;
+    width: 52px;
+    height: 52px;
     border-radius: 50%;
     object-fit: cover;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 87, 184, 0.15);
+}
+
+.logo .logo-texto {
+    display: flex;
+    flex-direction: column;
 }
 
 .logo h2 {
     color: var(--primary);
-    font-size: clamp(20px, 3vw, 24px);
+    font-size: clamp(1.15rem, 1.8vw, 1.35rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0;
+    white-space: nowrap;
 }
 
 .logo span {
-    color: #666;
-    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-weight: 500;
+    line-height: 1.2;
+    white-space: nowrap;
 }
 
+/* Menú de navegación principal */
 nav {
     display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-    justify-content: center;
+    align-items: center;
+    gap: clamp(4px, 0.6vw, 10px);
+    flex-wrap: nowrap;
+    position: relative;
 }
 
-nav a {
+/* Indicador deslizante dinámico (Punto 4) */
+.nav-indicator {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    height: 38px;
+    background: var(--primary);
+    border-radius: 8px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    box-shadow: 0 4px 14px var(--tint);
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+                width 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+                background-color 0.3s ease,
+                opacity 0.2s ease;
+}
+
+nav a.nav-link-item {
     text-decoration: none;
-    color: #0066b3;
+    color: var(--text-main);
     font-weight: 500;
+    font-size: 0.92rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+    background: transparent;
+    transition: color 0.2s ease;
+}
+
+nav a.nav-link-item:hover {
+    color: var(--primary);
+}
+
+/* Solo se vuelve blanco cuando el indicador está activamente posicionado debajo del link */
+nav a.nav-link-item.indicator-on {
+    color: var(--white) !important;
+    font-weight: 600;
+}
+
+nav a.nav-link-item.active {
+    font-weight: 600;
+}
+
+@media (min-width: 1101px) {
+    nav a.nav-link-item.active {
+        background: transparent;
+    }
+}
+
+/* Divisor sutil en el menú */
+.nav-divider {
+    width: 1px;
+    height: 26px;
+    background-color: var(--border-color);
+    margin: 0 4px;
+    flex-shrink: 0;
+}
+
+/* Contenedor y botón del usuario / avatar (Punto 1 y 2 resueltos) */
+.nav-user-slot {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.nav-user-dropdown {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.nav-avatar-btn {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    outline: none;
+    transition: transform 0.2s ease;
+}
+
+.nav-avatar-btn:hover,
+.nav-avatar-btn:focus-visible {
+    transform: scale(1.05);
+}
+
+.nav-avatar-btn:focus-visible {
+    box-shadow: 0 0 0 3px rgba(0, 119, 204, 0.4);
+}
+
+/* Solo 1 círculo de imagen, tamaño consistente de 44px */
+.nav-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #cbd5e1;
+    background-color: #f1f5f9;
+    display: block;
+    margin: 0;
+    transition: border-color 0.2s ease;
+}
+
+.nav-avatar-btn:hover .nav-avatar,
+.nav-avatar-btn.is-active .nav-avatar {
+    border-color: var(--primary);
+}
+
+/* Indicador verde de sesión activa pegado a la esquina inferior */
+.sesion-dot {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    width: 11px;
+    height: 11px;
+    background-color: #22c55e;
+    border: 2px solid var(--white);
+    border-radius: 50%;
+    pointer-events: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Menú flotante desplegable del perfil */
+.nav-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    min-width: 220px;
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    padding: 8px 0;
+    z-index: 1200;
+    display: none;
+    flex-direction: column;
+    animation: navDropdownFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-dropdown-menu.is-open {
+    display: flex;
+}
+
+@keyframes navDropdownFade {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.nav-dropdown-header {
+    padding: 10px 16px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.nav-user-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.nav-user-email {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.nav-user-role-badge {
+    align-self: flex-start;
+    font-size: 0.7rem;
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-weight: 600;
+    margin-top: 4px;
+    text-transform: capitalize;
+}
+
+.role-badge-admin {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+.role-badge-estudiante {
+    background-color: #e0f2fe;
+    color: #0369a1;
+}
+
+.role-badge-comun {
+    background-color: #f1f5f9;
+    color: #475569;
+}
+
+.nav-dropdown-divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: 6px 0;
+}
+
+.nav-dropdown-item {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 16px;
-    border-radius: 10px;
-    transition: 0.3s;
+    gap: 10px;
+    padding: 9px 16px;
+    color: var(--text-main);
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 500;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-nav a:hover, nav a.active {
-    background: var(--primary-hover);
+.nav-dropdown-item:hover {
+    background-color: #f8fafc;
+    color: var(--primary);
+}
+
+.nav-dropdown-item-admin {
+    color: #0057B8;
+    font-weight: 600;
+}
+
+.nav-dropdown-item-admin:hover {
+    background-color: #eff6ff;
+    color: #004494;
+}
+
+.nav-dropdown-item-logout {
+    color: #dc2626;
+}
+
+.nav-dropdown-item-logout:hover {
+    background-color: #fef2f2;
+    color: #b91c1c;
+}
+
+/* Botón Iniciar Sesión para invitados */
+.nav-btn-login {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    background-color: var(--primary);
     color: var(--white);
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, transform 0.15s ease;
 }
 
-.sesion-dot {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    background-color: #22c55e;
+.nav-btn-login:hover {
+    background-color: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+/* Skeleton Placeholder */
+.nav-avatar-skeleton {
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
-    margin-left: 5px;
-    vertical-align: middle;
+    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+    background-size: 200% 100%;
+    animation: skeletonShimmer 1.5s infinite;
 }
 
-/* "Mi Perfil" queda alineado en la misma fila que el resto del menú, como un
-   ícono circular de avatar al final, en vez de un botón rectangular con texto. */
-@media (min-width: 769px) {
-    /* Todos los links quedan uno al lado del otro, sin pasar a una segunda fila */
-    nav {
-        flex-wrap: nowrap;
-    }
-
-    nav a#nav-link-perfil {
-        width: 42px;
-        height: 42px;
-        margin-left: 6px;
-        padding: 0;
-        border-radius: 50%;
-        justify-content: center;
-        flex-shrink: 0;
-        font-size: 0;
-        background: var(--bg-light);
-        border: 2px solid #cbd5e1;
-        position: relative;
-    }
-
-    nav a#nav-link-perfil i {
-        font-size: 1.1rem;
-    }
-
-    nav a#nav-link-perfil:hover,
-    nav a#nav-link-perfil.active {
-        border-color: var(--primary-hover);
-    }
-
-    /* El puntito verde de "sesión activa" pasa a ser un badge sobre el círculo */
-    nav a#nav-link-perfil .sesion-dot {
-        position: absolute;
-        bottom: 1px;
-        right: 1px;
-        margin-left: 0;
-        border: 2px solid var(--white);
-    }
+@keyframes skeletonShimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
 }
 
-/* En pantallas intermedias, achicamos un poco el nav para que las 7 opciones
-   más el avatar entren cómodas en una sola fila. */
-@media (min-width: 769px) and (max-width: 1100px) {
-    nav {
-        gap: 6px;
-    }
-
-    nav a {
-        padding: 8px 10px;
-        font-size: 0.9rem;
-    }
-}
-
-/* Botón hamburguesa: oculto en escritorio */
+/* Botón hamburguesa */
 .nav-toggle {
     display: none;
     background: none;
@@ -217,41 +576,54 @@ nav a:hover, nav a.active {
     line-height: 1;
 }
 
-/* Tamaño por defecto (Celulares y pantallas chicas) */
-.nav-avatar {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    object-fit: cover;
-    vertical-align: middle;
-    margin-right: 6px;
-    border: 1.5px solid #0077cc;
-}
-
-/* Solo para pantallas de computadora (a partir de 768px) */
-@media (min-width: 768px) {
-    .nav-avatar {
-        width: 55px;
-        height: 55px;
-        border-width: 2px;
-    }
+/* Accesibilidad sr-only */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 /* =========================================
-   HERO SECTION (Soporta texto centrado e imagen al lado)
+   HERO SECTIONS (Hero de inicio y Cabecera Institucional)
    ========================================= */
+/* Hero principal de index.html (Dos columnas con imagen lateral) */
 .hero {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    text-align: center;
+    text-align: left;
     padding: 100px 8% 110px;
-    background: linear-gradient(135deg, #0057B8 0%, #0077cc 50%, #00AEEF 100%);
+    background: var(--hero-gradient);
     color: var(--white);
     gap: 50px;
     position: relative;
     overflow: hidden;
+    transition: background 0.3s ease;
+}
+
+/* Cabecera unificada institucional (.page-hero, .tablon-hero, .pasantias-hero) */
+.page-hero,
+.tablon-hero,
+.pasantias-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 12px;
+    padding: 60px clamp(16px, 5vw, 60px) 65px;
+    background: var(--hero-gradient);
+    color: var(--white);
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s ease;
 }
 
 .hero-texto, .hero-contenido {
@@ -279,14 +651,16 @@ nav a:hover, nav a.active {
 
 /* Etiquetas (Comprime .hero-badge, .etiqueta) */
 .etiqueta, .hero-badge {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background: rgba(255, 255, 255, 0.18);
     border: 1px solid rgba(255, 255, 255, 0.3);
     padding: 6px 18px;
     border-radius: 50px;
     font-size: 0.85rem;
     font-weight: 600;
-    margin-bottom: 24px;
+    margin-bottom: 8px;
     letter-spacing: 0.03em;
     color: var(--white);
     text-transform: uppercase;
@@ -315,6 +689,38 @@ nav a:hover, nav a.active {
     margin-bottom: 35px;
     line-height: 1.85;
     font-weight: 300;
+}
+
+.page-hero h1,
+.tablon-hero h1,
+.pasantias-hero h1 {
+    font-size: clamp(1.8rem, 4.2vw, 2.7rem);
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 0;
+    color: var(--white);
+    letter-spacing: -0.02em;
+}
+
+.page-hero p,
+.tablon-hero p,
+.pasantias-hero p {
+    font-size: 1.05rem;
+    max-width: 760px;
+    margin: 0 auto;
+    font-weight: 300;
+    line-height: 1.6;
+    opacity: 0.95;
+    color: var(--white);
+}
+
+.page-hero-cta,
+.pasantias-hero-cta {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 10px;
 }
 
 /* =========================================
@@ -516,10 +922,12 @@ nav a:hover, nav a.active {
    FOOTER Y CONTACTO
    ========================================= */
 footer {
-    background: #0f2744;
+    background: var(--footer-bg, #0f2744);
+    border-top: 3px solid var(--primary);
     color: rgba(255, 255, 255, 0.85);
     text-align: center;
     padding: 50px 8% 25px;
+    transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .footer-contacto, .contacto-info {
@@ -575,17 +983,12 @@ footer svg:hover {
 }
 
 /* =========================================
-   DISEÑO RESPONSIVO
+/* =========================================
+   DISEÑO RESPONSIVO - HEADER Y MENÚ (Breakpoint 1100px)
    ========================================= */
-@media (max-width: 768px) {
-    header {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: center;
-        padding: 16px;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
+@media (max-width: 1100px) {
+    #global-header {
+        padding: 12px clamp(14px, 3vw, 24px);
     }
 
     .nav-toggle {
@@ -595,21 +998,87 @@ footer svg:hover {
     nav {
         display: none;
         width: 100%;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(12px);
         flex-direction: column;
         align-items: stretch;
-        gap: 5px;
-        margin-top: 15px;
-        order: 3;
+        gap: 6px;
+        padding: 16px 20px 20px;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        border-top: 1px solid var(--border-color);
+        max-height: calc(100vh - 80px);
+        overflow-y: auto;
     }
 
     nav.nav-open {
         display: flex;
     }
 
-    nav a {
-        justify-content: center;
+    .nav-indicator {
+        display: none !important;
     }
 
+    nav a.nav-link-item {
+        justify-content: flex-start;
+        padding: 11px 14px;
+        font-size: 0.95rem;
+    }
+
+    nav a.nav-link-item.active {
+        background: var(--tint);
+        color: var(--primary) !important;
+        font-weight: 700;
+        border-radius: 8px;
+    }
+
+    nav a.nav-link-item.indicator-on {
+        color: var(--primary) !important;
+    }
+
+    .nav-divider {
+        width: 100%;
+        height: 1px;
+        margin: 6px 0;
+    }
+
+    .nav-user-slot {
+        width: 100%;
+    }
+
+    .nav-user-dropdown {
+        width: 100%;
+    }
+
+    .nav-avatar-btn {
+        width: 100%;
+        justify-content: flex-start;
+        padding: 8px 10px;
+        border-radius: 8px;
+    }
+
+    .nav-avatar-btn:hover {
+        background: #f1f5f9;
+    }
+
+    .nav-dropdown-menu {
+        position: static;
+        width: 100%;
+        box-shadow: none;
+        border: 1px solid var(--border-color);
+        margin-top: 6px;
+    }
+
+    .nav-btn-login {
+        width: 100%;
+        justify-content: center;
+        padding: 11px;
+    }
+}
+
+@media (max-width: 768px) {
     .hero, .destacado {
         flex-direction: column;
         text-align: center;
@@ -731,11 +1200,12 @@ footer svg:hover {
 
 /* --- Hero Compacto del Tablón --- */
 .tablon-hero {
-    background: linear-gradient(135deg, #0057B8 0%, #0077cc 50%, #00AEEF 100%);
+    background: var(--hero-gradient);
     color: #ffffff;
     text-align: center;
     padding: 45px 20px 50px;
     position: relative;
+    transition: background 0.3s ease;
 }
 
 .tablon-hero h1 {
@@ -923,12 +1393,12 @@ footer svg:hover {
     margin-bottom: 8px;
 }
 
-.tablon-form-group input[type="text"],
+.tablon-form-group input,
 .tablon-form-group textarea,
-.tablon-form-group input[type="file"],
-.form-group input[type="text"],
+.tablon-form-group select,
+.form-group input,
 .form-group textarea,
-.form-group input[type="file"] {
+.form-group select {
     width: 100%;
     padding: 12px 16px;
     border: 1px solid #cbd5e1;
@@ -948,8 +1418,10 @@ footer svg:hover {
 
 .tablon-form-group input:focus,
 .tablon-form-group textarea:focus,
+.tablon-form-group select:focus,
 .form-group input:focus,
-.form-group textarea:focus {
+.form-group textarea:focus,
+.form-group select:focus {
     outline: none;
     border-color: #0077cc;
     background: #ffffff;
@@ -1185,10 +1657,14 @@ footer svg:hover {
     justify-content: center;
     padding: 20px;
     box-sizing: border-box;
+    transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .tablon-modal-mask.hidden, .modal-mask.hidden {
-    display: none !important;
+    display: flex !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
 }
 
 .tablon-modal-box, .modal-box {
@@ -1280,11 +1756,12 @@ footer svg:hover {
    ========================================= */
 
 .pasantias-hero {
-    background: linear-gradient(135deg, #0057B8 0%, #0077cc 50%, #00AEEF 100%);
+    background: var(--hero-gradient);
     color: #ffffff;
     text-align: center;
     padding: 60px 20px 70px;
     position: relative;
+    transition: background 0.3s ease;
 }
 
 .pasantias-hero h1 {
@@ -1730,9 +2207,10 @@ footer svg:hover {
 }
 
 .modal-overlay.hidden {
-    opacity: 0;
-    pointer-events: none;
-    visibility: hidden;
+    display: flex !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
 }
 
 .modal-content-card {
@@ -1744,12 +2222,12 @@ footer svg:hover {
     max-width: 650px;
     max-height: 90vh;
     overflow-y: auto;
-    transform: scale(1);
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform: scale(1) translateY(0);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .modal-overlay.hidden .modal-content-card {
-    transform: scale(0.9);
+    transform: scale(0.95) translateY(10px);
 }
 
 /* =========================================
@@ -3255,4 +3733,92 @@ footer svg:hover {
     .resena-modal-box {
         border-radius: 14px;
     }
+}
+
+/* =========================================
+   SISTEMA DE NOTIFICACIONES TOAST (UX-13)
+   ========================================= */
+.proa-toast-container {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+    max-width: 90vw;
+}
+
+.proa-toast {
+    pointer-events: auto;
+    background: #ffffff;
+    color: #1e293b;
+    padding: 12px 20px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.92rem;
+    font-weight: 500;
+    border-left: 5px solid var(--primary);
+    transform: translateY(20px);
+    opacity: 0;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+}
+
+.proa-toast.is-visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.proa-toast-exito { border-left-color: #16a34a; }
+.proa-toast-exito i { color: #16a34a; }
+
+.proa-toast-error { border-left-color: #dc2626; }
+.proa-toast-error i { color: #dc2626; }
+
+.proa-toast-advertencia { border-left-color: #f59e0b; }
+.proa-toast-advertencia i { color: #f59e0b; }
+
+.proa-toast-info { border-left-color: var(--primary); }
+.proa-toast-info i { color: var(--primary); }
+
+/* =========================================
+   ANIMACIONES FLUIDAS EN MODALES (FLUID-02)
+   ========================================= */
+.modal-overlay,
+.resena-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.modal-overlay.is-open,
+.resena-modal-overlay.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.modal-content-card,
+.resena-modal-box {
+    transform: scale(0.95);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-overlay.is-open .modal-content-card,
+.resena-modal-overlay.is-open .resena-modal-box {
+    transform: scale(1);
 }
