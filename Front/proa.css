@@ -3735,6 +3735,7 @@ footer svg:hover {
     }
 }
 
+<<<<<<< HEAD
 /* =========================================
    SISTEMA DE NOTIFICACIONES TOAST (UX-13)
    ========================================= */
@@ -3821,4 +3822,367 @@ footer svg:hover {
 .modal-overlay.is-open .modal-content-card,
 .resena-modal-overlay.is-open .resena-modal-box {
     transform: scale(1);
+=======
+.preguntas-frecuentes {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 70px 20px;
+}
+
+.preguntas-frecuentes h2 {
+    text-align: center;
+    font-size: 2.2rem;
+    margin: 10px 0;
+}
+
+.descripcion-faq {
+    text-align: center;
+    margin-bottom: 35px;
+    color: #666;
+}
+
+.faq {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.faq details {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.faq details:hover {
+    border-color: #168dcc;
+}
+
+.faq summary {
+    padding: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    list-style: none;
+    position: relative;
+    padding-right: 50px;
+}
+
+.faq summary::-webkit-details-marker {
+    display: none;
+}
+
+.faq summary::after {
+    content: "+";
+    position: absolute;
+    right: 20px;
+    font-size: 22px;
+    transition: 0.3s;
+}
+
+.faq details[open] summary::after {
+    content: "−";
+}
+
+.respuesta {
+    padding: 0 20px 20px;
+    color: #555;
+    line-height: 1.6;
+    border-top: 1px solid #eee;
+}
+
+.respuesta p {
+    margin: 15px 0 0;
+}
+
+
+/* =========================================
+   CRUD ADMIN — MODALES Y COMPONENTES COMPARTIDOS
+   (CDE, Proyectos, Deportes)
+   ========================================= */
+
+/* Overlay de fondo del modal */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+    animation: fadeInOverlay 0.2s ease;
+}
+
+.modal-overlay.hidden {
+    display: none;
+}
+
+@keyframes fadeInOverlay {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Caja del modal */
+.modal-caja {
+    background: var(--bg-card);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    width: 100%;
+    max-width: 580px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUpModal 0.25s ease;
+}
+
+@keyframes slideUpModal {
+    from { transform: translateY(30px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* Cabecera del modal */
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 24px 16px;
+    border-bottom: 1px solid var(--border-color);
+    gap: 12px;
+}
+
+.modal-header h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin: 0;
+}
+
+.modal-cerrar {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 8px;
+    transition: background 0.2s, color 0.2s;
+    flex-shrink: 0;
+}
+
+.modal-cerrar:hover {
+    background: var(--tint);
+    color: var(--primary);
+}
+
+/* Formulario dentro del modal */
+.modal-form {
+    padding: 20px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.form-group .req {
+    color: var(--primary);
+}
+
+.form-group input[type="text"],
+.form-group input[type="url"],
+.form-group input[type="file"],
+.form-group select,
+.form-group textarea {
+    padding: 10px 14px;
+    border: 1.5px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-main);
+    background: var(--bg-light);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    width: 100%;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--tint);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 90px;
+}
+
+/* Acciones del modal */
+.modal-acciones {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    padding-top: 6px;
+}
+
+/* Mensajes de feedback del formulario */
+.form-mensaje {
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    font-weight: 500;
+}
+
+.form-mensaje.hidden {
+    display: none;
+}
+
+.form-mensaje-ok {
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
+
+.form-mensaje-error {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+/* Botones de acciones admin en cada tarjeta */
+.cde-acciones-admin {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+}
+
+.btn-admin-sm {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.btn-editar-cde,
+.btn-editar-proyecto,
+.btn-editar-deporte {
+    background: var(--tint);
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-editar-cde:hover,
+.btn-editar-proyecto:hover,
+.btn-editar-deporte:hover {
+    background: var(--primary);
+    color: #fff;
+}
+
+.btn-borrar-cde,
+.btn-borrar-proyecto,
+.btn-borrar-deporte {
+    background: #fee2e2;
+    color: #b91c1c;
+    border-color: #fca5a5;
+}
+
+.btn-borrar-cde:hover,
+.btn-borrar-proyecto:hover,
+.btn-borrar-deporte:hover {
+    background: #b91c1c;
+    color: #fff;
+    border-color: #b91c1c;
+}
+
+/* Header de tarjeta con metadatos */
+.cde-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.cde-fecha {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Link de archivo adjunto */
+.cde-archivo-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    font-size: 0.82rem;
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: none;
+    padding: 4px 10px;
+    border-radius: 8px;
+    background: var(--tint);
+    transition: background 0.2s, color 0.2s;
+}
+
+.cde-archivo-link:hover {
+    background: var(--primary);
+    color: #fff;
+}
+
+/* Estados de carga / vacío / error */
+.cde-loading,
+.cde-vacio,
+.cde-error {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    grid-column: 1 / -1;
+}
+
+.cde-error {
+    color: #b91c1c;
+    background: #fee2e2;
+    border-radius: 12px;
+    border: 1px solid #fca5a5;
+    padding: 20px;
+}
+
+/* Responsive modales */
+@media (max-width: 600px) {
+    .modal-caja {
+        border-radius: 14px;
+        max-height: 95vh;
+    }
+    .modal-header { padding: 16px 18px 12px; }
+    .modal-form   { padding: 16px 18px 20px; }
+    .modal-acciones { flex-direction: column; }
+    .modal-acciones button { width: 100%; justify-content: center; }
 }

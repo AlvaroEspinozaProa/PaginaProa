@@ -338,13 +338,14 @@ if (formulario) {
             });
         } else {
             // MODO CREACIÓN
-            exito = await publicarNoticia({
+            const resultado = await publicarNoticia({
                 titulo: document.getElementById('form-titulo').value.trim(),
                 resumen: document.getElementById('form-resumen').value.trim(),
                 contenido: document.getElementById('form-contenido').value.trim(),
                 archivo: file,
                 etiqueta: etiquetaValor
             });
+            exito = resultado && resultado.exito;
         }
 
         btnSubmit.disabled = false;

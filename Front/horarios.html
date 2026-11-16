@@ -126,9 +126,9 @@
             }
         }
 
-        /* Reglas optimizadas para impresión y exportación a PDF */
+        /* Reglas optimizadas para impresión */
         @media print {
-            #global-header, .tablon-bar-sesion, .tablon-hero, footer, .bloque-acciones, .btn-agregar-contextual {
+            #global-header, .tablon-bar-sesion, .page-hero, footer, .bloque-acciones, .btn-agregar-contextual, #btn-exportar-pdf {
                 display: none !important;
             }
             body {
@@ -137,7 +137,7 @@
             .grilla-semanal-container {
                 display: grid !important;
                 grid-template-columns: repeat(5, 1fr) !important;
-                gap: 10px !important;
+                gap: 8px !important;
             }
         }
     </style>

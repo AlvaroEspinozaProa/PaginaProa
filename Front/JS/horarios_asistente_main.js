@@ -501,70 +501,241 @@ async function cargarGrillaProporcional(curso) {
 }
 
 // ====================================================
-// EXPORTACIÓN DE HORARIOS A FORMATO PDF
+// EXPORTACIÓN DE HORARIOS A FORMATO PDF (UNA SOLA HOJA ESTRICTA)
 // ====================================================
-function exportarHorarioAPDF() {
-    const elemento = document.querySelector(".grilla-semanal-container");
+async function exportarHorarioAPDF() {
+    const grillaOriginal = document.querySelector(".grilla-semanal-container");
     const btnExportar = document.getElementById("btn-exportar-pdf");
-    if (!elemento) {
+    if (!grillaOriginal) {
         alert("No se encontró la grilla de horarios para exportar.");
         return;
     }
 
-    if (typeof html2pdf !== "undefined") {
-        const nombreArchivo = `Horario_Escuela_PRoA_${cursoActual.replace(/\s+/g, '_')}.pdf`;
+    const textoOriginal = btnExportar ? btnExportar.innerHTML : "";
+    if (btnExportar) {
+        btnExportar.disabled = true;
+        btnExportar.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Generando PDF (1 Hoja)...`;
+    }
 
-        // Armamos una página "a medida" del contenido (ancho x alto reales de la
-        // grilla, en pulgadas) para que el horario entre siempre completo en una
-        // sola hoja, sin importar cuántos bloques tenga cada día.
-        const margenIn = 0.3;
-        const anchoContenidoIn = elemento.scrollWidth / 96;
-        const altoContenidoIn = elemento.scrollHeight / 96;
-        const anchoPaginaIn = anchoContenidoIn + margenIn * 2;
-        const altoPaginaIn = altoContenidoIn + margenIn * 2;
+    // 1. Contenedor temporal de exportación con dimensiones fijas de escritorio (1120px)
+    // Se posiciona en top: 0, left: 0 en capa oculta para que html2canvas lo capture
+    // sin errores de viewport, tanto en celular/móvil como en computadora.
+    const exportWrapper = document.createElement("div");
+    exportWrapper.id = "pdf-export-wrapper";
+    exportWrapper.style.position = "absolute";
+    exportWrapper.style.top = "0";
+    exportWrapper.style.left = "0";
+    exportWrapper.style.width = "1120px";
+    exportWrapper.style.backgroundColor = "#ffffff";
+    exportWrapper.style.padding = "16px 20px";
+    exportWrapper.style.boxSizing = "border-box";
+    exportWrapper.style.fontFamily = "'Poppins', system-ui, -apple-system, sans-serif";
+    exportWrapper.style.zIndex = "-99999";
+    exportWrapper.style.pointerEvents = "none";
+    exportWrapper.style.opacity = "1";
 
-        const opciones = {
-            margin: [margenIn, margenIn, margenIn, margenIn],
-            filename: nombreArchivo,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true, logging: false },
-            jsPDF: {
-                unit: 'in',
-                format: [anchoPaginaIn, altoPaginaIn],
-                orientation: anchoPaginaIn >= altoPaginaIn ? 'landscape' : 'portrait'
-            },
-            // La página ya tiene el tamaño exacto del contenido, así que en la
-            // práctica nunca debería hacer falta una segunda hoja; 'avoid-all'
-            // queda solo como resguardo para no cortar un bloque a la mitad.
-            pagebreak: { mode: ['avoid-all'] }
-        };
+    // 2. Encabezado institucional destacado indicando notablemente el CURSO
+    const cursoNombre = (cursoActual || "Curso").toUpperCase();
+    const headerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #0057B8; padding-bottom: 10px; margin-bottom: 12px; background: #ffffff;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <img src="logo.png" style="height: 48px; width: 48px; object-fit: contain;" alt="Logo PRoA" onerror="this.style.display='none'">
+                <div>
+                    <div style="font-size: 1.2rem; color: #0057B8; font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase;">
+                        ESCUELA PRoA DESPEÑADEROS
+                    </div>
+                    <div style="font-size: 0.75rem; color: #64748b; font-weight: 600;">
+                        Educación Secundaria — Especialidad en Desarrollo de Software
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: right;">
+                <div style="background: #0057B8; color: #ffffff; padding: 6px 18px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,87,184,0.3);">
+                    <div style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; font-weight: 700;">CRONOGRAMA SEMANAL OFICIAL</div>
+                    <div style="font-size: 1.25rem; font-weight: 900; letter-spacing: 0.5px;">HORARIO ${cursoNombre}</div>
+                </div>
+            </div>
+        </div>
+    `;
 
-        const textoOriginal = btnExportar ? btnExportar.innerHTML : "";
-        if (btnExportar) {
-            btnExportar.disabled = true;
-            btnExportar.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Generando PDF...`;
+    // 3. Clonación de la grilla y estandarización a 5 columnas (Lunes a Viernes)
+    const grillaClon = grillaOriginal.cloneNode(true);
+    grillaClon.style.display = "grid";
+    grillaClon.style.gridTemplateColumns = "repeat(5, 1fr)";
+    grillaClon.style.gap = "8px";
+    grillaClon.style.width = "100%";
+    grillaClon.style.margin = "0";
+
+    // 4. Eliminación total de botones de edición, eliminación o adición (+)
+    grillaClon.querySelectorAll("button, .btn-agregar-contextual, .bloque-acciones, .btn-editar-bloque, .btn-borrar-bloque, .acciones-bloque").forEach(el => el.remove());
+
+    // 5. Ajuste proporcional y compacto de bloques en el clon para garantizar una sola hoja nítida
+    grillaClon.querySelectorAll(".columna-dia-card").forEach(col => {
+        col.style.borderRadius = "8px";
+        col.style.border = "1.5px solid #cbd5e1";
+        col.style.background = "#ffffff";
+        col.style.overflow = "hidden";
+        col.style.boxShadow = "none";
+        col.style.display = "flex";
+        col.style.flexDirection = "column";
+        col.style.width = "auto";
+    });
+
+    grillaClon.querySelectorAll(".encabezado-dia").forEach(hd => {
+        hd.style.backgroundColor = "#0f172a";
+        hd.style.color = "#ffffff";
+        hd.style.padding = "6px 8px";
+        hd.style.fontWeight = "800";
+        hd.style.fontSize = "0.85rem";
+        hd.style.textAlign = "center";
+        hd.style.justifyContent = "center";
+        hd.style.display = "flex";
+        hd.style.textTransform = "uppercase";
+    });
+
+    grillaClon.querySelectorAll(".bloques-wrapper").forEach(wrap => {
+        wrap.style.padding = "6px";
+        wrap.style.gap = "6px";
+        wrap.style.background = "#f8fafc";
+        wrap.style.display = "flex";
+        wrap.style.flexDirection = "column";
+    });
+
+    // Ajustar los bloques para que sean compactos, proporcionales y entren en 1 hoja
+    grillaClon.querySelectorAll(".bloque-item").forEach(item => {
+        item.style.transform = "none";
+        item.style.boxShadow = "none";
+        item.style.padding = "6px 8px";
+
+        const minHeightActual = parseInt(item.style.minHeight) || 45;
+        item.style.minHeight = Math.max(30, Math.min(Math.round(minHeightActual * 0.72), 65)) + "px";
+
+        const badgeHora = item.querySelector(".hora-etiqueta");
+        if (badgeHora) {
+            badgeHora.style.fontSize = "0.68rem";
+            badgeHora.style.padding = "1px 4px";
+            badgeHora.style.marginBottom = "3px";
         }
 
-        // Ocultar botones de administración para que no salgan en el PDF exportado (REL-15)
-        const botonesAdmin = elemento.querySelectorAll(".btn-bloque-admin, .btn-agregar-bloque, .btn-editar-bloque, .btn-borrar-bloque, .acciones-bloque, .btn-accion-admin");
-        botonesAdmin.forEach(btn => btn.style.display = "none");
+        const texto = item.querySelector(".contenido-texto");
+        if (texto) {
+            texto.style.fontSize = "0.78rem";
+            texto.style.lineHeight = "1.2";
+            const strong = texto.querySelector("strong");
+            if (strong) strong.style.fontSize = "0.82rem";
+            const profe = texto.querySelector("span");
+            if (profe) profe.style.fontSize = "0.68rem";
+        }
+    });
 
-        html2pdf().set(opciones).from(elemento).save().then(() => {
-            botonesAdmin.forEach(btn => btn.style.display = "");
-            if (btnExportar) {
-                btnExportar.disabled = false;
-                btnExportar.innerHTML = textoOriginal;
-            }
-        }).catch(err => {
-            botonesAdmin.forEach(btn => btn.style.display = "");
-            console.error("Error exportando PDF con html2pdf:", err);
-            if (btnExportar) {
-                btnExportar.disabled = false;
-                btnExportar.innerHTML = textoOriginal;
-            }
-            window.print();
+    // 6. Pie de página institucional en el documento
+    const footerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 6px; border-top: 1px solid #cbd5e1; font-size: 0.68rem; color: #64748b;">
+            <span>Escuela PRoA Despeñaderos — Documento Oficial de Horarios</span>
+            <span>Horario correspondiente a: <strong style="color: #0057B8;">${cursoNombre}</strong></span>
+        </div>
+    `;
+
+    exportWrapper.innerHTML = headerHTML;
+    exportWrapper.appendChild(grillaClon);
+    exportWrapper.insertAdjacentHTML("beforeend", footerHTML);
+    document.body.appendChild(exportWrapper);
+
+    try {
+        // Pausa breve para asegurar el renderizado en el DOM
+        await new Promise(resolve => setTimeout(resolve, 80));
+
+        // Captura con html2canvas
+        const canvas = await html2canvas(exportWrapper, {
+            scale: 2,
+            useCORS: true,
+            allowTaint: true,
+            logging: false,
+            backgroundColor: "#ffffff",
+            width: 1120
         });
-    } else {
-        window.print();
+
+        const nombreArchivo = `Horario_Escuela_PRoA_${cursoActual.replace(/\s+/g, '_')}.pdf`;
+
+        // Acceder a jsPDF (soporta window.jsPDF o window.jspdf.jsPDF)
+        const JsPdfConstructor = window.jsPDF || (window.jspdf && window.jspdf.jsPDF);
+
+        if (JsPdfConstructor) {
+            // A4 Landscape: 297 mm x 210 mm (llamada posicional universal para evitar fallos de versiones)
+            const pdf = new JsPdfConstructor('landscape', 'mm', 'a4');
+
+            const anchoPagina = 297;
+            const altoPagina = 210;
+            const margenX = 8;
+            const margenY = 6;
+            const anchoDisponible = anchoPagina - margenX * 2; // 281 mm
+            const altoDisponible = altoPagina - margenY * 2;   // 198 mm
+
+            const canvasWidth = canvas.width;
+            const canvasHeight = canvas.height;
+            const ratioCanvas = canvasWidth / canvasHeight;
+            const ratioDisponible = anchoDisponible / altoDisponible;
+
+            let finalWidth, finalHeight;
+
+            // Escala matemática estricta: NUNCA supera los límites de 1 sola hoja
+            if (ratioCanvas >= ratioDisponible) {
+                // Ajustado por ancho
+                finalWidth = anchoDisponible;
+                finalHeight = anchoDisponible / ratioCanvas;
+            } else {
+                // Ajustado por alto (cuando hay muchos bloques en el día)
+                finalHeight = altoDisponible;
+                finalWidth = altoDisponible * ratioCanvas;
+            }
+
+            // Centrado en la hoja
+            const posX = margenX + (anchoDisponible - finalWidth) / 2;
+            const posY = margenY + (altoDisponible - finalHeight) / 2;
+
+            const imgData = canvas.toDataURL("image/jpeg", 0.98);
+            pdf.addImage(imgData, "JPEG", posX, posY, finalWidth, finalHeight);
+            pdf.save(nombreArchivo);
+        } else if (typeof html2pdf !== "undefined") {
+            // Fallback con html2pdf sobre el elemento clonado
+            const opcionesFallback = {
+                margin: [6, 8, 6, 8],
+                filename: nombreArchivo,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, logging: false, backgroundColor: "#ffffff" },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
+                pagebreak: { mode: [] }
+            };
+            await html2pdf().set(opcionesFallback).from(exportWrapper).save();
+        } else {
+            console.warn("Librería PDF no disponible");
+        }
+    } catch (err) {
+        console.error("Error al exportar horario a PDF:", err);
+        // Fallback secundario silencioso con html2pdf si el primer método fallara
+        try {
+            if (typeof html2pdf !== "undefined") {
+                const nombreArchivo = `Horario_Escuela_PRoA_${cursoActual.replace(/\s+/g, '_')}.pdf`;
+                await html2pdf().set({
+                    margin: [6, 8, 6, 8],
+                    filename: nombreArchivo,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 1.5, useCORS: true, backgroundColor: "#ffffff" },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
+                    pagebreak: { mode: [] }
+                }).from(exportWrapper).save();
+            }
+        } catch (fallbackErr) {
+            console.error("Fallo crítico en exportación PDF:", fallbackErr);
+        }
+    } finally {
+        // Limpieza garantizada del DOM
+        if (exportWrapper.parentNode) {
+            exportWrapper.parentNode.removeChild(exportWrapper);
+        }
+        if (btnExportar) {
+            btnExportar.disabled = false;
+            btnExportar.innerHTML = textoOriginal;
+        }
     }
 }

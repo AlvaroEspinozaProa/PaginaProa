@@ -101,6 +101,22 @@ Rediseño y actualización de la plataforma web institucional de la Escuela PRoA
 
 ---
 
+## 📋 Próximas Tareas y Hoja de Ruta
+- [x] Integrar la verificación de dominio `@escuelasproa.edu.ar` en autenticación.
+- [x] Crear e integrar el script SQL `handle_new_user` y políticas RLS para `perfiles`.
+- [x] Desarrollar la vista de perfil de usuario (`perfil.html`) con badges y estado de pasantías.
+- [x] Unificar el módulo de horarios con ordenamiento cronológico y exportación a PDF.
+- [x] Estandarizar la navegación global (`navigation.js`) con indicador dinámico de sesión.
+- [x] Completar el CRUD del **Tablón de Novedades** con Supabase.
+- [x] Implementar CRUD completo para **Centro de Estudiantes** (`cde.html` / `cde.js`).
+- [x] Implementar CRUD completo para **Proyectos Institucionales** (`proyectos.html` / `proyectos.js`).
+- [x] Implementar CRUD completo para **Deportes** (`deporte.html` / `deportes.js`).
+- [ ] Diseñar y desarrollar la estructura del **Foro Estudiantil**.
+- [ ] Implementar herramientas avanzadas de moderación del Foro para administradores.
+- [ ] Configurar políticas RLS en Supabase para las tablas `centro_estudiantes`, `proyectos` y `deportes`.
+
+---
+
 ## 🗄️ Esquema de Base de Datos (Supabase)
 
 ### Tabla `perfiles`:
@@ -133,12 +149,89 @@ Rediseño y actualización de la plataforma web institucional de la Escuela PRoA
 
 ---
 
+### 5. CRUD Completo — Centro de Estudiantes, Proyectos y Deportes
+
+#### Centro de Estudiantes (`cde.html` / `JS/cde.js`)
+- Conexión con la tabla `centro_estudiantes` de Supabase (columnas: `id`, `titulo`, `contenido`, `categoria`, `archivo_url`, `fecha`).
+- Grilla dinámica que carga publicaciones desde Supabase al iniciar la página, con estados de carga, vacío y error.
+- **Panel de administración** protegido (visible solo con sesión admin activa via `esAdmin()` de `auth.js`):
+  - Botón "Nueva Publicación" que abre un modal con formulario completo (título, categoría, contenido, archivo adjunto).
+  - Botones **Editar** y **Borrar** inyectados dinámicamente en cada tarjeta solo cuando el usuario es admin.
+  - Edición en modal reutilizable con pre-carga de datos del registro.
+  - Borrado con `confirm()` de confirmación previa antes de ejecutar el DELETE en Supabase.
+  - Subida de archivos adjuntos al bucket `adjuntos_noticias` de Supabase Storage con sanitización de nombres.
+- Las tarjetas estáticas originales se conservan como contenido fijo, y las dinámicas se cargan en su propia sección separada.
+
+#### Proyectos Institucionales (`proyectos.html` / `JS/proyectos.js`)
+- Conexión con la tabla `proyectos` de Supabase (columnas: `id`, `titulo`, `descripcion`, `autor`, `estado`, `link_repositorio`, `imagen_url`).
+- Grilla dinámica con tarjetas que incluyen badge de estado coloreado (`En desarrollo`, `Completado`, `Pausado`, `Propuesta`).
+- **Panel de administración** protegido:
+  - Formulario modal para crear proyectos con campos: título, descripción, autor, estado (dropdown), link de repositorio y URL de imagen.
+  - Botones **Editar** y **Borrar** en cada tarjeta dinámica solo para admins.
+  - Pre-carga completa de datos en edición; actualización vía `UPDATE` en Supabase.
+  - Confirmación antes de borrar con feedback visual de éxito/error.
+- Proyectos estáticos originales se mantienen intactos en la misma página.
+
+#### Sección Deportes (`deporte.html` / `JS/deportes.js`)
+- Conexión con la tabla `deportes` de Supabase (columnas: `id`, `titulo`, `descripcion`, `categoria`, `horario`, `imagen_url`).
+- Grilla dinámica para torneos, entrenamientos y eventos deportivos con icono dinámico por categoría.
+- **Panel de administración** protegido:
+  - Formulario modal para agregar actividades: título, categoría (Competencias, Recreación, Torneos, Entrenamientos, Trabajo en Equipo, Eventos), descripción, horario/fecha y URL de imagen.
+  - Botones **Editar** y **Borrar** en cada tarjeta dinámica solo para admins.
+  - Misma lógica de creación, edición y borrado con confirmación.
+
+#### Verificaciones Generales (las 3 páginas)
+- `esAdmin()` consultado al inicio via `auth.js` → oculta/muestra barras admin y botones CRUD dinámicamente.
+- `data-seccion` en `<body>` de cada página para aplicar la paleta de colores CSS correcta del tema (`cde`, `proyectos`, `deportes`).
+- Estilos compartidos para modales, botones admin y estados de UI agregados al final de `proa.css`.
+- Marcador de conflicto Git residual (`>>>>>>> f93853e...`) en `proa.css` eliminado.
+
+---
+
 ## 📋 Próximas Tareas y Hoja de Ruta
-- [x] Integrar la verificación de dominio `@escuelasproa.edu.ar` en autenticación (`auth.js` y `registro.js`).
-- [x] Crear e integrar el script SQL `handle_new_user` y políticas RLS para la tabla `perfiles`.
+- [x] Integrar la verificación de dominio `@escuelasproa.edu.ar` en autenticación.
+- [x] Crear e integrar el script SQL `handle_new_user` y políticas RLS para `perfiles`.
 - [x] Desarrollar la vista de perfil de usuario (`perfil.html`) con badges y estado de pasantías.
 - [x] Unificar el módulo de horarios con ordenamiento cronológico y exportación a PDF.
 - [x] Estandarizar la navegación global (`navigation.js`) con indicador dinámico de sesión.
 - [x] Completar el CRUD del **Tablón de Novedades** con Supabase.
+- [x] Implementar CRUD completo para **Centro de Estudiantes** (`cde.html` / `cde.js`).
+- [x] Implementar CRUD completo para **Proyectos Institucionales** (`proyectos.html` / `proyectos.js`).
+- [x] Implementar CRUD completo para **Deportes** (`deporte.html` / `deportes.js`).
 - [ ] Diseñar y desarrollar la estructura del **Foro Estudiantil**.
 - [ ] Implementar herramientas avanzadas de moderación del Foro para administradores.
+- [ ] Configurar políticas RLS en Supabase para las tablas `centro_estudiantes`, `proyectos` y `deportes`.
+
+---
+
+## 🗄️ Esquema de Base de Datos (Supabase)
+
+
+### Tabla `centro_estudiantes`:
+- `id` (BIGINT / UUID, clave primaria)
+- `titulo` (TEXT, NOT NULL)
+- `contenido` (TEXT)
+- `categoria` (TEXT: `'Institucional'` | `'Participación'` | `'Proyectos CDE'` | `'Eventos'` | `'General'`)
+- `archivo_url` (TEXT, opcional — URL pública de Supabase Storage)
+- `fecha` (TIMESTAMPTZ)
+
+### Tabla `proyectos`:
+- `id` (BIGINT / UUID, clave primaria)
+- `titulo` (TEXT, NOT NULL)
+- `descripcion` (TEXT)
+- `autor` (TEXT, opcional)
+- `estado` (TEXT: `'En desarrollo'` | `'Completado'` | `'Pausado'` | `'Propuesta'`)
+- `link_repositorio` (TEXT, opcional)
+- `imagen_url` (TEXT, opcional)
+
+### Tabla `deportes`:
+- `id` (BIGINT / UUID, clave primaria)
+- `titulo` (TEXT, NOT NULL)
+- `descripcion` (TEXT)
+- `categoria` (TEXT: `'Competencias'` | `'Recreación'` | `'Torneos'` | `'Entrenamientos'` | `'Trabajo en Equipo'` | `'Eventos'`)
+- `horario` (TEXT, opcional — texto libre: ej. `'Viernes 15:00 hs'`)
+- `imagen_url` (TEXT, opcional)
+
+> **Nota RLS pendiente:** Las tres tablas requieren políticas de Row Level Security en Supabase:
+> - `SELECT` público (anon).
+> - `INSERT`, `UPDATE`, `DELETE` restringidos a usuarios con `rol = 'admin'` en la tabla `perfiles`.
