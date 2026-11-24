@@ -11,6 +11,11 @@ export async function esAdmin() {
         const user = await obtenerUsuarioActual();
         if (!user) return false;
 
+        // La cuenta principal de Super Admin posee rol de administrador garantizado
+        if (user.email && user.email.toLowerCase().trim() === 'despenaderos.ds@escuelasproa.edu.ar') {
+            return true;
+        }
+
         const { data, error } = await supabase
             .from('perfiles')
             .select('rol')
@@ -48,20 +53,22 @@ export async function obtenerPerfil() {
             .maybeSingle();
 
         if (!error && data) {
+            const esSuperAdmin = user.email && user.email.toLowerCase().trim() === 'despenaderos.ds@escuelasproa.edu.ar';
             return {
                 ...data,
                 email: data.email || user.email,
                 nombre: data.nombre || user.user_metadata?.nombre || (user.email ? user.email.split('@')[0] : "Usuario"),
-                rol: data.rol || (esCorreoInstitucional(user.email) ? 'estudiante' : 'comun')
+                rol: esSuperAdmin ? 'admin' : (data.rol || (esCorreoInstitucional(user.email) ? 'estudiante' : 'comun'))
             };
         }
 
         // Fallback resiliente: el usuario está autenticado en Supabase pero aún no tiene fila en 'perfiles'
+        const esSuperAdmin = Boolean(user.email && user.email.toLowerCase().trim() === 'despenaderos.ds@escuelasproa.edu.ar');
         return {
             id: user.id,
             email: user.email,
             nombre: user.user_metadata?.nombre || (user.email ? user.email.split('@')[0] : "Usuario"),
-            rol: esCorreoInstitucional(user.email) ? 'estudiante' : 'comun',
+            rol: esSuperAdmin ? 'admin' : (esCorreoInstitucional(user.email) ? 'estudiante' : 'comun'),
             avatar_url: null,
             estado_postulacion: 'No postulado'
         };

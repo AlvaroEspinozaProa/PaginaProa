@@ -253,6 +253,48 @@
             border: 1px solid #c7d2fe;
         }
 
+        .badge-role-estudiante {
+            background: #e0f2fe;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
+        }
+
+        .badge-role-comun {
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+        }
+
+        .badge-role-superadmin {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fde68a;
+            font-weight: 700;
+        }
+
+        .admin-banner-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            margin-bottom: 20px;
+            line-height: 1.45;
+        }
+
+        .admin-banner-superadmin {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #1e40af;
+        }
+
+        .admin-banner-regular {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            color: #475569;
+        }
+
         /* Action Buttons */
         .btn-action-icon {
             border: none;
@@ -541,8 +583,54 @@
 
             <!-- Pestaña Usuarios -->
             <div id="tab-usuarios" class="tab-pane hidden">
-                <h2 style="color: #0f172a;"><i class="fa-solid fa-users-gear"></i> Cuentas y Roles Registrados</h2>
-                <div id="contenedor-usuarios-admin" style="margin-top: 20px;">Cargando perfiles de Supabase...</div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                    <h2 style="margin: 0; color: #0f172a;"><i class="fa-solid fa-users-gear"></i> Cuentas y Roles Registrados</h2>
+                </div>
+
+                <!-- Banner de permisos (Super Admin vs Admin regular) -->
+                <div id="banner-permisos-usuarios" class="admin-banner-info admin-banner-regular">
+                    <!-- Contenido dinámico según el usuario autenticado -->
+                </div>
+
+                <!-- Tarjetas de Estadísticas de Usuarios -->
+                <div class="admin-stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Cuentas</div>
+                        <div class="stat-value" id="stat-usuarios-total">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label" style="color: #3730a3;">Admins</div>
+                        <div class="stat-value" id="stat-usuarios-admin" style="color: #3730a3;">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label" style="color: #0369a1;">Estudiantes</div>
+                        <div class="stat-value" id="stat-usuarios-estudiante" style="color: #0369a1;">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label" style="color: #64748b;">Comunes</div>
+                        <div class="stat-value" id="stat-usuarios-comun" style="color: #64748b;">0</div>
+                    </div>
+                </div>
+
+                <!-- Barra de herramientas: Búsqueda y Filtro por Rol -->
+                <div class="admin-toolbar">
+                    <div class="admin-search-box">
+                        <i class="fa-solid fa-magnifying-glass" style="color: #94a3b8;"></i>
+                        <input type="text" id="input-buscar-usuarios" placeholder="Buscar por nombre o correo electrónico..." autocomplete="off">
+                    </div>
+                    <div class="admin-filters">
+                        <label for="select-filtro-rol" style="font-weight: 600; font-size: 0.85rem; color: #64748b;">Rol:</label>
+                        <select id="select-filtro-rol" class="admin-select">
+                            <option value="todos">Todos los roles</option>
+                            <option value="admin">admin</option>
+                            <option value="estudiante">estudiante</option>
+                            <option value="comun">comun</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Tabla de usuarios -->
+                <div id="contenedor-usuarios-admin">Cargando perfiles de Supabase...</div>
             </div>
         </section>
     </main>
@@ -559,6 +647,53 @@
             </div>
             <div class="admin-modal-footer">
                 <button id="btn-cerrar-modal-footer" class="tablon-btn-action-secondary">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación para cambio de rol -->
+    <div id="modal-confirmar-rol" class="admin-modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="modal-rol-titulo">
+        <div class="admin-modal-card" style="max-width: 490px;">
+            <div class="admin-modal-header">
+                <h3 id="modal-rol-titulo" style="display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-user-shield" style="color: #0057B8;"></i>
+                    <span>Confirmar Cambio de Rol</span>
+                </h3>
+                <button type="button" id="btn-cerrar-modal-rol" class="btn-close-modal" aria-label="Cerrar modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="admin-modal-body">
+                <p style="margin-top: 0; color: #475569; font-size: 0.95rem; line-height: 1.5;">
+                    ¿Confirmas que deseas reasignar los privilegios y permisos de esta cuenta en el sistema?
+                </p>
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px; margin: 16px 0;">
+                    <div style="margin-bottom: 14px;">
+                        <span style="font-size: 0.75rem; text-transform: uppercase; color: #64748b; font-weight: 700; display: block; letter-spacing: 0.05em; margin-bottom: 3px;">Usuario</span>
+                        <strong id="modal-rol-usuario-nombre" style="color: #0f172a; font-size: 1rem; display: block;">-</strong>
+                        <div id="modal-rol-usuario-email" style="color: #64748b; font-size: 0.85rem; margin-top: 2px;">-</div>
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 14px; border-top: 1px solid #e2e8f0;">
+                        <div>
+                            <span style="font-size: 0.75rem; text-transform: uppercase; color: #64748b; font-weight: 600; display: block; margin-bottom: 6px;">Rol anterior</span>
+                            <span id="modal-rol-anterior" class="badge-role">-</span>
+                        </div>
+                        <div style="color: #94a3b8; font-size: 1.1rem; padding-top: 18px;">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                        <div>
+                            <span style="font-size: 0.75rem; text-transform: uppercase; color: #64748b; font-weight: 600; display: block; margin-bottom: 6px;">Nuevo rol</span>
+                            <span id="modal-rol-nuevo" class="badge-role">-</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="modal-rol-alerta" style="display: none; background: #fffbeb; border: 1px solid #fde68a; color: #b45309; padding: 12px 14px; border-radius: 8px; font-size: 0.85rem; line-height: 1.45;">
+                    <i class="fa-solid fa-triangle-exclamation" style="margin-right: 6px;"></i><span id="modal-rol-alerta-texto"></span>
+                </div>
+            </div>
+            <div class="admin-modal-footer" style="display: flex; justify-content: flex-end; gap: 10px;">
+                <button type="button" id="btn-cancelar-cambio-rol" class="tablon-btn-action-secondary">Cancelar</button>
+                <button type="button" id="btn-confirmar-cambio-rol" class="btn-admin-submit">
+                    <i class="fa-solid fa-check"></i> Confirmar cambio
+                </button>
             </div>
         </div>
     </div>
